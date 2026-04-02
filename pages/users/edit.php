@@ -75,54 +75,41 @@ $csrf = users_csrf_token();
             <?php $breadcrumbCurrent = 'Users / Edit User'; require __DIR__ . '/../../includes/breadcrumb.php'; ?>
             <div class="card bg-base-100 shadow-xl border border-base-300">
                 <div class="card-body space-y-4">
-                    <?php $usersAction = 'list'; require __DIR__ . '/menu-top.php'; ?>
-
                     <?php if ($errors): ?>
                         <div class="alert alert-error">
                             <span><?= h(implode(' ', $errors)) ?></span>
                         </div>
                     <?php endif; ?>
 
-                    <form method="post" action="index.php?page=users_edit&id=<?= $userId ?>" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <form method="post" action="index.php?page=users_edit&id=<?= $userId ?>" class="space-y-4">
                         <input type="hidden" name="_token" value="<?= h($csrf) ?>">
                         <input type="hidden" name="id" value="<?= $userId ?>">
-                        <label class="form-control"><span class="label-text">Full Name</span><input name="Name" value="<?= h($form['Name']) ?>" class="input input-bordered" required></label>
-                        <label class="form-control"><span class="label-text">User Name</span><input name="Username" value="<?= h($form['Username']) ?>" class="input input-bordered" required></label>
-                        <label class="form-control"><span class="label-text">IC/Passport</span><input name="ic_passport" value="<?= h($form['ic_passport']) ?>" class="input input-bordered"></label>
-                        <label class="form-control"><span class="label-text">Contact No.</span><input name="contact_nomber" value="<?= h($form['contact_nomber']) ?>" class="input input-bordered"></label>
-                        <label class="form-control"><span class="label-text">Email Address</span><input name="Email" value="<?= h($form['Email']) ?>" class="input input-bordered"></label>
-                        <label class="form-control"><span class="label-text">Date of Birth</span><input type="date" name="date_birth" value="<?= h($form['date_birth']) ?>" class="input input-bordered"></label>
-                        <label class="form-control"><span class="label-text">Email Password</span><input type="password" name="email_password" value="<?= h($form['email_password']) ?>" class="input input-bordered"></label>
-                        <label class="form-control"><span class="label-text">Outgoing Server</span><input name="outgoing_server" value="<?= h($form['outgoing_server']) ?>" class="input input-bordered"></label>
-                        <label class="form-control"><span class="label-text">Port No.</span><input name="outgoing_port_no" value="<?= h($form['outgoing_port_no']) ?>" class="input input-bordered"></label>
-                        <label class="form-control"><span class="label-text">Employee ID</span><input name="employee_id" value="<?= h($form['employee_id']) ?>" class="input input-bordered"></label>
+                        <div class="max-w-5xl mx-auto border border-base-300 rounded-box overflow-hidden">
+                            <div class="px-4 py-3 bg-linear-to-r from-sky-700 to-cyan-600 text-white font-bold text-lg">Edit User</div>
+                            <div class="divide-y divide-base-300">
+                                <?php
+                                $rowClass = 'grid grid-cols-1 md:grid-cols-[220px_1fr] items-center gap-3 px-4 py-2';
+                                $inputClass = 'input input-bordered w-full max-w-xl';
+                                $selectClass = 'select select-bordered w-full max-w-xs';
+                                ?>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Full Name :</label><input name="Name" value="<?= h($form['Name']) ?>" class="<?= $inputClass ?>" required></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">User Name :</label><input name="Username" value="<?= h($form['Username']) ?>" class="<?= $inputClass ?>" required></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">IC/Passport :</label><input name="ic_passport" value="<?= h($form['ic_passport']) ?>" class="<?= $inputClass ?>"></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Contact No. :</label><input name="contact_nomber" value="<?= h($form['contact_nomber']) ?>" class="<?= $inputClass ?>"></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Email Address :</label><input name="Email" value="<?= h($form['Email']) ?>" class="<?= $inputClass ?>"></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Email Password :</label><input type="password" name="email_password" value="<?= h($form['email_password']) ?>" class="<?= $inputClass ?>"></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Outgoing Server :</label><input name="outgoing_server" value="<?= h($form['outgoing_server']) ?>" class="<?= $inputClass ?>"></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Port No :</label><input name="outgoing_port_no" value="<?= h($form['outgoing_port_no']) ?>" class="input input-bordered w-full max-w-48"></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Date of Birth :</label><input type="date" name="date_birth" value="<?= h($form['date_birth']) ?>" class="input input-bordered w-full max-w-xs"></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Active Status :</label><select name="Status" class="<?= $selectClass ?>"><?php foreach ($activeOptions as $opt): ?><option value="<?= h($opt) ?>" <?= $form['Status'] === $opt ? 'selected' : '' ?>><?= h($opt) ?></option><?php endforeach; ?></select></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Gender :</label><select name="gender" class="<?= $selectClass ?>"><?php foreach ($genderOptions as $opt): ?><option value="<?= h($opt) ?>" <?= $form['gender'] === $opt ? 'selected' : '' ?>><?= h($opt) ?></option><?php endforeach; ?></select></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Title :</label><select name="position" class="<?= $selectClass ?>"><?php foreach ($positionOptions as $opt): ?><option value="<?= h($opt) ?>" <?= $form['position'] === $opt ? 'selected' : '' ?>><?= h($opt) ?></option><?php endforeach; ?></select></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Department :</label><select name="department" class="<?= $selectClass ?>"><?php foreach ($departmentOptions as $opt): ?><option value="<?= h($opt) ?>" <?= $form['department'] === $opt ? 'selected' : '' ?>><?= h($opt) ?></option><?php endforeach; ?></select></div>
+                                <div class="<?= $rowClass ?>"><label class="font-semibold text-base-content/80">Employee ID :</label><input name="employee_id" value="<?= h($form['employee_id']) ?>" class="input input-bordered w-full max-w-xs"></div>
+                            </div>
+                        </div>
 
-                        <label class="form-control">
-                            <span class="label-text">Active Status</span>
-                            <select name="Status" class="select select-bordered">
-                                <?php foreach ($activeOptions as $opt): ?><option value="<?= h($opt) ?>" <?= $form['Status'] === $opt ? 'selected' : '' ?>><?= h($opt) ?></option><?php endforeach; ?>
-                            </select>
-                        </label>
-                        <label class="form-control">
-                            <span class="label-text">Gender</span>
-                            <select name="gender" class="select select-bordered">
-                                <?php foreach ($genderOptions as $opt): ?><option value="<?= h($opt) ?>" <?= $form['gender'] === $opt ? 'selected' : '' ?>><?= h($opt) ?></option><?php endforeach; ?>
-                            </select>
-                        </label>
-                        <label class="form-control">
-                            <span class="label-text">Title</span>
-                            <select name="position" class="select select-bordered">
-                                <?php foreach ($positionOptions as $opt): ?><option value="<?= h($opt) ?>" <?= $form['position'] === $opt ? 'selected' : '' ?>><?= h($opt) ?></option><?php endforeach; ?>
-                            </select>
-                        </label>
-                        <label class="form-control md:col-span-2">
-                            <span class="label-text">Department</span>
-                            <select name="department" class="select select-bordered">
-                                <?php foreach ($departmentOptions as $opt): ?><option value="<?= h($opt) ?>" <?= $form['department'] === $opt ? 'selected' : '' ?>><?= h($opt) ?></option><?php endforeach; ?>
-                            </select>
-                        </label>
-
-                        <div class="md:col-span-2 flex justify-end">
+                        <div class="flex justify-center">
                             <button class="btn btn-primary" type="submit">Update</button>
                         </div>
                     </form>

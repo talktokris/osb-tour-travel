@@ -46,8 +46,6 @@ $csrf = users_csrf_token();
 
             <div class="card bg-base-100 shadow-xl border border-base-300">
                 <div class="card-body space-y-4">
-                    <?php $usersAction = 'list'; require __DIR__ . '/menu-top.php'; ?>
-
                     <?php if (!empty($flash)): ?>
                         <div class="alert <?= $flash['type'] === 'success' ? 'alert-success' : 'alert-error' ?>">
                             <span><?= h((string) $flash['message']) ?></span>

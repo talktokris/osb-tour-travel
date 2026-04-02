@@ -47,8 +47,6 @@ $csrf = users_csrf_token();
             <?php $breadcrumbCurrent = 'Users / Change Password'; require __DIR__ . '/../../includes/breadcrumb.php'; ?>
             <div class="card bg-base-100 shadow-xl border border-base-300">
                 <div class="card-body space-y-4">
-                    <?php $usersAction = 'password'; require __DIR__ . '/menu-top.php'; ?>
-
                     <?php if ($errors): ?>
                         <div class="alert alert-error"><span><?= h(implode(' ', $errors)) ?></span></div>
                     <?php endif; ?>
