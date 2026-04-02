@@ -17,7 +17,7 @@
     $currentPage = $_GET['page'] ?? 'home';
     ?>
     <!-- Fixed header similar to the Flowbite navbar layout -->
-    <header class="navbar bg-base-100 text-base-content fixed top-0 left-0 right-0 z-20 border-b border-base-300 shadow-sm pl-0 pr-6">
+    <header class="navbar bg-base-100 text-base-content fixed top-0 left-0 right-0 z-20 border-b border-base-300 shadow-sm pl-10 py-5">
         <div class="w-full grid grid-cols-3 items-center">
             <!-- Logo (very left) -->
             <div class="flex items-center gap-3">
