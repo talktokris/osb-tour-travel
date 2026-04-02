@@ -16,92 +16,37 @@
     $loggedUser = $_SESSION['user_name'] ?? 'User';
     $currentPage = $_GET['page'] ?? 'home';
     ?>
-    <!-- Fixed header similar to the Flowbite navbar layout -->
-    <header class="navbar bg-base-100 text-base-content fixed top-0 left-0 right-0 z-20 border-b border-base-300 shadow-sm pl-10 py-4">
-        <div class="w-full grid grid-cols-3 items-center">
-            <!-- Logo (very left) -->
-            <div class="flex items-center gap-3">
-                <img src="images/within_earth.png" alt="OSB" class="h-8 w-auto" />
+    <header style="position:fixed;top:0;left:0;right:0;z-index:20;background:#ffffff;border-bottom:1px solid #d7dee7;box-shadow:0 6px 20px rgba(15,23,42,0.10);">
+        <div style="max-width:1400px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <div style="flex-shrink:0;display:flex;align-items:center;">
+                <img src="images/within_earth.png" alt="OSB" style="height:38px;width:auto;display:block;" />
             </div>
 
-            <!-- Desktop nav (menu centered) -->
-            <div class="hidden md:flex items-center justify-center gap-1 flex-wrap">
-                <a href="index.php?page=home" class="btn btn-sm rounded-btn <?= $currentPage === 'home' ? 'btn-primary' : 'btn-ghost' ?>">
-                    Home
-                </a>
-                <a href="index.php?page=file" class="btn btn-sm rounded-btn <?= $currentPage === 'file' ? 'btn-primary' : 'btn-ghost' ?>">
-                    File / Assg
-                </a>
-                <a href="index.php?page=search" class="btn btn-sm rounded-btn <?= $currentPage === 'search' ? 'btn-primary' : 'btn-ghost' ?>">
-                    Search
-                </a>
-                <a href="index.php?page=report" class="btn btn-sm rounded-btn <?= $currentPage === 'report' ? 'btn-primary' : 'btn-ghost' ?>">
-                    Report
-                </a>
-                <a href="index.php?page=driver" class="btn btn-sm rounded-btn <?= $currentPage === 'driver' ? 'btn-primary' : 'btn-ghost' ?>">
-                    Driver
-                </a>
-                <a href="index.php?page=invoice" class="btn btn-sm rounded-btn <?= $currentPage === 'invoice' ? 'btn-primary' : 'btn-ghost' ?>">
-                    Invoice
-                </a>
-                <a href="index.php?page=sms" class="btn btn-sm rounded-btn <?= $currentPage === 'sms' ? 'btn-primary' : 'btn-ghost' ?>">
-                    SMS
-                </a>
-                <a href="index.php?page=setup" class="btn btn-sm rounded-btn <?= $currentPage === 'setup' ? 'btn-primary' : 'btn-ghost' ?>">
-                    Setup
-                </a>
-                <a href="index.php?page=users" class="btn btn-sm rounded-btn <?= $currentPage === 'users' ? 'btn-primary' : 'btn-ghost' ?>">
-                    Users
-                </a>
-                <a href="index.php?page=logout" class="btn btn-outline btn-primary btn-sm rounded-btn">
-                    Logout
-                </a>
+            <div style="display:flex;align-items:center;gap:10px;white-space:nowrap;font-size:12px;">
+                <div style="padding:4px 10px;border-radius:999px;background:#ecfdf5;color:#047857;font-weight:600;border:1px solid #a7f3d0;">
+                    Active Agent : <span class="font-bold"><?= h((string)$activeAgent) ?></span>
+                </div>
+                <div style="padding:4px 10px;border-radius:999px;background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;">
+                    Logged as : <span style="font-weight:600;color:#0f172a;"><?= h((string)$loggedUser) ?></span>
+                </div>
             </div>
+        </div>
 
-            <!-- Agent + user info on the right -->
-            <div class="hidden md:flex items-center gap-8 text-sm justify-end">
-                <div class="text-green-600 font-semibold">
-                    Active Agent : <span class="text-green-700 font-bold"><?= h((string)$activeAgent) ?></span>
-                </div>
-                <div class="text-base-content/70">
-                    Logged as : <span class="text-base-content font-semibold"><?= h((string)$loggedUser) ?></span>
-                </div>
-            </div>
-
-            <!-- Mobile menu -->
-            <div class="md:hidden flex items-center gap-2 justify-end col-span-3">
-                <div class="dropdown dropdown-end">
-                    <label tabindex="0" class="btn btn-ghost btn-square">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </label>
-                    <ul tabindex="0" class="menu dropdown-content bg-base-100 text-base-content rounded-box mt-3 w-56 p-2 shadow border border-base-300">
-                        <li class="p-2">
-                            <div class="text-green-600 text-sm font-semibold">
-                                Active Agent : <span class="text-green-700 font-bold"><?= h((string)$activeAgent) ?></span>
-                            </div>
-                            <div class="text-base-content/70 text-sm mt-1">
-                                Logged as : <span class="font-semibold"><?= h((string)$loggedUser) ?></span>
-                            </div>
-                        </li>
-                        <li><a href="index.php?page=home">Home</a></li>
-                        <li><a href="index.php?page=file">File / Assg</a></li>
-                        <li><a href="index.php?page=search">Search</a></li>
-                        <li><a href="index.php?page=report">Report</a></li>
-                        <li><a href="index.php?page=driver">Driver</a></li>
-                        <li><a href="index.php?page=invoice">Invoice</a></li>
-                        <li><a href="index.php?page=sms">SMS</a></li>
-                        <li><a href="index.php?page=setup">Setup</a></li>
-                        <li><a href="index.php?page=users">Users</a></li>
-                        <li class="mt-1">
-                            <a href="index.php?page=logout" class="btn btn-outline btn-primary btn-block">Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <div style="background:linear-gradient(90deg,#0c4a8a 0%,#0b77bb 55%,#0a94c8 100%);border-top:1px solid rgba(255,255,255,0.30);box-shadow:inset 0 1px 0 rgba(255,255,255,0.18);">
+            <nav style="max-width:1400px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;overflow-x:auto;">
+                <a href="index.php?page=home" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'home' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">Home</a>
+                <a href="index.php?page=file" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'file' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">File / Assg</a>
+                <a href="index.php?page=search" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'search' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">Search</a>
+                <a href="index.php?page=report" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'report' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">Report</a>
+                <a href="index.php?page=driver" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'driver' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">Driver</a>
+                <a href="index.php?page=invoice" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'invoice' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">Invoice</a>
+                <a href="index.php?page=sms" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'sms' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">SMS</a>
+                <a href="index.php?page=setup" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'setup' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">Setup</a>
+                <a href="index.php?page=users" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'users' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">Users</a>
+                <a href="index.php?page=logout" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;color:#ffffff;border:1px solid rgba(255,255,255,0.75);">Logout</a>
+            </nav>
         </div>
     </header>
 <?php endif; ?>
 <!-- Offset for fixed header -->
-<div class="w-full px-0 py-4 flex-1 pt-24">
+<div class="w-full px-0 py-4 flex-1 pt-28">
