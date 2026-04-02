@@ -41,25 +41,28 @@ if (!$user) {
                         </div>
                     <?php endif; ?>
 
-                    <h3 class="card-title text-lg text-success">View User Information</h3>
-                    <div class="overflow-x-auto rounded-box border border-base-300">
-                        <table class="table">
-                            <tbody>
-                                <tr><th>Name</th><td><?= h((string) $user['Name']) ?></td></tr>
-                                <tr><th>Username</th><td><?= h((string) $user['Username']) ?></td></tr>
-                                <tr><th>Contact No.</th><td><?= h((string) $user['contact_nomber']) ?></td></tr>
-                                <tr><th>IC/Passport No.</th><td><?= h((string) $user['ic_passport']) ?></td></tr>
-                                <tr><th>Email Address</th><td><?= h((string) $user['Email']) ?></td></tr>
-                                <tr><th>Date of Birth</th><td><?= h((string) $user['date_birth']) ?></td></tr>
-                                <tr><th>Active Status</th><td><?= h((string) $user['Status']) ?></td></tr>
-                                <tr><th>Gender</th><td><?= h((string) $user['gender']) ?></td></tr>
-                                <tr><th>Role</th><td><?= h((string) $user['Role']) ?></td></tr>
-                                <tr><th>Title</th><td><?= h((string) $user['position']) ?></td></tr>
-                                <tr><th>Department</th><td><?= h((string) $user['department']) ?></td></tr>
-                                <tr><th>Outgoing Server</th><td><?= h((string) $user['outgoing_server']) ?></td></tr>
-                                <tr><th>Port No.</th><td><?= h((string) $user['outgoing_port_no']) ?></td></tr>
-                            </tbody>
-                        </table>
+                    <div class="max-w-4xl mx-auto border border-base-300 rounded-box overflow-hidden">
+                        <div class="px-4 py-2.5 bg-linear-to-r from-sky-700 to-cyan-600 text-white font-bold text-base">View User Information</div>
+                        <div class="divide-y divide-base-300">
+                            <?php
+                            $rowClass = 'grid grid-cols-1 md:grid-cols-[190px_1fr] items-center gap-2 px-3 py-1.5';
+                            $labelClass = 'font-semibold text-sm text-base-content/80';
+                            $valueClass = 'text-sm text-base-content';
+                            ?>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Name :</div><div class="<?= $valueClass ?>"><?= h((string) $user['Name']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Username :</div><div class="<?= $valueClass ?>"><?= h((string) $user['Username']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Contact No. :</div><div class="<?= $valueClass ?>"><?= h((string) $user['contact_nomber']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">IC/Passport No. :</div><div class="<?= $valueClass ?>"><?= h((string) $user['ic_passport']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Email Address :</div><div class="<?= $valueClass ?>"><?= h((string) $user['Email']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Date of Birth :</div><div class="<?= $valueClass ?>"><?= h((string) $user['date_birth']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Active Status :</div><div class="<?= $valueClass ?>"><?= h((string) $user['Status']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Gender :</div><div class="<?= $valueClass ?>"><?= h((string) $user['gender']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Role :</div><div class="<?= $valueClass ?>"><?= h((string) $user['Role']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Title :</div><div class="<?= $valueClass ?>"><?= h((string) $user['position']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Department :</div><div class="<?= $valueClass ?>"><?= h((string) $user['department']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Outgoing Server :</div><div class="<?= $valueClass ?>"><?= h((string) $user['outgoing_server']) ?></div></div>
+                            <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Port No. :</div><div class="<?= $valueClass ?>"><?= h((string) $user['outgoing_port_no']) ?></div></div>
+                        </div>
                     </div>
                 </div>
             </div>
