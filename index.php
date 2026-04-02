@@ -75,7 +75,21 @@ if ($page === 'login') {
 } elseif ($page === 'setup') {
     require __DIR__ . '/pages/setup/index.php';
 } elseif ($page === 'users') {
-    require __DIR__ . '/pages/users/index.php';
+    require __DIR__ . '/pages/users/list.php';
+} elseif ($page === 'users_create') {
+    require __DIR__ . '/pages/users/create.php';
+} elseif ($page === 'users_edit') {
+    require __DIR__ . '/pages/users/edit.php';
+} elseif ($page === 'users_view') {
+    require __DIR__ . '/pages/users/view.php';
+} elseif ($page === 'users_role_list') {
+    require __DIR__ . '/pages/users/change-role-list.php';
+} elseif ($page === 'users_role_form') {
+    require __DIR__ . '/pages/users/change-role-form.php';
+} elseif ($page === 'users_password_list') {
+    require __DIR__ . '/pages/users/change-password-list.php';
+} elseif ($page === 'users_password_form') {
+    require __DIR__ . '/pages/users/change-password-form.php';
 } else {
     require __DIR__ . '/pages/home/index.php';
 }

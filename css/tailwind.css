@@ -2326,6 +2326,9 @@
   .grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -2811,6 +2814,13 @@
       --alert-color: var(--color-error);
     }
   }
+  .alert-success {
+    @layer daisyui.l1.l2 {
+      color: var(--color-success-content);
+      --alert-border-color: var(--color-success);
+      --alert-color: var(--color-success);
+    }
+  }
   .text-base-content {
     color: var(--color-base-content);
   }
@@ -3039,10 +3049,29 @@
       --size: calc(var(--size-field, 0.25rem) * 8);
     }
   }
+  .btn-xs {
+    @layer daisyui.l1.l2 {
+      --fontsize: 0.6875rem;
+      --btn-p: 0.5rem;
+      --size: calc(var(--size-field, 0.25rem) * 6);
+    }
+  }
   .badge-primary {
     @layer daisyui.l1.l2 {
       --badge-color: var(--color-primary);
       --badge-fg: var(--color-primary-content);
+    }
+  }
+  .btn-error {
+    @layer daisyui.l1.l2.l3 {
+      --btn-color: var(--color-error);
+      --btn-fg: var(--color-error-content);
+    }
+  }
+  .btn-info {
+    @layer daisyui.l1.l2.l3 {
+      --btn-color: var(--color-info);
+      --btn-fg: var(--color-info-content);
     }
   }
   .btn-primary {
@@ -3213,6 +3242,16 @@
   .md\:grid-cols-2 {
     @media (width >= 48rem) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .md\:grid-cols-4 {
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .md\:gap-3 {
+    @media (width >= 48rem) {
+      gap: calc(var(--spacing) * 3);
     }
   }
   .md\:space-x-2 {
