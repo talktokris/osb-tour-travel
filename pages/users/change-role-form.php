@@ -52,19 +52,29 @@ $csrf = users_csrf_token();
                         <div class="alert alert-error"><span><?= h(implode(' ', $errors)) ?></span></div>
                     <?php endif; ?>
 
-                    <form method="post" action="index.php?page=users_role_form&id=<?= $userId ?>" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <form method="post" action="index.php?page=users_role_form&id=<?= $userId ?>" class="space-y-3">
                         <input type="hidden" name="_token" value="<?= h($csrf) ?>">
                         <input type="hidden" name="id" value="<?= $userId ?>">
-                        <label class="form-control"><span class="label-text">Full Name</span><input value="<?= h((string) $user['Name']) ?>" class="input input-bordered bg-base-200" readonly></label>
-                        <label class="form-control"><span class="label-text">User Name</span><input value="<?= h((string) $user['Username']) ?>" class="input input-bordered bg-base-200" readonly></label>
-                        <label class="form-control md:col-span-2">
-                            <span class="label-text">Role</span>
-                            <select name="Role" class="select select-bordered">
-                                <option value="">Select Role</option>
-                                <?php foreach ($roleOptions as $opt): ?><option value="<?= h($opt) ?>" <?= $selectedRole === $opt ? 'selected' : '' ?>><?= h($opt) ?></option><?php endforeach; ?>
-                            </select>
-                        </label>
-                        <div class="md:col-span-2 flex justify-end"><button class="btn btn-primary" type="submit">Change Role</button></div>
+                        <div class="max-w-4xl mx-auto border border-base-300 rounded-box overflow-hidden">
+                            <div class="px-4 py-2.5 bg-linear-to-r from-sky-700 to-cyan-600 text-white font-bold text-base">Change Role</div>
+                            <div class="divide-y divide-base-300">
+                                <?php
+                                $rowClass = 'grid grid-cols-1 md:grid-cols-[190px_1fr] items-center gap-2 px-3 py-1.5';
+                                $labelClass = 'font-semibold text-sm text-base-content/80';
+                                $inputClass = 'input input-bordered input-sm text-sm w-full max-w-xl';
+                                ?>
+                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Full Name :</label><input value="<?= h((string) $user['Name']) ?>" class="<?= $inputClass ?> bg-base-200" readonly></div>
+                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">User Name :</label><input value="<?= h((string) $user['Username']) ?>" class="<?= $inputClass ?> bg-base-200" readonly></div>
+                                <div class="<?= $rowClass ?>">
+                                    <label class="<?= $labelClass ?>">Role :</label>
+                                    <select name="Role" class="select select-bordered select-sm text-sm w-full max-w-xs">
+                                        <option value="">Select Role</option>
+                                        <?php foreach ($roleOptions as $opt): ?><option value="<?= h($opt) ?>" <?= $selectedRole === $opt ? 'selected' : '' ?>><?= h($opt) ?></option><?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-center"><button class="btn btn-primary" type="submit">Change Role</button></div>
                     </form>
                 </div>
             </div>

@@ -51,14 +51,24 @@ $csrf = users_csrf_token();
                         <div class="alert alert-error"><span><?= h(implode(' ', $errors)) ?></span></div>
                     <?php endif; ?>
 
-                    <form method="post" action="index.php?page=users_password_form&id=<?= $userId ?>" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <form method="post" action="index.php?page=users_password_form&id=<?= $userId ?>" class="space-y-3">
                         <input type="hidden" name="_token" value="<?= h($csrf) ?>">
                         <input type="hidden" name="id" value="<?= $userId ?>">
-                        <label class="form-control"><span class="label-text">Full Name</span><input value="<?= h((string) $user['Name']) ?>" class="input input-bordered bg-base-200" readonly></label>
-                        <label class="form-control"><span class="label-text">User Name</span><input value="<?= h((string) $user['Username']) ?>" class="input input-bordered bg-base-200" readonly></label>
-                        <label class="form-control"><span class="label-text">Password</span><input type="password" name="new_password" class="input input-bordered"></label>
-                        <label class="form-control"><span class="label-text">Confirm Password</span><input type="password" name="con_password" class="input input-bordered"></label>
-                        <div class="md:col-span-2 flex justify-end"><button class="btn btn-primary" type="submit">Change Password</button></div>
+                        <div class="max-w-4xl mx-auto border border-base-300 rounded-box overflow-hidden">
+                            <div class="px-4 py-2.5 bg-linear-to-r from-sky-700 to-cyan-600 text-white font-bold text-base">Change Password</div>
+                            <div class="divide-y divide-base-300">
+                                <?php
+                                $rowClass = 'grid grid-cols-1 md:grid-cols-[190px_1fr] items-center gap-2 px-3 py-1.5';
+                                $labelClass = 'font-semibold text-sm text-base-content/80';
+                                $inputClass = 'input input-bordered input-sm text-sm w-full max-w-xl';
+                                ?>
+                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Full Name :</label><input value="<?= h((string) $user['Name']) ?>" class="<?= $inputClass ?> bg-base-200" readonly></div>
+                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">User Name :</label><input value="<?= h((string) $user['Username']) ?>" class="<?= $inputClass ?> bg-base-200" readonly></div>
+                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Password :</label><input type="password" name="new_password" class="<?= $inputClass ?>"></div>
+                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Confirm Password :</label><input type="password" name="con_password" class="<?= $inputClass ?>"></div>
+                            </div>
+                        </div>
+                        <div class="flex justify-center"><button class="btn btn-primary" type="submit">Change Password</button></div>
                     </form>
                 </div>
             </div>
