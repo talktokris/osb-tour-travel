@@ -17,7 +17,7 @@
     $currentPage = $_GET['page'] ?? 'home';
     ?>
     <!-- Fixed header similar to the Flowbite navbar layout -->
-    <header class="navbar bg-base-100 text-base-content fixed top-0 left-0 right-0 z-20 border-b border-base-300 shadow-sm pl-10 py-5">
+    <header class="navbar bg-base-100 text-base-content fixed top-0 left-0 right-0 z-20 border-b border-base-300 shadow-sm pl-10 py-4">
         <div class="w-full grid grid-cols-3 items-center">
             <!-- Logo (very left) -->
             <div class="flex items-center gap-3">
@@ -25,18 +25,33 @@
             </div>
 
             <!-- Desktop nav (menu centered) -->
-            <div class="hidden md:flex items-center justify-center gap-1">
+            <div class="hidden md:flex items-center justify-center gap-1 flex-wrap">
                 <a href="index.php?page=home" class="btn btn-sm rounded-btn <?= $currentPage === 'home' ? 'btn-primary' : 'btn-ghost' ?>">
                     Home
                 </a>
-                <a href="index.php?page=agents" class="btn btn-sm rounded-btn <?= $currentPage === 'agents' ? 'btn-primary' : 'btn-ghost' ?>">
-                    Agents
+                <a href="index.php?page=file" class="btn btn-sm rounded-btn <?= $currentPage === 'file' ? 'btn-primary' : 'btn-ghost' ?>">
+                    File / Assg
                 </a>
-                <a href="index.php?page=services" class="btn btn-sm rounded-btn <?= $currentPage === 'services' ? 'btn-primary' : 'btn-ghost' ?>">
-                    Services
+                <a href="index.php?page=search" class="btn btn-sm rounded-btn <?= $currentPage === 'search' ? 'btn-primary' : 'btn-ghost' ?>">
+                    Search
                 </a>
-                <a href="index.php?page=bookings" class="btn btn-sm rounded-btn <?= $currentPage === 'bookings' ? 'btn-primary' : 'btn-ghost' ?>">
-                    Bookings
+                <a href="index.php?page=report" class="btn btn-sm rounded-btn <?= $currentPage === 'report' ? 'btn-primary' : 'btn-ghost' ?>">
+                    Report
+                </a>
+                <a href="index.php?page=driver" class="btn btn-sm rounded-btn <?= $currentPage === 'driver' ? 'btn-primary' : 'btn-ghost' ?>">
+                    Driver
+                </a>
+                <a href="index.php?page=invoice" class="btn btn-sm rounded-btn <?= $currentPage === 'invoice' ? 'btn-primary' : 'btn-ghost' ?>">
+                    Invoice
+                </a>
+                <a href="index.php?page=sms" class="btn btn-sm rounded-btn <?= $currentPage === 'sms' ? 'btn-primary' : 'btn-ghost' ?>">
+                    SMS
+                </a>
+                <a href="index.php?page=setup" class="btn btn-sm rounded-btn <?= $currentPage === 'setup' ? 'btn-primary' : 'btn-ghost' ?>">
+                    Setup
+                </a>
+                <a href="index.php?page=users" class="btn btn-sm rounded-btn <?= $currentPage === 'users' ? 'btn-primary' : 'btn-ghost' ?>">
+                    Users
                 </a>
                 <a href="index.php?page=logout" class="btn btn-outline btn-primary btn-sm rounded-btn">
                     Logout
@@ -71,9 +86,14 @@
                             </div>
                         </li>
                         <li><a href="index.php?page=home">Home</a></li>
-                        <li><a href="index.php?page=agents">Agents</a></li>
-                        <li><a href="index.php?page=services">Services</a></li>
-                        <li><a href="index.php?page=bookings">Bookings</a></li>
+                        <li><a href="index.php?page=file">File / Assg</a></li>
+                        <li><a href="index.php?page=search">Search</a></li>
+                        <li><a href="index.php?page=report">Report</a></li>
+                        <li><a href="index.php?page=driver">Driver</a></li>
+                        <li><a href="index.php?page=invoice">Invoice</a></li>
+                        <li><a href="index.php?page=sms">SMS</a></li>
+                        <li><a href="index.php?page=setup">Setup</a></li>
+                        <li><a href="index.php?page=users">Users</a></li>
                         <li class="mt-1">
                             <a href="index.php?page=logout" class="btn btn-outline btn-primary btn-block">Logout</a>
                         </li>

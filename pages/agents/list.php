@@ -12,11 +12,11 @@ $currentPage = $_GET['page'] ?? 'home';
 <div class="flex gap-6 w-full">
     <!-- Left sidebar -->
     <aside class="hidden lg:block w-72 shrink-0">
-        <?php require __DIR__ . '/../../includes/sidebar.php'; ?>
+        <?php require __DIR__ . '/sidebar.php'; ?>
     </aside>
 
     <!-- Main content -->
-    <main class="flex-1">
+    <main class="flex-1 px-4">
         <div class="space-y-4">
             <h2 class="text-2xl font-semibold text-base-content">Agents</h2>
 

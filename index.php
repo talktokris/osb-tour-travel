@@ -53,14 +53,30 @@ if ($page !== 'login' && empty($_SESSION['user_id'])) {
 if ($page === 'login') {
     require __DIR__ . '/pages/login.php';
 } elseif ($page === 'home') {
-    require __DIR__ . '/pages/home.php';
+    require __DIR__ . '/pages/home/index.php';
 } elseif ($page === 'agents') {
     require __DIR__ . '/pages/agents/list.php';
 } elseif ($page === 'services') {
-    require __DIR__ . '/pages/services.php';
+    require __DIR__ . '/pages/services/index.php';
 } elseif ($page === 'bookings') {
-    require __DIR__ . '/pages/bookings.php';
+    require __DIR__ . '/pages/bookings/index.php';
+} elseif ($page === 'file') {
+    require __DIR__ . '/pages/file/index.php';
+} elseif ($page === 'search') {
+    require __DIR__ . '/pages/search/index.php';
+} elseif ($page === 'report') {
+    require __DIR__ . '/pages/report/index.php';
+} elseif ($page === 'driver') {
+    require __DIR__ . '/pages/driver/index.php';
+} elseif ($page === 'invoice') {
+    require __DIR__ . '/pages/invoice/index.php';
+} elseif ($page === 'sms') {
+    require __DIR__ . '/pages/sms/index.php';
+} elseif ($page === 'setup') {
+    require __DIR__ . '/pages/setup/index.php';
+} elseif ($page === 'users') {
+    require __DIR__ . '/pages/users/index.php';
 } else {
-    require __DIR__ . '/pages/home.php';
+    require __DIR__ . '/pages/home/index.php';
 }
 

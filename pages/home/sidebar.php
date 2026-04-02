@@ -1,8 +1,8 @@
 <?php
-// Sidebar menu for logged-in pages.
-// Expects $currentPage to be available in the caller.
+// Sidebar for the Home menu (logged-in pages).
+// Expects $currentPage to be available.
 ?>
-<aside class="bg-base-100 border-r border-base-300 w-72 min-h-full  rounded-lg">
+<aside class="bg-base-100 border-r border-base-300 w-72 min-h-full ml-6 rounded-2xl">
     <div class="p-4 border-b border-base-300">
         <div class="text-sm font-semibold text-base-content/70">Navigation</div>
     </div>
