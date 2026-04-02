@@ -14,35 +14,37 @@
     <?php
     $activeAgent = $_COOKIE['agent_cookie'] ?? 'None';
     $loggedUser = $_SESSION['user_name'] ?? 'User';
+    $currentPage = $_GET['page'] ?? 'home';
     ?>
     <!-- Fixed header similar to the Flowbite navbar layout -->
-    <header class="navbar bg-base-100 text-base-content fixed top-0 left-0 right-0 z-20 border-b border-base-300 shadow-sm px-4">
-        <div class="max-w-screen-xl w-full mx-auto flex items-center justify-between gap-3">
+    <header class="navbar bg-base-100 text-base-content fixed top-0 left-0 right-0 z-20 border-b border-base-300 shadow-sm pl-0 pr-6">
+        <div class="w-full grid grid-cols-3 items-center">
+            <!-- Logo (very left) -->
             <div class="flex items-center gap-3">
                 <img src="images/within_earth.png" alt="OSB" class="h-8 w-auto" />
             </div>
 
-            <!-- Desktop nav (Logout moved into nav) -->
-            <div class="hidden md:flex flex-1 items-center justify-center gap-1">
-                <a href="index.php?page=home" class="btn btn-ghost btn-sm rounded-btn">
+            <!-- Desktop nav (menu centered) -->
+            <div class="hidden md:flex items-center justify-center gap-1">
+                <a href="index.php?page=home" class="btn btn-sm rounded-btn <?= $currentPage === 'home' ? 'btn-primary' : 'btn-ghost' ?>">
                     Home
                 </a>
-                <a href="index.php?page=agents" class="btn btn-ghost btn-sm rounded-btn">
+                <a href="index.php?page=agents" class="btn btn-sm rounded-btn <?= $currentPage === 'agents' ? 'btn-primary' : 'btn-ghost' ?>">
                     Agents
                 </a>
-                <a href="index.php?page=services" class="btn btn-ghost btn-sm rounded-btn">
+                <a href="index.php?page=services" class="btn btn-sm rounded-btn <?= $currentPage === 'services' ? 'btn-primary' : 'btn-ghost' ?>">
                     Services
                 </a>
-                <a href="index.php?page=bookings" class="btn btn-ghost btn-sm rounded-btn">
+                <a href="index.php?page=bookings" class="btn btn-sm rounded-btn <?= $currentPage === 'bookings' ? 'btn-primary' : 'btn-ghost' ?>">
                     Bookings
                 </a>
-                <a href="index.php?page=logout" class="btn btn-primary btn-sm rounded-btn">
+                <a href="index.php?page=logout" class="btn btn-outline btn-primary btn-sm rounded-btn">
                     Logout
                 </a>
             </div>
 
-            <!-- Agent + user info on the right (where Logout was) -->
-            <div class="hidden md:flex items-center gap-8 text-sm">
+            <!-- Agent + user info on the right -->
+            <div class="hidden md:flex items-center gap-8 text-sm justify-end">
                 <div class="text-green-600 font-semibold">
                     Active Agent : <span class="text-green-700 font-bold"><?= h((string)$activeAgent) ?></span>
                 </div>
@@ -52,7 +54,7 @@
             </div>
 
             <!-- Mobile menu -->
-            <div class="md:hidden flex items-center gap-2">
+            <div class="md:hidden flex items-center gap-2 justify-end col-span-3">
                 <div class="dropdown dropdown-end">
                     <label tabindex="0" class="btn btn-ghost btn-square">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -73,7 +75,7 @@
                         <li><a href="index.php?page=services">Services</a></li>
                         <li><a href="index.php?page=bookings">Bookings</a></li>
                         <li class="mt-1">
-                            <a href="index.php?page=logout" class="btn btn-primary btn-block">Logout</a>
+                            <a href="index.php?page=logout" class="btn btn-outline btn-primary btn-block">Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -82,4 +84,4 @@
     </header>
 <?php endif; ?>
 <!-- Offset for fixed header -->
-<div class="max-w-7xl mx-auto px-4 py-4 w-full flex-1 pt-24">
+<div class="w-full px-0 py-4 flex-1 pt-24">
