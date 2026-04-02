@@ -30,28 +30,45 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.25);
         }
         .module-sidebar .menu {
-            padding: 0.7rem;
+            padding: 0.55rem 0;
             gap: 0.42rem;
             background: transparent;
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            display: block !important;
+            box-sizing: border-box;
         }
         .module-sidebar .menu li {
             margin: 0;
+            width: 100% !important;
+            display: flex !important;
+            padding: 0 0.55rem;
+            box-sizing: border-box;
         }
-        .module-sidebar .menu li > a {
+        .module-sidebar ul.menu > li > a,
+        .module-sidebar .menu li > a,
+        .module-sidebar .menu :where(li > a) {
             min-height: 2.65rem;
             border-radius: 12px;
             font-size: 0.9rem;
             font-weight: 700;
             color: #344256;
-            display: flex;
+            display: flex !important;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             gap: 0.6rem;
             transition: all 0.18s ease;
             padding: 0.45rem 0.55rem 0.45rem 0.75rem;
             border: 1px solid #dbe6f3;
             background: linear-gradient(180deg, #f8fbff 0%, #edf3fb 100%);
             box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            text-align: left;
+            box-sizing: border-box;
+            flex: 1 1 auto !important;
         }
         .module-sidebar .menu li > a::before {
             content: "";
@@ -67,22 +84,7 @@
             transition: all 0.18s ease;
         }
         .module-sidebar .menu li > a::after {
-            content: "...";
-            width: 1.55rem;
-            height: 1.55rem;
-            flex: 0 0 1.55rem;
-            border-radius: 999px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 800;
-            letter-spacing: 0.04em;
-            color: #5b6b82;
-            background: linear-gradient(180deg, #f2f6fc 0%, #e4ecf8 100%);
-            border: 1px solid #cdd8e8;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
-            transition: all 0.18s ease;
+            content: none;
         }
         .module-sidebar .menu li > a:hover {
             background: linear-gradient(180deg, #f0f6ff 0%, #e3eeff 100%);
@@ -95,11 +97,6 @@
             background-color: #0b77bb;
             transform: translateX(1px);
         }
-        .module-sidebar .menu li > a:hover::after {
-            color: #0c4a8a;
-            border-color: #9ec5fb;
-            background: linear-gradient(180deg, #e7f1ff 0%, #d7e8ff 100%);
-        }
         .module-sidebar .menu li.active > a,
         .module-sidebar .menu li > a.active {
             background: linear-gradient(180deg, #dfeeff 0%, #d3e6ff 100%);
@@ -110,12 +107,6 @@
         .module-sidebar .menu li.active > a::before,
         .module-sidebar .menu li > a.active::before {
             background-color: #0c4a8a;
-        }
-        .module-sidebar .menu li.active > a::after,
-        .module-sidebar .menu li > a.active::after {
-            color: #0c4a8a;
-            border-color: #90bdfa;
-            background: linear-gradient(180deg, #deecff 0%, #cfe3ff 100%);
         }
     </style>
 </head>
