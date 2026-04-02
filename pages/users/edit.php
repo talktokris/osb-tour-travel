@@ -84,7 +84,7 @@ $csrf = users_csrf_token();
                     <form method="post" action="index.php?page=users_edit&id=<?= $userId ?>" class="space-y-4">
                         <input type="hidden" name="_token" value="<?= h($csrf) ?>">
                         <input type="hidden" name="id" value="<?= $userId ?>">
-                        <div class="max-w-5xl mx-auto border border-base-300 rounded-box overflow-hidden">
+                        <div class="max-w-4xl mx-auto border border-base-300 rounded-box overflow-hidden">
                             <div class="px-4 py-3 bg-linear-to-r from-sky-700 to-cyan-600 text-white font-bold text-lg">Edit User</div>
                             <div class="divide-y divide-base-300">
                                 <?php
