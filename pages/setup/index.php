@@ -11,7 +11,7 @@ $currentPage = $_GET['page'] ?? 'setup';
 
     <main class="flex-1 px-4">
         <div class="space-y-4">
-            <h2 class="text-2xl font-semibold text-base-content">Setup</h2>
+            <?php $breadcrumbCurrent = 'Setup'; require __DIR__ . '/../../includes/breadcrumb.php'; ?>
             <div class="card bg-base-100 shadow-xl border border-base-300">
                 <div class="card-body">
                     <h3 class="card-title text-lg text-success">Service Setup</h3>

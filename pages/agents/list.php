@@ -18,7 +18,7 @@ $currentPage = $_GET['page'] ?? 'home';
     <!-- Main content -->
     <main class="flex-1 px-4">
         <div class="space-y-4">
-            <h2 class="text-2xl font-semibold text-base-content">Agents</h2>
+            <?php $breadcrumbCurrent = 'Agents'; require __DIR__ . '/../../includes/breadcrumb.php'; ?>
 
             <div class="card bg-base-100 shadow-xl border border-base-300">
                 <div class="card-body">
