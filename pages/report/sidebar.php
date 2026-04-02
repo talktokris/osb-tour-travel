@@ -1,11 +1,10 @@
 <?php
 // Sidebar for Report module.
 ?>
-<aside class="bg-base-100 border-r border-base-300 w-72 min-h-full ml-6 rounded-2xl">
-    <div class="p-4 border-b border-base-300">
-        <div class="text-sm font-semibold text-base-content/70">Report Menu</div>
-    </div>
-    <ul class="menu menu-compact p-2">
+<aside class="module-sidebar">
+    <div class="module-sidebar__head">Report Menu</div>
+    <div class="px-3 py-2 text-[11px] uppercase tracking-wide text-slate-500 font-semibold">Reports</div>
+    <ul class="menu">
         <li><a href="#">Report by Agent</a></li>
         <li><a href="#">Report by Supplier</a></li>
         <li><a href="#">Report by Vehicle Type</a></li>

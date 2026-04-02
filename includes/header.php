@@ -8,6 +8,52 @@
     <title>OSB Tour System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/tailwind.css">
+    <style>
+        .module-sidebar {
+            width: 18rem;
+            min-height: 100%;
+            margin-left: 1.5rem;
+            border: 1px solid #dbe2ea;
+            border-radius: 14px;
+            background: #ffffff;
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+        }
+        .module-sidebar__head {
+            padding: 0.85rem 1rem;
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #0c4a8a 0%, #0b77bb 60%, #0a94c8 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .module-sidebar .menu {
+            padding: 0.6rem;
+            gap: 0.2rem;
+            background: transparent;
+        }
+        .module-sidebar .menu li > a {
+            min-height: 2rem;
+            border-radius: 9px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #1f2937;
+            transition: all 0.15s ease;
+        }
+        .module-sidebar .menu li > a:hover {
+            background: #eef6ff;
+            color: #0c4a8a;
+            transform: translateX(2px);
+        }
+        .module-sidebar .menu li.active > a,
+        .module-sidebar .menu li > a.active {
+            background: #dbeafe;
+            color: #0c4a8a;
+            box-shadow: inset 0 0 0 1px #bfdbfe;
+        }
+    </style>
 </head>
 <body class="min-h-screen bg-base-200 flex flex-col">
 <?php if (!empty($_SESSION['user_id'])): ?>
