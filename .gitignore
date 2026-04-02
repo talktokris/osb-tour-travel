@@ -1,0 +1,13 @@
+## OSB Tour System - ignore generated and archives
+
+# Ignore all zip files anywhere in the project
+**/*.zip
+
+# Optional: generated build output
+/css/tailwind.css
+
+# Optional: node dependencies if you run Tailwind builds
+/node_modules/
+
+# Environment files should not be committed
+/.env
