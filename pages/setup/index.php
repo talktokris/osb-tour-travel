@@ -13,10 +13,12 @@ $currentPage = $_GET['page'] ?? 'setup';
         <div class="space-y-4">
             <?php $breadcrumbCurrent = 'Setup'; require __DIR__ . '/../../includes/breadcrumb.php'; ?>
             <div class="card bg-base-100 shadow-xl border border-base-300">
-                <div class="card-body">
-                    <h3 class="card-title text-lg text-success">Service Setup</h3>
-                    <div class="bg-warning/15 border border-warning/40 rounded-box p-6">
-                        <p class="text-sm text-base-content/80">Master setup screens are grouped in this module and will be migrated one by one.</p>
+                <div class="card-body space-y-4">
+                    <h3 class="card-title text-lg text-success">Setup</h3>
+                    <p class="text-sm text-base-content/80">Master data and configuration. Start with agents below; other modules will be added over time.</p>
+                    <a href="index.php?page=setup_agents" class="btn btn-primary btn-sm w-fit">Open Agent Setup</a>
+                    <div class="bg-warning/15 border border-warning/40 rounded-box p-4">
+                        <p class="text-sm text-base-content/80">Additional setup screens (supplier, vehicles, etc.) are listed in the sidebar when available.</p>
                     </div>
                 </div>
             </div>

@@ -74,6 +74,14 @@ if ($page === 'login') {
     require __DIR__ . '/pages/sms/index.php';
 } elseif ($page === 'setup') {
     require __DIR__ . '/pages/setup/index.php';
+} elseif ($page === 'setup_agents') {
+    require __DIR__ . '/pages/setup/agents/list.php';
+} elseif ($page === 'setup_agent_create') {
+    require __DIR__ . '/pages/setup/agents/create.php';
+} elseif ($page === 'setup_agent_view') {
+    require __DIR__ . '/pages/setup/agents/view.php';
+} elseif ($page === 'setup_agent_edit') {
+    require __DIR__ . '/pages/setup/agents/edit.php';
 } elseif ($page === 'users') {
     require __DIR__ . '/pages/users/list.php';
 } elseif ($page === 'users_create') {

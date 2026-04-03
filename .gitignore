@@ -18,3 +18,7 @@
 
 # Environment files should not be committed
 /.env
+
+# Uploaded agent logos (keep directory via .gitkeep)
+/uploads/agent_logos/*
+!/uploads/agent_logos/.gitkeep

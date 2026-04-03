@@ -1,11 +1,14 @@
 <?php
 // Sidebar for Setup module.
+$setupPage = $_GET['page'] ?? 'setup';
+$agentPages = ['setup_agents', 'setup_agent_create', 'setup_agent_view', 'setup_agent_edit'];
+$isAgent = in_array($setupPage, $agentPages, true);
 ?>
 <aside class="module-sidebar">
     <div class="module-sidebar__head">Setup Menu</div>
-    <div class="px-3 py-2 text-[11px] uppercase tracking-wide text-slate-500 font-semibold">Master Data</div>
+    <div class="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider text-slate-500 font-medium">Master Data</div>
     <ul class="menu">
-        <li><a href="#">Agent Setup</a></li>
+        <li class="<?= $isAgent ? 'active' : '' ?>"><a href="index.php?page=setup_agents">Agent Setup</a></li>
         <li><a href="#">Supplier Setup</a></li>
         <li><a href="#">Vehicles Setup</a></li>
         <li><a href="#">Service Setup</a></li>
@@ -21,4 +24,3 @@
         <li><a href="#">SMS Label</a></li>
     </ul>
 </aside>
-
