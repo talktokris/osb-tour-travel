@@ -26,7 +26,41 @@ require __DIR__ . '/../../../includes/header.php'; require __DIR__ . '/../../../
 <?php $sn=1; $arabicCols = $m['list_arabic_columns'] ?? []; foreach($rows as $row): ?><tr><td><?= $sn++ ?></td><?php foreach(array_keys($m['list_columns']) as $col): $cell = (string)($row[$col]??''); $isAr = in_array($col, $arabicCols, true); if ($isAr && function_exists('normalize_arabic_text')) { $cell = normalize_arabic_text($cell); } ?><td<?= $isAr ? ' class="max-w-xs whitespace-normal text-right" dir="rtl" lang="ar"' : '' ?>><?= h($cell) ?></td><?php endforeach; ?><td><a class="btn btn-xs btn-info btn-outline" href="index.php?page=<?= h($routes['view']) ?>&id=<?= (int)$row[$pk] ?>">View</a></td><td><a class="btn btn-xs btn-outline" href="index.php?page=<?= h($routes['edit']) ?>&id=<?= (int)$row[$pk] ?>">Edit</a></td><?php if($setupModule==='drivers'): ?><td><a class="btn btn-xs btn-warning btn-outline" href="index.php?page=setup_driver_password_form&id=<?= (int)$row[$pk] ?>">Change Password</a></td><?php endif; ?><?php if(!$hideDelete): ?><td><button type="button" class="btn btn-xs btn-error btn-outline js-del" data-id="<?= (int)$row[$pk] ?>" data-name="<?= h((string)($row[array_key_first($m['list_columns'])]??'')) ?>">Delete</button></td><?php endif; ?></tr><?php endforeach; ?>
 </tbody></table></div></div></div></div></main></div>
 <?php if (!$hideDelete): ?>
-<form id="f-del" method="post" action="index.php?page=<?= h($routes['list']) ?>" class="hidden"><input type="hidden" name="_token" value="<?= h($csrf) ?>"><input type="hidden" name="action" value="delete_row"><input type="hidden" name="id" id="f-del-id"></form>
-<script>(function(){var f=document.getElementById('f-del'),id=document.getElementById('f-del-id');document.querySelectorAll('.js-del').forEach(function(b){b.addEventListener('click',function(){id.value=this.getAttribute('data-id')||'';if(confirm('Delete this record?'))f.submit();});});})();</script>
+<form id="f-del" method="post" action="index.php?page=<?= h($routes['list']) ?>" class="hidden" aria-hidden="true"><input type="hidden" name="_token" value="<?= h($csrf) ?>"><input type="hidden" name="action" value="delete_row"><input type="hidden" name="id" id="f-del-id"></form>
+<dialog id="delete-setup-list-modal" class="agent-delete-dialog" aria-labelledby="delete-setup-list-title" aria-describedby="delete-setup-list-msg">
+    <div class="agent-delete-dialog__surface">
+        <h3 class="font-bold text-lg mb-1" id="delete-setup-list-title">Delete <?= h($m['single']) ?>?</h3>
+        <p class="agent-delete-dialog__message" id="delete-setup-list-msg">Are you sure? This cannot be undone.</p>
+        <div class="agent-delete-dialog__actions">
+            <button type="button" class="btn btn-outline" id="delete-setup-list-no">No</button>
+            <button type="button" class="btn btn-error" id="delete-setup-list-yes">Yes</button>
+        </div>
+    </div>
+</dialog>
+<script>
+(function () {
+    var modal = document.getElementById('delete-setup-list-modal');
+    var form = document.getElementById('f-del');
+    var idInput = document.getElementById('f-del-id');
+    var msg = document.getElementById('delete-setup-list-msg');
+    var btnNo = document.getElementById('delete-setup-list-no');
+    var btnYes = document.getElementById('delete-setup-list-yes');
+    var entityLabel = <?= json_encode($m['single'], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+    if (!modal || !form || !idInput || !msg || !btnNo || !btnYes) return;
+
+    document.querySelectorAll('.js-del').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            idInput.value = this.getAttribute('data-id') || '';
+            var name = this.getAttribute('data-name') || '';
+            msg.textContent = name
+                ? 'Are you sure you want to delete ' + entityLabel + ' "' + name + '"? This cannot be undone.'
+                : 'Are you sure you want to delete this ' + entityLabel + '? This cannot be undone.';
+            modal.showModal();
+        });
+    });
+    btnNo.addEventListener('click', function () { modal.close(); });
+    btnYes.addEventListener('click', function () { modal.close(); form.submit(); });
+})();
+</script>
 <?php endif; ?>
 <?php require __DIR__ . '/../../../includes/footer.php'; ?>

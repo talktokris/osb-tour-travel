@@ -124,6 +124,50 @@
         .module-sidebar .menu li > a.active::before {
             background-color: #0c4a8a;
         }
+        /* Shared delete confirmation (Setup lists, agents, suppliers, etc.) */
+        dialog.agent-delete-dialog {
+            margin: 0;
+            max-width: none;
+            max-height: none;
+            width: 100%;
+            height: 100%;
+            padding: 1.25rem;
+            border: none;
+            background: transparent;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+        dialog.agent-delete-dialog[open] {
+            display: flex;
+        }
+        dialog.agent-delete-dialog::backdrop {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(4px);
+        }
+        dialog.agent-delete-dialog .agent-delete-dialog__surface {
+            width: 100%;
+            max-width: 26rem;
+            background: var(--color-base-100, #ffffff);
+            color: var(--color-base-content, #1e293b);
+            border-radius: 1rem;
+            border: 1px solid color-mix(in oklab, var(--color-base-content, #64748b) 12%, transparent);
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35);
+            padding: 1.5rem 1.5rem 1.25rem;
+        }
+        dialog.agent-delete-dialog .agent-delete-dialog__message {
+            margin: 0 0 1.35rem;
+            font-size: 0.875rem;
+            line-height: 1.55;
+            color: color-mix(in oklab, var(--color-base-content, #64748b) 78%, transparent);
+        }
+        dialog.agent-delete-dialog .agent-delete-dialog__actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-base-200 flex flex-col">

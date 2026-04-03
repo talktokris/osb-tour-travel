@@ -158,15 +158,6 @@ require __DIR__ . '/../../../includes/nav.php';
     </div>
 </dialog>
 
-<style>
-    #delete-supplier-modal.agent-delete-dialog { margin: 0; max-width: none; max-height: none; width: 100%; height: 100%; padding: 1.25rem; border: none; background: transparent; display: none; align-items: center; justify-content: center; box-sizing: border-box; }
-    #delete-supplier-modal.agent-delete-dialog[open] { display: flex; }
-    #delete-supplier-modal.agent-delete-dialog::backdrop { background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px); }
-    #delete-supplier-modal .agent-delete-dialog__surface { width: 100%; max-width: 26rem; background: var(--color-base-100, #fff); color: var(--color-base-content, #1e293b); border-radius: 1rem; border: 1px solid color-mix(in oklab, var(--color-base-content, #64748b) 12%, transparent); box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35); padding: 1.5rem 1.5rem 1.25rem; }
-    #delete-supplier-modal .agent-delete-dialog__message { margin: 0 0 1.35rem; font-size: 0.875rem; line-height: 1.55; color: color-mix(in oklab, var(--color-base-content, #64748b) 78%, transparent); }
-    #delete-supplier-modal .agent-delete-dialog__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: flex-end; }
-</style>
-
 <script>
 (function () {
     var countrySel = document.getElementById('supplier-filter-country');
@@ -197,7 +188,7 @@ require __DIR__ . '/../../../includes/nav.php';
         btn.addEventListener('click', function () {
             idInput.value = this.getAttribute('data-supplier-id') || '';
             var name = this.getAttribute('data-supplier-name') || '';
-            msg.textContent = name ? 'Are you sure you want to delete supplier "' + name + '"? This cannot be undone.' : 'Are you sure? This cannot be undone.';
+            msg.textContent = name ? 'Are you sure you want to delete supplier "' + name + '"? This cannot be undone.' : 'Are you sure you want to delete this supplier? This cannot be undone.';
             modal.showModal();
         });
     });
