@@ -9,8 +9,13 @@ function setup_common_module_map(): array
             'service' => __DIR__ . '/../../../includes/setup_zones_service.php',
             'routes' => ['list' => 'setup_zones', 'create' => 'setup_zone_create', 'view' => 'setup_zone_view', 'edit' => 'setup_zone_edit'],
             'functions' => ['list' => 'setup_zones_list', 'find' => 'setup_zones_find', 'create' => 'setup_zones_create', 'update' => 'setup_zones_update', 'delete' => 'setup_zones_delete', 'flash_get' => 'setup_zones_flash_get', 'flash_set' => 'setup_zones_flash_set', 'csrf_token' => 'setup_zones_csrf_token', 'csrf_validate' => 'setup_zones_csrf_validate', 'locations' => 'setup_zones_locations'],
-            'fields' => [['key' => 'location_name', 'label' => 'Location', 'type' => 'select_locations'], ['key' => 'zone_name', 'label' => 'Zone Name', 'type' => 'text'], ['key' => 'zone_name_arabic', 'label' => 'Zone Name Arabic', 'type' => 'text']],
+            'fields' => [
+                ['key' => 'location_name', 'label' => 'Location', 'type' => 'select_locations'],
+                ['key' => 'zone_name', 'label' => 'Zone Name', 'type' => 'text'],
+                ['key' => 'zone_name_arabic', 'label' => 'Zone Name Arabic', 'type' => 'text', 'arabic' => true],
+            ],
             'list_columns' => ['location_name' => 'Location', 'zone_name' => 'Zone', 'zone_name_arabic' => 'Zone Arabic'],
+            'list_arabic_columns' => ['zone_name_arabic'],
             'primary_key' => 'zone_id',
         ],
         'countries' => [
