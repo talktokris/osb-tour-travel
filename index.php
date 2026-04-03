@@ -206,8 +206,8 @@ if ($page === 'login') {
     $_GET['m'] = 'sms_labels';
     require __DIR__ . '/pages/setup/common/list.php';
 } elseif ($page === 'setup_sms_label_create') {
-    $_GET['m'] = 'sms_labels';
-    require __DIR__ . '/pages/setup/common/create.php';
+    header('Location: index.php?page=setup_sms_labels');
+    exit;
 } elseif ($page === 'setup_sms_label_view') {
     $_GET['m'] = 'sms_labels';
     require __DIR__ . '/pages/setup/common/view.php';

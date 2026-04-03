@@ -44,9 +44,9 @@ require __DIR__ . '/../../../includes/nav.php';
                                     <div class="grid grid-cols-1 md:grid-cols-[220px_1fr] items-center gap-2 px-3 py-1.5">
                                         <label class="font-semibold text-sm text-base-content/80"><?= h($label) ?> :</label>
                                         <?php if ($k === 'city_five_fills'): ?>
-                                            <textarea name="<?= h($k) ?>" class="textarea textarea-bordered textarea-sm text-sm w-full max-w-4xl" rows="8"><?= h($form[$k]) ?></textarea>
+                                            <textarea name="<?= h($k) ?>" dir="rtl" lang="ar" class="textarea textarea-bordered textarea-sm text-sm w-full max-w-4xl input-arabic" rows="8"><?= h($form[$k]) ?></textarea>
                                         <?php else: ?>
-                                            <input name="<?= h($k) ?>" value="<?= h($form[$k]) ?>" class="input input-bordered input-sm text-sm w-full max-w-4xl">
+                                            <input name="<?= h($k) ?>" value="<?= h($form[$k]) ?>" dir="rtl" lang="ar" class="input input-bordered input-sm text-sm w-full max-w-4xl input-arabic" type="text" autocomplete="off">
                                         <?php endif; ?>
                                     </div>
                                 <?php endforeach; ?>

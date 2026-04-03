@@ -9,6 +9,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/tailwind.css">
     <style>
+        input[type="text"],
+        input[type="search"],
+        input[type="email"],
+        input[type="password"],
+        textarea {
+            font-family: "Noto Naskh Arabic", "Tahoma", "Arial", sans-serif;
+        }
+        /* Explicit RTL for Arabic-only fields (typing flows right-to-left) */
+        .input-arabic,
+        textarea.input-arabic {
+            direction: rtl;
+            text-align: right;
+            unicode-bidi: plaintext;
+        }
         .module-sidebar {
             width: 18rem;
             min-height: 100%;

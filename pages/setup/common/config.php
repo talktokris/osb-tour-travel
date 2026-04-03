@@ -69,9 +69,11 @@ function setup_common_module_map(): array
         ],
         'sms_labels' => [
             'label' => 'SMS Label Setup', 'single' => 'SMS Label',
+            'list_hide_create' => true,
+            'list_hide_delete' => true,
             'service' => __DIR__ . '/../../../includes/setup_sms_labels_service.php',
-            'routes' => ['list' => 'setup_sms_labels', 'create' => 'setup_sms_label_create', 'view' => 'setup_sms_label_view', 'edit' => 'setup_sms_label_edit'],
-            'functions' => ['list' => 'setup_sms_labels_list', 'find' => 'setup_sms_labels_find', 'create' => 'setup_sms_labels_create', 'update' => 'setup_sms_labels_update', 'delete' => 'setup_sms_labels_delete', 'flash_get' => 'setup_sms_labels_flash_get', 'flash_set' => 'setup_sms_labels_flash_set', 'csrf_token' => 'setup_sms_labels_csrf_token', 'csrf_validate' => 'setup_sms_labels_csrf_validate'],
+            'routes' => ['list' => 'setup_sms_labels', 'view' => 'setup_sms_label_view', 'edit' => 'setup_sms_label_edit'],
+            'functions' => ['list' => 'setup_sms_labels_list', 'find' => 'setup_sms_labels_find', 'update' => 'setup_sms_labels_update', 'flash_get' => 'setup_sms_labels_flash_get', 'flash_set' => 'setup_sms_labels_flash_set', 'csrf_token' => 'setup_sms_labels_csrf_token', 'csrf_validate' => 'setup_sms_labels_csrf_validate'],
             'fields' => [['key' => 'sms_label_header', 'label' => 'SMS Header Label', 'type' => 'text'], ['key' => 'sms_label_footer', 'label' => 'SMS Footer Label', 'type' => 'text']],
             'list_columns' => ['sms_label_header' => 'SMS Header Label', 'sms_label_footer' => 'SMS Footer Label'],
             'primary_key' => 'sms_label_id',

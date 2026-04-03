@@ -24,7 +24,7 @@ require __DIR__ . '/../../../includes/nav.php';
                                 <?php $first = true; foreach ($fieldMap as $col => $label): ?>
                                     <tr>
                                         <td><?= h($label) ?></td>
-                                        <td class="max-w-3xl whitespace-normal"><?= h((string)($row[$col] ?? '')) ?></td>
+                                        <td class="max-w-3xl whitespace-normal text-right" dir="rtl" lang="ar"><?= h((string)($row[$col] ?? '')) ?></td>
                                         <td><?= $first ? '<a class="btn btn-xs btn-outline" href="index.php?page=setup_itinerary_label_edit&id=1">Edit</a>' : '' ?></td>
                                     </tr>
                                 <?php $first = false; endforeach; ?>
