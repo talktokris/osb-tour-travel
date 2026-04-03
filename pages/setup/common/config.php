@@ -27,8 +27,13 @@ function setup_common_module_map(): array
             'service' => __DIR__ . '/../../../includes/setup_cities_service.php',
             'routes' => ['list' => 'setup_cities', 'create' => 'setup_city_create', 'view' => 'setup_city_view', 'edit' => 'setup_city_edit'],
             'functions' => ['list' => 'setup_cities_list', 'find' => 'setup_cities_find', 'create' => 'setup_cities_create', 'update' => 'setup_cities_update', 'delete' => 'setup_cities_delete', 'flash_get' => 'setup_cities_flash_get', 'flash_set' => 'setup_cities_flash_set', 'csrf_token' => 'setup_cities_csrf_token', 'csrf_validate' => 'setup_cities_csrf_validate', 'countries' => 'setup_cities_countries'],
-            'fields' => [['key' => 'city_country_name', 'label' => 'Country', 'type' => 'select_countries'], ['key' => 'city_name', 'label' => 'City Name English', 'type' => 'text'], ['key' => 'city_shotform', 'label' => 'City Name Arabic', 'type' => 'text']],
+            'fields' => [
+                ['key' => 'city_country_name', 'label' => 'Country', 'type' => 'select_countries'],
+                ['key' => 'city_name', 'label' => 'City Name English', 'type' => 'text'],
+                ['key' => 'city_shotform', 'label' => 'City Name Arabic', 'type' => 'text', 'arabic' => true],
+            ],
             'list_columns' => ['city_name' => 'City Name English', 'city_shotform' => 'City Name Arabic', 'city_country_name' => 'Country'],
+            'list_arabic_columns' => ['city_shotform'],
             'primary_key' => 'city_id',
         ],
         'designations' => [
