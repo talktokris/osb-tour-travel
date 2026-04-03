@@ -74,8 +74,12 @@ function setup_common_module_map(): array
             'service' => __DIR__ . '/../../../includes/setup_sms_labels_service.php',
             'routes' => ['list' => 'setup_sms_labels', 'view' => 'setup_sms_label_view', 'edit' => 'setup_sms_label_edit'],
             'functions' => ['list' => 'setup_sms_labels_list', 'find' => 'setup_sms_labels_find', 'update' => 'setup_sms_labels_update', 'flash_get' => 'setup_sms_labels_flash_get', 'flash_set' => 'setup_sms_labels_flash_set', 'csrf_token' => 'setup_sms_labels_csrf_token', 'csrf_validate' => 'setup_sms_labels_csrf_validate'],
-            'fields' => [['key' => 'sms_label_header', 'label' => 'SMS Header Label', 'type' => 'text'], ['key' => 'sms_label_footer', 'label' => 'SMS Footer Label', 'type' => 'text']],
+            'fields' => [
+                ['key' => 'sms_label_header', 'label' => 'SMS Header Label', 'type' => 'text', 'arabic' => true],
+                ['key' => 'sms_label_footer', 'label' => 'SMS Footer Label', 'type' => 'text', 'arabic' => true],
+            ],
             'list_columns' => ['sms_label_header' => 'SMS Header Label', 'sms_label_footer' => 'SMS Footer Label'],
+            'list_arabic_columns' => ['sms_label_header', 'sms_label_footer'],
             'primary_key' => 'sms_label_id',
         ],
     ];
