@@ -4,7 +4,7 @@ $activePage = $_GET['page'] ?? 'users';
 ?>
 <aside class="module-sidebar">
     <div class="module-sidebar__head">Users Menu</div>
-    <div class="px-3 py-2 text-[11px] uppercase tracking-wide text-slate-500 font-semibold">Access</div>
+    <div class="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider text-slate-500 font-medium">Access</div>
     <ul class="menu">
         <li class="<?= $activePage === 'users_create' ? 'active' : '' ?>"><a href="index.php?page=users_create">Create User</a></li>
         <li class="<?= in_array($activePage, ['users_role_list', 'users_role_form'], true) ? 'active' : '' ?>"><a href="index.php?page=users_role_list">Change Role</a></li>

@@ -20,23 +20,24 @@
             overflow: hidden;
         }
         .module-sidebar__head {
-            padding: 0.9rem 1rem;
+            padding: 0.85rem 1rem;
             color: #fff;
-            font-size: 0.75rem;
-            font-weight: 700;
+            font-size: 0.6875rem;
+            font-weight: 600;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             background: linear-gradient(90deg, #0c4a8a 0%, #0b77bb 60%, #0a94c8 100%);
             border-bottom: 1px solid rgba(255, 255, 255, 0.25);
         }
         .module-sidebar .menu {
-            padding: 0.55rem 0;
-            gap: 0.42rem;
+            padding: 0.65rem 0 0.85rem;
+            gap: 0.55rem;
             background: transparent;
             width: 100% !important;
             min-width: 100% !important;
             max-width: 100% !important;
-            display: block !important;
+            display: flex !important;
+            flex-direction: column;
             box-sizing: border-box;
         }
         .module-sidebar .menu li {
@@ -49,17 +50,17 @@
         .module-sidebar ul.menu > li > a,
         .module-sidebar .menu li > a,
         .module-sidebar .menu :where(li > a) {
-            min-height: 2.65rem;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #344256;
+            min-height: 2.35rem;
+            border-radius: 10px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #475569;
             display: flex !important;
             align-items: center;
             justify-content: flex-start;
             gap: 0.6rem;
             transition: all 0.18s ease;
-            padding: 0.45rem 0.55rem 0.45rem 0.75rem;
+            padding: 0.4rem 0.5rem 0.4rem 0.65rem;
             border: 1px solid #dbe6f3;
             background: linear-gradient(180deg, #f8fbff 0%, #edf3fb 100%);
             box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
@@ -72,9 +73,9 @@
         }
         .module-sidebar .menu li > a::before {
             content: "";
-            width: 1rem;
-            height: 1rem;
-            flex: 0 0 1rem;
+            width: 0.875rem;
+            height: 0.875rem;
+            flex: 0 0 0.875rem;
             border-radius: 999px;
             background-color: #64748b;
             mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5l7 7-7 7' /%3E%3C/svg%3E");
@@ -101,6 +102,7 @@
         .module-sidebar .menu li > a.active {
             background: linear-gradient(180deg, #dfeeff 0%, #d3e6ff 100%);
             color: #0c4a8a;
+            font-weight: 600;
             border-color: #9ec5fb;
             box-shadow: 0 6px 14px rgba(59, 130, 246, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.92);
         }
