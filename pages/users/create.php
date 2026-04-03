@@ -1,7 +1,9 @@
 <?php
-require __DIR__ . '/../../includes/header.php';
-require __DIR__ . '/../../includes/nav.php';
-require __DIR__ . '/../../includes/users_service.php';
+// POST + redirects must run before any HTML (header.php sends output; otherwise Location fails and page exits blank).
+if (!isset($mysqli)) {
+    require __DIR__ . '/../../config.php';
+}
+require_once __DIR__ . '/../../includes/users_service.php';
 
 $currentPage = $_GET['page'] ?? 'users';
 $actor = users_actor($mysqli);
@@ -42,9 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $result = users_create($mysqli, $form);
         if (!empty($result['ok'])) {
-            users_flash_set('success', 'User created successfully.');
-            $newId = (int) ($result['id'] ?? 0);
-            header('Location: index.php?page=users_view&id=' . $newId);
+            $createdName = trim((string) ($form['Username'] !== '' ? $form['Username'] : $form['Name']));
+            $message = $createdName !== ''
+                ? 'User "' . $createdName . '" created successfully.'
+                : 'User created successfully.';
+            users_flash_set('success', $message);
+            header('Location: index.php?page=users');
             exit;
         }
         $errors = $result['errors'] ?? ['Create failed.'];
@@ -61,6 +66,9 @@ if (!empty($actor['is_admin'])) {
     $form['department'] = (string) ($actor['department'] ?? '');
 }
 $csrf = users_csrf_token();
+
+require __DIR__ . '/../../includes/header.php';
+require __DIR__ . '/../../includes/nav.php';
 ?>
 
 <div class="flex gap-6 w-full">
@@ -79,7 +87,7 @@ $csrf = users_csrf_token();
                         </div>
                     <?php endif; ?>
 
-                    <form method="post" action="index.php?page=users_create" class="space-y-3">
+                    <form method="post" action="index.php?page=users_create" class="space-y-3" autocomplete="off">
                         <input type="hidden" name="_token" value="<?= h($csrf) ?>">
                         <div class="max-w-4xl mx-auto border border-base-300 rounded-box overflow-hidden">
                             <div class="px-4 py-2.5 bg-linear-to-r from-sky-700 to-cyan-600 text-white font-bold text-base">Create User</div>
@@ -91,10 +99,10 @@ $csrf = users_csrf_token();
                                 $selectClass = 'select select-bordered select-sm text-sm w-full max-w-xs';
                                 ?>
                                 <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Full Name :</label><input name="Name" value="<?= h($form['Name']) ?>" class="<?= $inputClass ?>" required></div>
-                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">User Name :</label><input name="Username" value="<?= h($form['Username']) ?>" class="<?= $inputClass ?>" required></div>
+                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">User Name :</label><input name="Username" value="<?= h($form['Username']) ?>" class="<?= $inputClass ?>" autocomplete="off" required></div>
                                 <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">IC/Passport :</label><input name="ic_passport" value="<?= h($form['ic_passport']) ?>" class="<?= $inputClass ?>"></div>
-                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Password :</label><input type="password" name="password" class="<?= $inputClass ?>" required></div>
-                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Confirm Password :</label><input type="password" name="conpassword" class="<?= $inputClass ?>" required></div>
+                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Password :</label><input type="password" name="password" class="<?= $inputClass ?>" autocomplete="new-password" required></div>
+                                <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Confirm Password :</label><input type="password" name="conpassword" class="<?= $inputClass ?>" autocomplete="new-password" required></div>
                                 <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Contact No. :</label><input name="contact_nomber" value="<?= h($form['contact_nomber']) ?>" class="<?= $inputClass ?>"></div>
                                 <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Email Address :</label><input name="Email" value="<?= h($form['Email']) ?>" class="<?= $inputClass ?>"></div>
                                 <div class="<?= $rowClass ?>"><label class="<?= $labelClass ?>">Email Password :</label><input type="password" name="email_password" class="<?= $inputClass ?>"></div>

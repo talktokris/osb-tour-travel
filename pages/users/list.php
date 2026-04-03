@@ -1,7 +1,9 @@
 <?php
-require __DIR__ . '/../../includes/header.php';
-require __DIR__ . '/../../includes/nav.php';
-require __DIR__ . '/../../includes/users_service.php';
+// POST delete redirect must run before any HTML output.
+if (!isset($mysqli)) {
+    require __DIR__ . '/../../config.php';
+}
+require_once __DIR__ . '/../../includes/users_service.php';
 
 $currentPage = $_GET['page'] ?? 'users';
 $actor = users_actor($mysqli);
@@ -33,6 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delet
 $users = users_list($mysqli, $actor);
 $flash = users_flash_get();
 $csrf = users_csrf_token();
+
+require __DIR__ . '/../../includes/header.php';
+require __DIR__ . '/../../includes/nav.php';
 ?>
 
 <div class="flex gap-6 w-full">

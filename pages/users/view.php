@@ -1,7 +1,8 @@
 <?php
-require __DIR__ . '/../../includes/header.php';
-require __DIR__ . '/../../includes/nav.php';
-require __DIR__ . '/../../includes/users_service.php';
+if (!isset($mysqli)) {
+    require __DIR__ . '/../../config.php';
+}
+require_once __DIR__ . '/../../includes/users_service.php';
 
 $currentPage = $_GET['page'] ?? 'users';
 $actor = users_actor($mysqli);
@@ -23,6 +24,9 @@ if (!$user) {
     header('Location: index.php?page=users');
     exit;
 }
+
+require __DIR__ . '/../../includes/header.php';
+require __DIR__ . '/../../includes/nav.php';
 ?>
 
 <div class="flex gap-6 w-full">
@@ -32,7 +36,20 @@ if (!$user) {
 
     <main class="flex-1 px-4">
         <div class="space-y-4">
-            <?php $breadcrumbCurrent = 'Users / View'; require __DIR__ . '/../../includes/breadcrumb.php'; ?>
+            <?php
+            $breadcrumbParentLabel = 'User List';
+            $breadcrumbParentHref = 'index.php?page=users';
+            $breadcrumbCurrent = 'View';
+            require __DIR__ . '/../../includes/breadcrumb.php';
+            ?>
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="index.php?page=users" class="btn btn-sm btn-outline gap-1.5">
+                    <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                    Back to user list
+                </a>
+            </div>
             <div class="card bg-base-100 shadow-xl border border-base-300">
                 <div class="card-body space-y-4">
                     <?php if (!empty($flash)): ?>

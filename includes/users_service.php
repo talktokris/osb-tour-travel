@@ -224,7 +224,7 @@ function users_create(mysqli $mysqli, array $input): array
         return ['ok' => false, 'errors' => $errors];
     }
 
-    $sql = 'INSERT INTO user_login (Name, Username, password, Status, gender, Role, date_birth, position, Email, employee_id, contact_nomber, ic_passport, department, outgoing_server, outgoing_port_no, email_password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    $sql = 'INSERT INTO user_login (Name, Username, password, Status, gender, Role, date_birth, position, Email, employee_id, ic_passport, user_photo, contact_nomber, department, outgoing_server, outgoing_port_no, email_password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     $stmt = $mysqli->prepare($sql);
     if (!$stmt) {
         return ['ok' => false, 'errors' => ['Failed to prepare create statement.']];
@@ -242,15 +242,21 @@ function users_create(mysqli $mysqli, array $input): array
         trim((string) ($input['position'] ?? '')),
         trim((string) ($input['Email'] ?? '')),
         trim((string) ($input['employee_id'] ?? '')),
-        trim((string) ($input['contact_nomber'] ?? '')),
         trim((string) ($input['ic_passport'] ?? '')),
+        '',
+        trim((string) ($input['contact_nomber'] ?? '')),
         trim((string) ($input['department'] ?? '')),
         trim((string) ($input['outgoing_server'] ?? '')),
         trim((string) ($input['outgoing_port_no'] ?? '')),
         trim((string) ($input['email_password'] ?? '')),
     ];
-    $stmt->bind_param('ssssssssssssssss', ...$values);
-    $ok = $stmt->execute();
+    $stmt->bind_param('sssssssssssssssss', ...$values);
+    try {
+        $ok = $stmt->execute();
+    } catch (mysqli_sql_exception $e) {
+        $stmt->close();
+        return ['ok' => false, 'errors' => ['Failed to create user: ' . $e->getMessage()]];
+    }
     $newId = (int) $stmt->insert_id;
     $stmt->close();
 

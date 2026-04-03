@@ -1,7 +1,9 @@
 <?php
-require __DIR__ . '/../../includes/header.php';
-require __DIR__ . '/../../includes/nav.php';
-require __DIR__ . '/../../includes/users_service.php';
+// Redirects must run before any HTML output.
+if (!isset($mysqli)) {
+    require __DIR__ . '/../../config.php';
+}
+require_once __DIR__ . '/../../includes/users_service.php';
 
 $currentPage = $_GET['page'] ?? 'users';
 $actor = users_actor($mysqli);
@@ -63,6 +65,9 @@ if (!empty($actor['is_admin'])) {
     $form['department'] = (string) ($actor['department'] ?? '');
 }
 $csrf = users_csrf_token();
+
+require __DIR__ . '/../../includes/header.php';
+require __DIR__ . '/../../includes/nav.php';
 ?>
 
 <div class="flex gap-6 w-full">

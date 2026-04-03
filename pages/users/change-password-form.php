@@ -1,7 +1,8 @@
 <?php
-require __DIR__ . '/../../includes/header.php';
-require __DIR__ . '/../../includes/nav.php';
-require __DIR__ . '/../../includes/users_service.php';
+if (!isset($mysqli)) {
+    require __DIR__ . '/../../config.php';
+}
+require_once __DIR__ . '/../../includes/users_service.php';
 
 $currentPage = $_GET['page'] ?? 'users';
 $actor = users_actor($mysqli);
@@ -35,6 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $csrf = users_csrf_token();
+
+require __DIR__ . '/../../includes/header.php';
+require __DIR__ . '/../../includes/nav.php';
 ?>
 
 <div class="flex gap-6 w-full">
