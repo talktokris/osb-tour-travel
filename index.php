@@ -82,6 +82,38 @@ if ($page === 'login') {
     require __DIR__ . '/pages/setup/agents/view.php';
 } elseif ($page === 'setup_agent_edit') {
     require __DIR__ . '/pages/setup/agents/edit.php';
+} elseif ($page === 'setup_suppliers') {
+    require __DIR__ . '/pages/setup/suppliers/list.php';
+} elseif ($page === 'setup_supplier_create') {
+    require __DIR__ . '/pages/setup/suppliers/create.php';
+} elseif ($page === 'setup_supplier_view') {
+    require __DIR__ . '/pages/setup/suppliers/view.php';
+} elseif ($page === 'setup_supplier_edit') {
+    require __DIR__ . '/pages/setup/suppliers/edit.php';
+} elseif ($page === 'setup_vehicles') {
+    require __DIR__ . '/pages/setup/vehicles/list.php';
+} elseif ($page === 'setup_vehicle_create') {
+    require __DIR__ . '/pages/setup/vehicles/create.php';
+} elseif ($page === 'setup_vehicle_view') {
+    require __DIR__ . '/pages/setup/vehicles/view.php';
+} elseif ($page === 'setup_vehicle_edit') {
+    require __DIR__ . '/pages/setup/vehicles/edit.php';
+} elseif ($page === 'setup_locations') {
+    require __DIR__ . '/pages/setup/locations/list.php';
+} elseif ($page === 'setup_location_create') {
+    require __DIR__ . '/pages/setup/locations/create.php';
+} elseif ($page === 'setup_location_view') {
+    require __DIR__ . '/pages/setup/locations/view.php';
+} elseif ($page === 'setup_location_edit') {
+    require __DIR__ . '/pages/setup/locations/edit.php';
+} elseif ($page === 'setup_services') {
+    require __DIR__ . '/pages/setup/services/list.php';
+} elseif ($page === 'setup_service_create') {
+    require __DIR__ . '/pages/setup/services/create.php';
+} elseif ($page === 'setup_service_view') {
+    require __DIR__ . '/pages/setup/services/view.php';
+} elseif ($page === 'setup_service_edit') {
+    require __DIR__ . '/pages/setup/services/edit.php';
 } elseif ($page === 'users') {
     require __DIR__ . '/pages/users/list.php';
 } elseif ($page === 'users_create') {
