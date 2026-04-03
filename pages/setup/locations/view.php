@@ -12,7 +12,7 @@ $flash=setup_locations_flash_get();require __DIR__ . '/../../../includes/header.
 <div class="max-w-4xl mx-auto border border-base-300 rounded-box overflow-hidden"><div class="px-4 py-2.5 bg-linear-to-r from-sky-700 to-cyan-600 text-white font-bold text-base">View Location</div><div class="divide-y divide-base-300">
 <?php $rowClass='grid grid-cols-1 md:grid-cols-[190px_1fr] items-center gap-2 px-3 py-1.5'; $labelClass='font-semibold text-sm text-base-content/80'; $valueClass='text-sm text-base-content'; ?>
 <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Location Name English :</div><div class="<?= $valueClass ?>"><?= h((string)$row['location_name']) ?></div></div>
-<div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Location Name Arabic :</div><div class="<?= $valueClass ?>"><?= h((string)$row['location_name_arb']) ?></div></div>
+<div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Location Name Arabic :</div><div class="<?= $valueClass ?> text-right" dir="rtl" lang="ar"><?= h(function_exists('normalize_arabic_text') ? normalize_arabic_text((string) $row['location_name_arb']) : (string) $row['location_name_arb']) ?></div></div>
 <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Country :</div><div class="<?= $valueClass ?>"><?= h((string)$row['location_country']) ?></div></div>
 <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">City :</div><div class="<?= $valueClass ?>"><?= h((string)$row['location_city']) ?></div></div>
 <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Address :</div><div class="<?= $valueClass ?>"><?= h((string)$row['location_address']) ?></div></div>
