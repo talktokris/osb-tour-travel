@@ -18,8 +18,9 @@ function setup_common_module_map(): array
             'service' => __DIR__ . '/../../../includes/setup_countries_service.php',
             'routes' => ['list' => 'setup_countries', 'create' => 'setup_country_create', 'view' => 'setup_country_view', 'edit' => 'setup_country_edit'],
             'functions' => ['list' => 'setup_countries_list', 'find' => 'setup_countries_find', 'create' => 'setup_countries_create', 'update' => 'setup_countries_update', 'delete' => 'setup_countries_delete', 'flash_get' => 'setup_countries_flash_get', 'flash_set' => 'setup_countries_flash_set', 'csrf_token' => 'setup_countries_csrf_token', 'csrf_validate' => 'setup_countries_csrf_validate'],
-            'fields' => [['key' => 'country_name', 'label' => 'Country Name English', 'type' => 'text'], ['key' => 'country_shotform', 'label' => 'Country Name Arabic/Short', 'type' => 'text']],
+            'fields' => [['key' => 'country_name', 'label' => 'Country Name English', 'type' => 'text'], ['key' => 'country_shotform', 'label' => 'Country Name Arabic/Short', 'type' => 'text', 'arabic' => true]],
             'list_columns' => ['country_name' => 'Country Name English', 'country_shotform' => 'Country Name Arabic'],
+            'list_arabic_columns' => ['country_shotform'],
             'primary_key' => 'country_id',
         ],
         'cities' => [
