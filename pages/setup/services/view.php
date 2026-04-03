@@ -19,7 +19,7 @@ $flash=setup_services_flash_get();require __DIR__ . '/../../../includes/header.p
 <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">To Location :</div><div class="<?= $valueClass ?>"><?= h((string)$row['to_locaion']) ?></div></div>
 <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">To City :</div><div class="<?= $valueClass ?>"><?= h((string)$row['to_city']) ?></div></div>
 <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Service Name Eng :</div><div class="<?= $valueClass ?>"><?= h((string)$row['service_name_english']) ?></div></div>
-<div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Service Name Arb :</div><div class="<?= $valueClass ?>"><?= h((string)$row['service_name_arabic']) ?></div></div>
+<div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Service Name Arb :</div><div class="<?= $valueClass ?> text-right" dir="rtl" lang="ar"><?= h(normalize_arabic_text((string)$row['service_name_arabic'])) ?></div></div>
 <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Service Categories :</div><div class="<?= $valueClass ?>"><?= h((string)$row['service_categories']) ?></div></div>
 <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Vehicle Type :</div><div class="<?= $valueClass ?>"><?= h((string)$row['vehicle_type']) ?></div></div>
 <div class="<?= $rowClass ?>"><div class="<?= $labelClass ?>">Buying / Selling :</div><div class="<?= $valueClass ?>"><?= h((string)$row['buying_price']) ?> / <?= h((string)$row['selling_price']) ?></div></div>

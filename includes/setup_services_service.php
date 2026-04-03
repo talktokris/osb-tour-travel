@@ -79,7 +79,14 @@ function setup_services_create(mysqli $mysqli, array $input): array
     $stmt=$mysqli->prepare('INSERT INTO service (service_id, service_type, from_country, from_locaion, from_city, from_address, to_country, to_locaion, to_city, to_address, service_name_english, service_name_arabic, buying_price, selling_price, service_categories, vehicle_type, sic_adult_price, sic_children_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
     if(!$stmt)return ['ok'=>false,'errors'=>['Failed to prepare insert.']];
     $stmt->bind_param('isssssssssssssssss',$id,$data['service_type'],$data['from_country'],$data['from_locaion'],$data['from_city'],$data['from_address'],$data['to_country'],$data['to_locaion'],$data['to_city'],$data['to_address'],$data['service_name_english'],$data['service_name_arabic'],$data['buying_price'],$data['selling_price'],$data['service_categories'],$data['vehicle_type'],$data['sic_adult_price'],$data['sic_children_price']);
-    $ok=$stmt->execute();$stmt->close();return $ok?['ok'=>true,'id'=>$id]:['ok'=>false,'errors'=>['Failed to create service.']];
+    try {
+        $ok = $stmt->execute();
+    } catch (Throwable $e) {
+        $stmt->close();
+        return ['ok' => false, 'errors' => ['Create failed: ' . $e->getMessage()]];
+    }
+    $stmt->close();
+    return $ok?['ok'=>true,'id'=>$id]:['ok'=>false,'errors'=>['Failed to create service.']];
 }
 
 function setup_services_update(mysqli $mysqli, int $id, array $input): array
@@ -90,7 +97,14 @@ function setup_services_update(mysqli $mysqli, int $id, array $input): array
     $stmt=$mysqli->prepare('UPDATE service SET service_type=?, from_country=?, from_locaion=?, from_city=?, from_address=?, to_country=?, to_locaion=?, to_city=?, to_address=?, service_name_english=?, service_name_arabic=?, buying_price=?, selling_price=?, service_categories=?, vehicle_type=?, sic_adult_price=?, sic_children_price=? WHERE service_id=?');
     if(!$stmt)return ['ok'=>false,'errors'=>['Failed to prepare update.']];
     $stmt->bind_param('sssssssssssssssssi',$data['service_type'],$data['from_country'],$data['from_locaion'],$data['from_city'],$data['from_address'],$data['to_country'],$data['to_locaion'],$data['to_city'],$data['to_address'],$data['service_name_english'],$data['service_name_arabic'],$data['buying_price'],$data['selling_price'],$data['service_categories'],$data['vehicle_type'],$data['sic_adult_price'],$data['sic_children_price'],$id);
-    $ok=$stmt->execute();$stmt->close();return $ok?['ok'=>true]:['ok'=>false,'errors'=>['Failed to update service.']];
+    try {
+        $ok = $stmt->execute();
+    } catch (Throwable $e) {
+        $stmt->close();
+        return ['ok' => false, 'errors' => ['Update failed: ' . $e->getMessage()]];
+    }
+    $stmt->close();
+    return $ok?['ok'=>true]:['ok'=>false,'errors'=>['Failed to update service.']];
 }
 
 function setup_services_delete(mysqli $mysqli, int $id): bool
