@@ -114,6 +114,110 @@ if ($page === 'login') {
     require __DIR__ . '/pages/setup/services/view.php';
 } elseif ($page === 'setup_service_edit') {
     require __DIR__ . '/pages/setup/services/edit.php';
+} elseif ($page === 'setup_zones') {
+    $_GET['m'] = 'zones';
+    require __DIR__ . '/pages/setup/common/list.php';
+} elseif ($page === 'setup_zone_create') {
+    $_GET['m'] = 'zones';
+    require __DIR__ . '/pages/setup/common/create.php';
+} elseif ($page === 'setup_zone_view') {
+    $_GET['m'] = 'zones';
+    require __DIR__ . '/pages/setup/common/view.php';
+} elseif ($page === 'setup_zone_edit') {
+    $_GET['m'] = 'zones';
+    require __DIR__ . '/pages/setup/common/edit.php';
+} elseif ($page === 'setup_countries') {
+    $_GET['m'] = 'countries';
+    require __DIR__ . '/pages/setup/common/list.php';
+} elseif ($page === 'setup_country_create') {
+    $_GET['m'] = 'countries';
+    require __DIR__ . '/pages/setup/common/create.php';
+} elseif ($page === 'setup_country_view') {
+    $_GET['m'] = 'countries';
+    require __DIR__ . '/pages/setup/common/view.php';
+} elseif ($page === 'setup_country_edit') {
+    $_GET['m'] = 'countries';
+    require __DIR__ . '/pages/setup/common/edit.php';
+} elseif ($page === 'setup_cities') {
+    $_GET['m'] = 'cities';
+    require __DIR__ . '/pages/setup/common/list.php';
+} elseif ($page === 'setup_city_create') {
+    $_GET['m'] = 'cities';
+    require __DIR__ . '/pages/setup/common/create.php';
+} elseif ($page === 'setup_city_view') {
+    $_GET['m'] = 'cities';
+    require __DIR__ . '/pages/setup/common/view.php';
+} elseif ($page === 'setup_city_edit') {
+    $_GET['m'] = 'cities';
+    require __DIR__ . '/pages/setup/common/edit.php';
+} elseif ($page === 'setup_designations') {
+    $_GET['m'] = 'designations';
+    require __DIR__ . '/pages/setup/common/list.php';
+} elseif ($page === 'setup_designation_create') {
+    $_GET['m'] = 'designations';
+    require __DIR__ . '/pages/setup/common/create.php';
+} elseif ($page === 'setup_designation_view') {
+    $_GET['m'] = 'designations';
+    require __DIR__ . '/pages/setup/common/view.php';
+} elseif ($page === 'setup_designation_edit') {
+    $_GET['m'] = 'designations';
+    require __DIR__ . '/pages/setup/common/edit.php';
+} elseif ($page === 'setup_departments') {
+    $_GET['m'] = 'departments';
+    require __DIR__ . '/pages/setup/common/list.php';
+} elseif ($page === 'setup_department_create') {
+    $_GET['m'] = 'departments';
+    require __DIR__ . '/pages/setup/common/create.php';
+} elseif ($page === 'setup_department_view') {
+    $_GET['m'] = 'departments';
+    require __DIR__ . '/pages/setup/common/view.php';
+} elseif ($page === 'setup_department_edit') {
+    $_GET['m'] = 'departments';
+    require __DIR__ . '/pages/setup/common/edit.php';
+} elseif ($page === 'setup_drivers') {
+    $_GET['m'] = 'drivers';
+    require __DIR__ . '/pages/setup/common/list.php';
+} elseif ($page === 'setup_driver_create') {
+    $_GET['m'] = 'drivers';
+    require __DIR__ . '/pages/setup/common/create.php';
+} elseif ($page === 'setup_driver_view') {
+    $_GET['m'] = 'drivers';
+    require __DIR__ . '/pages/setup/common/view.php';
+} elseif ($page === 'setup_driver_edit') {
+    $_GET['m'] = 'drivers';
+    require __DIR__ . '/pages/setup/common/edit.php';
+} elseif ($page === 'setup_driver_password_list') {
+    require __DIR__ . '/pages/setup/drivers/change-password-list.php';
+} elseif ($page === 'setup_driver_password_form') {
+    require __DIR__ . '/pages/setup/drivers/change-password-form.php';
+} elseif ($page === 'setup_vehicle_types') {
+    $_GET['m'] = 'vehicle_types';
+    require __DIR__ . '/pages/setup/common/list.php';
+} elseif ($page === 'setup_vehicle_type_create') {
+    $_GET['m'] = 'vehicle_types';
+    require __DIR__ . '/pages/setup/common/create.php';
+} elseif ($page === 'setup_vehicle_type_view') {
+    $_GET['m'] = 'vehicle_types';
+    require __DIR__ . '/pages/setup/common/view.php';
+} elseif ($page === 'setup_vehicle_type_edit') {
+    $_GET['m'] = 'vehicle_types';
+    require __DIR__ . '/pages/setup/common/edit.php';
+} elseif ($page === 'setup_sms_labels') {
+    $_GET['m'] = 'sms_labels';
+    require __DIR__ . '/pages/setup/common/list.php';
+} elseif ($page === 'setup_sms_label_create') {
+    $_GET['m'] = 'sms_labels';
+    require __DIR__ . '/pages/setup/common/create.php';
+} elseif ($page === 'setup_sms_label_view') {
+    $_GET['m'] = 'sms_labels';
+    require __DIR__ . '/pages/setup/common/view.php';
+} elseif ($page === 'setup_sms_label_edit') {
+    $_GET['m'] = 'sms_labels';
+    require __DIR__ . '/pages/setup/common/edit.php';
+} elseif ($page === 'setup_itinerary_labels') {
+    require __DIR__ . '/pages/setup/itinerary-labels/list.php';
+} elseif ($page === 'setup_itinerary_label_edit') {
+    require __DIR__ . '/pages/setup/itinerary-labels/edit.php';
 } elseif ($page === 'users') {
     require __DIR__ . '/pages/users/list.php';
 } elseif ($page === 'users_create') {
