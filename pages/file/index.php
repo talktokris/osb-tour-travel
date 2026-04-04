@@ -149,9 +149,135 @@ $apiBase = 'index.php?page=file_api';
     box-shadow: 0 1px 2px rgba(0,0,0,.12);
 }
 .file-ts-pax .input { max-width: 5rem; }
-/* Flatpickr: match compact form height */
-.file-ts-date-wrap { max-width: 11rem; }
-.file-ts-date-wrap .flatpickr-input { cursor: pointer; }
+/* Service date: text field + calendar icon inside (same pattern as SMS / Date of Birth affordance) */
+.file-ts-dob-wrap {
+    position: relative;
+    max-width: 11.5rem;
+    width: 100%;
+}
+.file-ts-dob-wrap .file-ts-dob-input {
+    width: 100%;
+    height: 1.85rem;
+    min-height: 1.85rem;
+    padding-left: 0.5rem;
+    padding-right: 2.15rem;
+    font-size: 12px;
+    line-height: 1.2;
+    border: 1px solid #94a3b8;
+    border-radius: 0.25rem;
+    background: #fff;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.file-ts-dob-wrap .file-ts-dob-input:hover {
+    border-color: #64748b;
+}
+.file-ts-dob-wrap .file-ts-dob-input:focus {
+    outline: 2px solid color-mix(in oklab, #00a651 40%, transparent);
+    outline-offset: 1px;
+    border-color: #1a6b5c;
+}
+.file-ts-dob-wrap .file-ts-dob-input::placeholder {
+    color: #94a3b8;
+}
+.file-ts-dob-cal-btn {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.85rem;
+    height: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0.2rem;
+    background: transparent;
+    cursor: pointer;
+    color: #334155;
+}
+.file-ts-dob-cal-btn:hover {
+    background: rgba(26, 107, 92, 0.1);
+    color: #1a6b5c;
+}
+.file-ts-dob-cal-btn:focus-visible {
+    outline: 2px solid #00a651;
+    outline-offset: 1px;
+}
+/* Flatpickr calendar — OSB teal / green, softer shadow */
+.flatpickr-calendar {
+    border-radius: 10px;
+    border: 1px solid #1a6b5c;
+    box-shadow: 0 14px 44px rgba(15, 23, 42, 0.14), 0 4px 14px rgba(26, 107, 92, 0.1);
+    font-family: inherit;
+}
+.flatpickr-months {
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+}
+.flatpickr-months .flatpickr-month {
+    background: #1a6b5c !important;
+    color: #fff !important;
+    fill: #fff !important;
+}
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #14532d !important;
+    font-weight: 600;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.flatpickr-current-month input.cur-year {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 4px;
+}
+.flatpickr-months .flatpickr-prev-month svg,
+.flatpickr-months .flatpickr-next-month svg {
+    fill: #fff;
+}
+.flatpickr-months .flatpickr-prev-month:hover svg,
+.flatpickr-months .flatpickr-next-month:hover svg {
+    fill: #bbf7d0;
+}
+.flatpickr-weekdays {
+    background: #f0fdf4;
+    border-bottom: 1px solid #d1fae5;
+}
+span.flatpickr-weekday {
+    color: #166534;
+    font-weight: 600;
+    font-size: 0.72rem;
+}
+.flatpickr-day {
+    border-radius: 6px;
+    font-weight: 500;
+}
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+    background: #00a651 !important;
+    border-color: #00a651 !important;
+    color: #fff !important;
+    box-shadow: 0 2px 6px rgba(0, 166, 81, 0.35);
+}
+.flatpickr-day.today {
+    border-color: #0d9488;
+    color: #0f766e;
+    font-weight: 700;
+}
+.flatpickr-day:hover:not(.selected):not(.flatpickr-disabled) {
+    background: #ecfdf5;
+    border-color: #6ee7b7;
+    color: #14532d;
+}
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+    color: #cbd5e1;
+}
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
@@ -246,8 +372,13 @@ $apiBase = 'index.php?page=file_api';
                 <div class="file-ts-panel">
                     <div class="file-ts-row">
                         <div class="file-ts-lbl">Service Date :</div>
-                        <div class="file-ts-ctl file-ts-date-wrap">
-                            <input type="text" name="service_date" id="fa-service-date" class="input input-bordered w-full bg-white" placeholder="dd-mm-yyyy" value="<?= h($c['service_date']) ?>" required autocomplete="off">
+                        <div class="file-ts-ctl">
+                            <div class="file-ts-dob-wrap">
+                                <input type="text" name="service_date" id="fa-service-date" class="file-ts-dob-input" placeholder="dd-mm-yyyy" value="<?= h($c['service_date']) ?>" required autocomplete="off" inputmode="numeric">
+                                <button type="button" class="file-ts-dob-cal-btn" id="fa-service-date-cal" title="Open calendar" aria-label="Open calendar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="file-ts-row file-ts-pax">
@@ -464,8 +595,22 @@ $apiBase = 'index.php?page=file_api';
     document.getElementById('fa-adults').addEventListener('keyup', sumPax);
     document.getElementById('fa-children').addEventListener('keyup', sumPax);
 
-    if (typeof flatpickr === 'function') {
-        flatpickr('#fa-service-date', { dateFormat: 'd-m-Y', allowInput: true, clickOpens: true });
+    var dateInp = document.getElementById('fa-service-date');
+    var dateCalBtn = document.getElementById('fa-service-date-cal');
+    if (typeof flatpickr === 'function' && dateInp) {
+        var fpSvc = flatpickr(dateInp, {
+            dateFormat: 'd-m-Y',
+            allowInput: true,
+            clickOpens: true,
+            animate: true
+        });
+        if (dateCalBtn && fpSvc) {
+            dateCalBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                fpSvc.open();
+            });
+        }
     }
 })();
 </script>
