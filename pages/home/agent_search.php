@@ -63,6 +63,49 @@ $flash = home_dashboard_flash_get();
         height: 1rem;
         opacity: 0.45;
     }
+    .home-agent-suggest-wrap {
+        position: relative;
+        width: 100%;
+    }
+    .home-agent-suggest {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        margin-top: 2px;
+        z-index: 50;
+        background: #ffffff;
+        border: 1px solid #c5ccd6;
+        border-radius: 0.375rem;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.12);
+        max-height: 240px;
+        overflow-y: auto;
+        box-sizing: border-box;
+    }
+    .home-agent-suggest[hidden] {
+        display: none !important;
+    }
+    .home-agent-suggest__item {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 0.45rem 0.65rem;
+        font-size: 0.8125rem;
+        line-height: 1.35;
+        color: #1e293b;
+        background: #ffffff;
+        border: 0;
+        border-bottom: 1px solid #eef2f6;
+        cursor: pointer;
+    }
+    .home-agent-suggest__item:last-child {
+        border-bottom: 0;
+    }
+    .home-agent-suggest__item:hover,
+    .home-agent-suggest__item:focus-visible {
+        background: #f1f5f9;
+        outline: none;
+    }
 </style>
 
 <main class="w-full max-w-[1000px] mx-auto px-3 sm:px-4 pb-6">
@@ -87,12 +130,14 @@ $flash = home_dashboard_flash_get();
                     <form method="post" action="index.php?page=home_agent_search" class="flex flex-wrap items-end gap-3">
                         <input type="hidden" name="_token" value="<?= h($csrf) ?>">
                         <div class="form-control flex-1 min-w-[220px]">
-                            <div class="home-agent-input-join" role="group" aria-label="Search agents">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                <input type="text" name="search_word" id="home-agent-search-input" placeholder="Code or name"
-                                       value="<?= h($searchWord) ?>" maxlength="100" autocomplete="off" list="home-agent-search-datalist">
+                            <div class="home-agent-suggest-wrap">
+                                <div class="home-agent-input-join" role="group" aria-label="Search agents">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                    <input type="text" name="search_word" id="home-agent-search-input" placeholder="Code or name"
+                                           value="<?= h($searchWord) ?>" maxlength="100" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="home-agent-search-suggest">
+                                </div>
+                                <div id="home-agent-search-suggest" class="home-agent-suggest" role="listbox" hidden></div>
                             </div>
-                            <datalist id="home-agent-search-datalist"></datalist>
                         </div>
                         <button type="submit" class="btn btn-sm px-6 text-white font-semibold border-0" style="background:linear-gradient(180deg,#5cb85c,#449d44);">Search</button>
                     </form>
@@ -160,14 +205,53 @@ $flash = home_dashboard_flash_get();
 <script>
 (function () {
     var input = document.getElementById('home-agent-search-input');
-    var list = document.getElementById('home-agent-search-datalist');
-    if (!input || !list) return;
+    var panel = document.getElementById('home-agent-search-suggest');
+    var wrap = input && input.closest('.home-agent-suggest-wrap');
+    if (!input || !panel || !wrap) return;
     var t;
+    var onDocDown;
+    function hide() {
+        input.setAttribute('aria-expanded', 'false');
+        panel.hidden = true;
+        panel.innerHTML = '';
+        if (onDocDown) {
+            document.removeEventListener('mousedown', onDocDown);
+            onDocDown = null;
+        }
+    }
+    function render(items) {
+        panel.innerHTML = '';
+        if (!items.length) {
+            hide();
+            return;
+        }
+        items.forEach(function (s) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'home-agent-suggest__item';
+            btn.setAttribute('role', 'option');
+            btn.textContent = s;
+            btn.addEventListener('click', function () {
+                input.value = s;
+                hide();
+                input.focus();
+            });
+            panel.appendChild(btn);
+        });
+        panel.hidden = false;
+        input.setAttribute('aria-expanded', 'true');
+        if (!onDocDown) {
+            onDocDown = function (e) {
+                if (!wrap.contains(e.target)) hide();
+            };
+            document.addEventListener('mousedown', onDocDown);
+        }
+    }
     input.addEventListener('input', function () {
         clearTimeout(t);
         var q = input.value.trim();
         if (q.length < 1) {
-            list.innerHTML = '';
+            hide();
             return;
         }
         t = setTimeout(function () {
@@ -175,15 +259,17 @@ $flash = home_dashboard_flash_get();
                 .then(function (r) { return r.json(); })
                 .then(function (arr) {
                     if (!Array.isArray(arr)) return;
-                    list.innerHTML = '';
-                    arr.slice(0, 25).forEach(function (s) {
-                        var o = document.createElement('option');
-                        o.value = s;
-                        list.appendChild(o);
-                    });
+                    render(arr.slice(0, 25));
                 })
-                .catch(function () {});
+                .catch(function () { hide(); });
         }, 200);
+    });
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') hide();
+        if (e.key === 'Enter' && !panel.hidden && panel.firstElementChild) {
+            e.preventDefault();
+            panel.firstElementChild.click();
+        }
     });
 })();
 </script>

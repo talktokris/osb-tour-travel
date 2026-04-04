@@ -127,6 +127,72 @@ if ($showLetterView) {
         height: 1rem;
         opacity: 0.45;
     }
+    .home-agent-suggest-wrap {
+        position: relative;
+        width: 100%;
+    }
+    .home-agent-suggest {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        margin-top: 2px;
+        z-index: 50;
+        background: #ffffff;
+        border: 1px solid #c5ccd6;
+        border-radius: 0.375rem;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.12);
+        max-height: 240px;
+        overflow-y: auto;
+        box-sizing: border-box;
+    }
+    .home-agent-suggest[hidden] {
+        display: none !important;
+    }
+    .home-agent-suggest__item {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 0.45rem 0.65rem;
+        font-size: 0.8125rem;
+        line-height: 1.35;
+        color: #1e293b;
+        background: #ffffff;
+        border: 0;
+        border-bottom: 1px solid #eef2f6;
+        cursor: pointer;
+    }
+    .home-agent-suggest__item:last-child {
+        border-bottom: 0;
+    }
+    .home-agent-suggest__item:hover,
+    .home-agent-suggest__item:focus-visible {
+        background: #f1f5f9;
+        outline: none;
+    }
+    /* A–Z boxed row */
+    .home-az-box {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.5rem 0.4rem 0.55rem;
+        margin-top: 0.25rem;
+        background: #f6fff6;
+        border: 1px solid #b8d4a8;
+        border-radius: 0.375rem;
+    }
+    .home-az-link--empty {
+        color: #7cb87c;
+    }
+    .home-az-link--has {
+        color: #14532d;
+        font-weight: 800;
+    }
+    .home-az-link--current {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        box-shadow: inset 0 0 0 1px rgba(20, 83, 45, 0.35);
+        background: rgba(255, 255, 255, 0.75);
+    }
     /* Full-width A–Z: equal columns */
     .home-az-strip {
         display: flex;
@@ -183,12 +249,14 @@ if ($showLetterView) {
                     <h2 class="home-legacy-title-green mb-3">Agent Search</h2>
                     <form method="post" action="index.php?page=home_agent_search" class="flex flex-col gap-3 flex-1">
                         <input type="hidden" name="_token" value="<?= h($csrf) ?>">
-                        <div class="home-agent-input-join w-full" role="group" aria-label="Search agents">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                            <input type="text" name="search_word" id="home-dash-agent-input" placeholder="Code or name"
-                                   maxlength="100" autocomplete="off" list="home-dash-agent-dl">
+                        <div class="home-agent-suggest-wrap">
+                            <div class="home-agent-input-join w-full" role="group" aria-label="Search agents">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                <input type="text" name="search_word" id="home-dash-agent-input" placeholder="Code or name"
+                                       maxlength="100" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="home-dash-agent-suggest">
+                            </div>
+                            <div id="home-dash-agent-suggest" class="home-agent-suggest" role="listbox" hidden></div>
                         </div>
-                        <datalist id="home-dash-agent-dl"></datalist>
                         <div class="flex justify-end pt-1">
                             <button type="submit" class="btn btn-success btn-sm px-6 min-h-9 h-9 border-0 text-white font-semibold shadow-sm" style="background:linear-gradient(180deg,#5cb85c,#449d44);">Search</button>
                         </div>
@@ -242,20 +310,22 @@ if ($showLetterView) {
                         <?php if ($bookingSearchError !== ''): ?>
                             <p class="text-error text-sm"><?= h($bookingSearchError) ?></p>
                         <?php endif; ?>
-                        <!-- Row 2: A–Z strip — full width, equal spacing -->
-                        <div class="home-az-strip pt-2 pb-0.5 border-t border-amber-200/80">
-                            <?php foreach ($strip as $item): ?>
-                                <?php
-                                $cnt = home_dashboard_count_pending_supplier_like($mysqli, $item['pattern']);
-                                $isActive = $pattern !== null && $item['pattern'] === $pattern;
-                                $cls = $cnt >= 1 ? 'text-error' : 'text-base-content/35';
-                                $href = 'index.php?' . http_build_query([
-                                    'page' => 'home',
-                                    'letter' => home_dashboard_letter_query_value($item['label'], $item['pattern']),
-                                ]);
-                                ?>
-                                <a href="<?= h($href) ?>" class="home-az-link <?= h($cls) ?> <?= $isActive ? 'underline decoration-2 underline-offset-2 ring-1 ring-base-300/80 bg-base-200/40' : '' ?>"><?= h($item['label']) ?></a>
-                            <?php endforeach; ?>
+                        <!-- Row 2: A–Z — boxed; light green if no pending, dark green if count &gt; 0 (legacy logic, inverted palette) -->
+                        <div class="home-az-box">
+                            <div class="home-az-strip">
+                                <?php foreach ($strip as $item): ?>
+                                    <?php
+                                    $cnt = home_dashboard_count_pending_supplier_like($mysqli, $item['pattern']);
+                                    $isActive = $pattern !== null && $item['pattern'] === $pattern;
+                                    $countCls = $cnt >= 1 ? 'home-az-link--has' : 'home-az-link--empty';
+                                    $href = 'index.php?' . http_build_query([
+                                        'page' => 'home',
+                                        'letter' => home_dashboard_letter_query_value($item['label'], $item['pattern']),
+                                    ]);
+                                    ?>
+                                    <a href="<?= h($href) ?>" class="home-az-link <?= h($countCls) ?> <?= $isActive ? 'home-az-link--current' : '' ?>"><?= h($item['label']) ?></a>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </form>
                     <p class="text-[11px] text-base-content/55 mt-3 pt-2 border-t border-amber-200/60">
@@ -449,7 +519,7 @@ if ($showLetterView) {
 
 <script>
 (function () {
-    function wire(inputId, type, listId) {
+    function wireDatalist(inputId, type, listId) {
         var input = document.getElementById(inputId);
         var list = document.getElementById(listId);
         if (!input || !list) return;
@@ -473,9 +543,80 @@ if ($showLetterView) {
             }, 200);
         });
     }
-    wire('home-dash-agent-input', 'agent', 'home-dash-agent-dl');
-    wire('home-dash-pax', 'pax', 'home-dash-pax-dl');
-    wire('home-dash-file', 'file_no', 'home-dash-file-dl');
+    wireDatalist('home-dash-pax', 'pax', 'home-dash-pax-dl');
+    wireDatalist('home-dash-file', 'file_no', 'home-dash-file-dl');
+})();
+(function () {
+    var input = document.getElementById('home-dash-agent-input');
+    var panel = document.getElementById('home-dash-agent-suggest');
+    var wrap = input && input.closest('.home-agent-suggest-wrap');
+    if (!input || !panel || !wrap) return;
+    var t;
+    var onDocDown;
+    function setOpen(open) {
+        input.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (!open) {
+            panel.hidden = true;
+            panel.innerHTML = '';
+            if (onDocDown) {
+                document.removeEventListener('mousedown', onDocDown);
+                onDocDown = null;
+            }
+        }
+    }
+    function hide() { setOpen(false); }
+    function render(items) {
+        panel.innerHTML = '';
+        if (!items.length) {
+            hide();
+            return;
+        }
+        items.forEach(function (s) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'home-agent-suggest__item';
+            btn.setAttribute('role', 'option');
+            btn.textContent = s;
+            btn.addEventListener('click', function () {
+                input.value = s;
+                hide();
+                input.focus();
+            });
+            panel.appendChild(btn);
+        });
+        panel.hidden = false;
+        input.setAttribute('aria-expanded', 'true');
+        if (!onDocDown) {
+            onDocDown = function (e) {
+                if (!wrap.contains(e.target)) hide();
+            };
+            document.addEventListener('mousedown', onDocDown);
+        }
+    }
+    input.addEventListener('input', function () {
+        clearTimeout(t);
+        var q = input.value.trim();
+        if (q.length < 1) {
+            hide();
+            return;
+        }
+        t = setTimeout(function () {
+            fetch('index.php?page=home_autocomplete&type=agent&q=' + encodeURIComponent(q))
+                .then(function (r) { return r.json(); })
+                .then(function (arr) {
+                    if (!Array.isArray(arr)) return;
+                    render(arr.slice(0, 25));
+                })
+                .catch(function () { hide(); });
+        }, 200);
+    });
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') hide();
+        if (e.key === 'Enter' && !panel.hidden && panel.firstElementChild) {
+            e.preventDefault();
+            panel.firstElementChild.click();
+        }
+    });
 })();
 </script>
 
