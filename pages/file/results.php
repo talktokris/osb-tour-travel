@@ -112,8 +112,6 @@ function file_results_icon_svg(string $name): string
             return '<svg ' . $a . '><path d="M12 2v4"/><path d="m16.2 7.8.7.7"/><path d="M18 12h4"/><path d="m16.2 16.2.7.7"/><path d="M12 18v4"/><path d="m7.8 16.2-.7.7"/><path d="M6 12H2"/><path d="m7.8 7.8-.7.7"/><circle cx="12" cy="12" r="3"/></svg>';
         case 'users':
             return '<svg ' . $a . '><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
-        case 'price':
-            return '<svg ' . $a . '><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>';
         case 'pin':
             return '<svg ' . $a . '><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>';
         case 'arrow-right':
@@ -441,12 +439,6 @@ require __DIR__ . '/../../includes/nav.php';
     padding: 0.35rem 0.55rem;
     border-radius: 8px;
 }
-.file-res-chip--price {
-    color: #0f766e;
-    background: rgba(20, 184, 166, 0.08);
-    border-color: rgba(20, 184, 166, 0.22);
-    font-variant-numeric: tabular-nums;
-}
 .file-res-chip--luxury {
     color: #92400e;
     background: linear-gradient(135deg, rgba(253, 230, 138, 0.35), rgba(251, 191, 36, 0.15));
@@ -456,9 +448,75 @@ require __DIR__ . '/../../includes/nav.php';
     flex-shrink: 0;
     opacity: 0.88;
 }
+.file-res-card__price-block {
+    padding: 0.55rem 0.75rem 0.6rem;
+    border-radius: 12px;
+    background:
+        linear-gradient(160deg, rgba(236, 253, 245, 0.95) 0%, rgba(255, 255, 255, 0.98) 55%, rgba(240, 253, 250, 0.5) 100%);
+    border: 2px solid rgba(45, 212, 191, 0.45);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 6px 18px rgba(15, 118, 110, 0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.file-res-card__price-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #0d9488, #14b8a6, #2dd4bf);
+    opacity: 0.9;
+}
+.file-res-card__price-label {
+    display: block;
+    font-size: 0.625rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #64748b;
+    margin: 0.2rem 0 0.35rem;
+}
+.file-res-card__price-value {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.3rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+.file-res-card__price-currency {
+    font-size: 0.9375rem;
+    font-weight: 800;
+    color: #0f766e;
+}
+.file-res-card__price-amount {
+    font-size: 1.625rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #0f172a;
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+@supports not (-webkit-background-clip: text) {
+    .file-res-card__price-amount {
+        color: #0f172a;
+        -webkit-text-fill-color: #0f172a;
+    }
+}
 .file-res-card__action {
     margin-top: 0;
     padding-top: 0.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    align-items: stretch;
+    justify-content: center;
 }
 @media (max-width: 767px) {
     .file-res-card__action {
@@ -477,16 +535,16 @@ require __DIR__ . '/../../includes/nav.php';
     .file-res-card__action {
         flex-shrink: 0;
         align-self: stretch;
-        display: flex;
-        align-items: center;
         padding-top: 0;
-        padding-left: 0.25rem;
+        padding-left: 0.75rem;
         border-left: 1px solid rgba(226, 232, 240, 0.9);
         margin-left: 0.25rem;
+        min-width: 9.25rem;
+        max-width: 11rem;
     }
     .file-res-card__action .btn {
-        width: auto;
-        min-width: 7.75rem;
+        width: 100%;
+        min-width: 0;
         white-space: nowrap;
     }
 }
@@ -607,10 +665,6 @@ require __DIR__ . '/../../includes/nav.php';
                                                     <?= file_results_icon_svg($vehSvg) ?>
                                                     <?= h($vtype !== '' ? $vtype : 'Vehicle') ?>
                                                 </span>
-                                                <span class="file-res-chip file-res-chip--price" title="Total price">
-                                                    <?= file_results_icon_svg('price') ?>
-                                                    RM <?= h($priceDisp) ?>
-                                                </span>
                                                 <span class="file-res-chip" title="Maximum passengers">
                                                     <?= file_results_icon_svg('users') ?>
                                                     Max <?= $paxDisp ?> pax
@@ -645,6 +699,13 @@ require __DIR__ . '/../../includes/nav.php';
                                         </div>
                                     </div>
                                     <div class="file-res-card__action">
+                                        <div class="file-res-card__price-block" aria-label="Total price RM <?= h($priceDisp) ?>">
+                                            <span class="file-res-card__price-label">Total</span>
+                                            <div class="file-res-card__price-value">
+                                                <span class="file-res-card__price-currency">RM</span>
+                                                <span class="file-res-card__price-amount"><?= h($priceDisp) ?></span>
+                                            </div>
+                                        </div>
                                         <a class="btn btn-success text-white shadow-md hover:shadow-lg" href="index.php?page=file_book&amp;service_id=<?= $sid ?>">Book now</a>
                                     </div>
                                 </div>
