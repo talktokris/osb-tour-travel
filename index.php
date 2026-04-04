@@ -54,6 +54,20 @@ if ($page === 'login') {
     require __DIR__ . '/pages/login.php';
 } elseif ($page === 'home') {
     require __DIR__ . '/pages/home/index.php';
+} elseif ($page === 'home_booking_action') {
+    require __DIR__ . '/pages/home/booking_action.php';
+} elseif ($page === 'home_autocomplete') {
+    require __DIR__ . '/pages/home/autocomplete.php';
+} elseif ($page === 'home_agent_search') {
+    require __DIR__ . '/pages/home/agent_search.php';
+} elseif ($page === 'home_browse') {
+    require __DIR__ . '/pages/home/browse.php';
+} elseif ($page === 'home_supplier_bookings') {
+    require __DIR__ . '/pages/home/supplier_bookings.php';
+} elseif ($page === 'home_cancel_report') {
+    require __DIR__ . '/pages/home/cancel_report.php';
+} elseif ($page === 'agent_login') {
+    require __DIR__ . '/pages/agent_login.php';
 } elseif ($page === 'agents') {
     require __DIR__ . '/pages/agents/list.php';
 } elseif ($page === 'services') {

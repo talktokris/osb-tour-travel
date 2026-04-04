@@ -7,7 +7,11 @@
     <div class="px-3 py-2 text-[11px] uppercase tracking-wide text-slate-500 font-semibold">Main Menu</div>
     
     <ul class="menu">
-        <li class="<?= ($currentPage ?? 'home') === 'home' ? 'active' : '' ?>">
+        <?php
+        $cp = $currentPage ?? 'home';
+        $homeSidebar = $cp === 'home' || strncmp($cp, 'home_', 5) === 0;
+        ?>
+        <li class="<?= $homeSidebar ? 'active' : '' ?>">
             <a href="index.php?page=home">Home</a>
         </li>
         <li class="<?= ($currentPage ?? 'home') === 'agents' ? 'active' : '' ?>">
