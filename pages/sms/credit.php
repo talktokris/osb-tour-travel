@@ -21,7 +21,7 @@ if ($cfg === null) {
 require __DIR__ . '/panel_styles.php';
 ?>
 
-<div class="flex gap-6 w-full max-w-none px-3 sm:px-5 lg:px-6 pb-6">
+<div class="flex gap-6 w-full max-w-none pb-6">
     <aside class="hidden lg:block w-72 shrink-0">
         <?php require __DIR__ . '/sidebar.php'; ?>
     </aside>

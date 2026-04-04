@@ -111,7 +111,7 @@ $agentLogoPlaceholderDataUri = 'data:image/svg+xml,' . rawurlencode($agentLogoPl
     }
 </style>
 
-<main class="w-full max-w-none px-3 sm:px-5 lg:px-6 pb-6">
+<main class="w-full max-w-none pb-6">
         <div class="space-y-4">
             <?php $breadcrumbCurrent = 'Agent search'; require __DIR__ . '/../../includes/breadcrumb.php'; ?>
 

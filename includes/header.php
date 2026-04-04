@@ -26,7 +26,6 @@
         .module-sidebar {
             width: 18rem;
             min-height: 100%;
-            margin-left: 1.5rem;
             border: 1px solid #dbe2ea;
             border-radius: 16px;
             background: #ffffff;
@@ -217,5 +216,5 @@
         </div>
     </header>
 <?php endif; ?>
-<!-- Offset for fixed header -->
-<div class="w-full px-0 py-4 flex-1 pt-28">
+<!-- Offset for fixed header; full-width row (sidebar + main) — no max-width column -->
+<div class="w-full min-w-0 box-border px-3 sm:px-4 lg:px-5 py-4 flex-1 pt-28">
