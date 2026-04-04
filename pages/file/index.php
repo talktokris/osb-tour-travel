@@ -278,6 +278,10 @@ span.flatpickr-weekday {
 .flatpickr-day.nextMonthDay {
     color: #cbd5e1;
 }
+select.file-ts-zone-empty {
+    color: #64748b;
+    background-color: #f8fafc;
+}
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
@@ -319,7 +323,7 @@ span.flatpickr-weekday {
                         <div class="file-ts-ctl file-ts-pair">
                             <select name="from_city" id="fa-from-city" class="select select-bordered w-full bg-white" required></select>
                             <select name="from_location" id="fa-from-location" class="select select-bordered w-full bg-white" required></select>
-                            <select name="from_zone" id="fa-from-zone" class="select select-bordered w-full bg-white"><option value="">Select Zone</option></select>
+                            <select name="from_zone" id="fa-from-zone" class="select select-bordered w-full bg-white file-ts-zone-sel"><option value="">Select Zone</option></select>
                         </div>
                     </div>
 
@@ -328,7 +332,7 @@ span.flatpickr-weekday {
                         <div class="file-ts-ctl file-ts-pair">
                             <select name="to_city" id="fa-to-city" class="select select-bordered w-full bg-white" required></select>
                             <select name="to_location" id="fa-to-location" class="select select-bordered w-full bg-white" required></select>
-                            <select name="to_zone" id="fa-to-zone" class="select select-bordered w-full bg-white"><option value="">Select Zone</option></select>
+                            <select name="to_zone" id="fa-to-zone" class="select select-bordered w-full bg-white file-ts-zone-sel"><option value="">Select Zone</option></select>
                         </div>
                     </div>
 
@@ -463,6 +467,29 @@ span.flatpickr-weekday {
         });
     }
 
+    function resetZoneSelect(sel) {
+        sel.classList.remove('file-ts-zone-empty');
+        sel.title = '';
+        sel.innerHTML = '<option value=\"\">Select Zone</option>';
+    }
+
+    /** After a location is chosen: populate zones or show empty-state (still submits zone as empty). */
+    function fillZoneSelect(sel, items, cur, emptyLabel) {
+        if (items.length === 0) {
+            sel.classList.add('file-ts-zone-empty');
+            sel.innerHTML = '';
+            var o = document.createElement('option');
+            o.value = '';
+            o.textContent = '(No zones for this location)';
+            sel.appendChild(o);
+            sel.title = 'No zone records for this location.';
+            return;
+        }
+        sel.classList.remove('file-ts-zone-empty');
+        sel.title = '';
+        fillSelect(sel, items, cur, emptyLabel);
+    }
+
     function get(url) {
         return fetch(url).then(function (r) { return r.json(); });
     }
@@ -494,6 +521,25 @@ span.flatpickr-weekday {
         });
     }
 
+    /** Restore pick-up or drop-off chain: city → locations → zones (strict order). */
+    function hydrateSide(locSel, zoneSel, savedCity, savedLoc, savedZone) {
+        if (!savedCity) {
+            locSel.innerHTML = '<option value=\"\">Select Location</option>';
+            resetZoneSelect(zoneSel);
+            return Promise.resolve();
+        }
+        return get(api + '&action=locations&q=' + encodeURIComponent(savedCity)).then(function (d) {
+            fillSelect(locSel, d.items || [], savedLoc, 'Select Location');
+            if (!savedLoc) {
+                resetZoneSelect(zoneSel);
+                return Promise.resolve();
+            }
+            return get(api + '&action=zones&q=' + encodeURIComponent(savedLoc)).then(function (zd) {
+                fillZoneSelect(zoneSel, zd.items || [], savedZone, 'Select Zone');
+            });
+        });
+    }
+
     fc.addEventListener('change', function () {
         toHidden.value = fc.value;
         var country = fc.value;
@@ -501,57 +547,72 @@ span.flatpickr-weekday {
             fillSelect(fcity, [], '', 'Select City');
             fillSelect(tcity, [], '', 'Select City');
             floc.innerHTML = '<option value=\"\">Select Location</option>';
-            fzone.innerHTML = '<option value=\"\">Select Zone</option>';
             tloc.innerHTML = '<option value=\"\">Select Location</option>';
-            tzone.innerHTML = '<option value=\"\">Select Zone</option>';
+            resetZoneSelect(fzone);
+            resetZoneSelect(tzone);
             refreshServices();
             return;
         }
         get(api + '&action=cities&q=' + encodeURIComponent(country)).then(function (d) {
             var items = d.items || [];
-            fillSelect(fcity, items, saved.from_city, 'Select City');
+            fillSelect(fcity, items, '', 'Select City');
+            fillSelect(tcity, items, '', 'Select City');
             floc.innerHTML = '<option value=\"\">Select Location</option>';
-            fzone.innerHTML = '<option value=\"\">Select Zone</option>';
-            fillSelect(tcity, items, saved.to_city, 'Select City');
             tloc.innerHTML = '<option value=\"\">Select Location</option>';
-            tzone.innerHTML = '<option value=\"\">Select Zone</option>';
+            resetZoneSelect(fzone);
+            resetZoneSelect(tzone);
+            refreshServices();
         });
     });
 
     fcity.addEventListener('change', function () {
+        if (!fcity.value) {
+            floc.innerHTML = '<option value=\"\">Select Location</option>';
+            resetZoneSelect(fzone);
+            refreshServices();
+            return;
+        }
         get(api + '&action=locations&q=' + encodeURIComponent(fcity.value)).then(function (d) {
-            fillSelect(floc, d.items || [], saved.from_location, 'Select Location');
-            fzone.innerHTML = '<option value=\"\">Select Zone</option>';
+            fillSelect(floc, d.items || [], '', 'Select Location');
+            resetZoneSelect(fzone);
+            refreshServices();
         });
     });
 
     floc.addEventListener('change', function () {
         if (!floc.value) {
-            fzone.innerHTML = '<option value=\"\">Select Zone</option>';
+            resetZoneSelect(fzone);
             refreshServices();
             return;
         }
         get(api + '&action=zones&q=' + encodeURIComponent(floc.value)).then(function (d) {
-            fillSelect(fzone, d.items || [], saved.from_zone, 'Select Zone');
+            fillZoneSelect(fzone, d.items || [], '', 'Select Zone');
             refreshServices();
         });
     });
 
     tcity.addEventListener('change', function () {
+        if (!tcity.value) {
+            tloc.innerHTML = '<option value=\"\">Select Location</option>';
+            resetZoneSelect(tzone);
+            refreshServices();
+            return;
+        }
         get(api + '&action=locations&q=' + encodeURIComponent(tcity.value)).then(function (d) {
-            fillSelect(tloc, d.items || [], saved.to_location, 'Select Location');
-            tzone.innerHTML = '<option value=\"\">Select Zone</option>';
+            fillSelect(tloc, d.items || [], '', 'Select Location');
+            resetZoneSelect(tzone);
+            refreshServices();
         });
     });
 
     tloc.addEventListener('change', function () {
         if (!tloc.value) {
-            tzone.innerHTML = '<option value=\"\">Select Zone</option>';
+            resetZoneSelect(tzone);
             refreshServices();
             return;
         }
         get(api + '&action=zones&q=' + encodeURIComponent(tloc.value)).then(function (d) {
-            fillSelect(tzone, d.items || [], saved.to_zone, 'Select Zone');
+            fillZoneSelect(tzone, d.items || [], '', 'Select Zone');
             refreshServices();
         });
     });
@@ -560,32 +621,19 @@ span.flatpickr-weekday {
     tzone.addEventListener('change', refreshServices);
 
     if (fc.value) {
-        fc.dispatchEvent(new Event('change'));
-        setTimeout(function () {
-            if (saved.from_city) {
-                fcity.value = saved.from_city;
-                fcity.dispatchEvent(new Event('change'));
-            }
-        }, 200);
-        setTimeout(function () {
-            if (saved.from_location) {
-                floc.value = saved.from_location;
-                floc.dispatchEvent(new Event('change'));
-            }
-        }, 450);
+        toHidden.value = fc.value;
+        get(api + '&action=cities&q=' + encodeURIComponent(fc.value)).then(function (d) {
+            var items = d.items || [];
+            fillSelect(fcity, items, saved.from_city, 'Select City');
+            fillSelect(tcity, items, saved.to_city, 'Select City');
+            return Promise.all([
+                hydrateSide(floc, fzone, saved.from_city, saved.from_location, saved.from_zone),
+                hydrateSide(tloc, tzone, saved.to_city, saved.to_location, saved.to_zone)
+            ]);
+        }).then(function () {
+            refreshServices();
+        });
     }
-    setTimeout(function () {
-        if (saved.to_city) {
-            tcity.value = saved.to_city;
-            tcity.dispatchEvent(new Event('change'));
-        }
-    }, 300);
-    setTimeout(function () {
-        if (saved.to_location) {
-            tloc.value = saved.to_location;
-            tloc.dispatchEvent(new Event('change'));
-        }
-    }, 600);
 
     function sumPax() {
         var a = parseInt(document.getElementById('fa-adults').value, 10) || 0;

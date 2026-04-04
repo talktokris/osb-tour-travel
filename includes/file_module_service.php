@@ -204,12 +204,44 @@ function file_module_locations_for_city(mysqli $mysqli, string $city): array
     return $rows;
 }
 
-/** @return list<string> */
+/**
+ * Zones for a location (legacy: zone.location_name = selected location).
+ * Tries exact string, trim, and collapsed whitespace variants for DB/name drift.
+ *
+ * @return list<string>
+ */
 function file_module_zones_for_location(mysqli $mysqli, string $location): array
 {
     if ($location === '') {
         return [];
     }
+    $variants = [];
+    $variants[] = $location;
+    $t = trim($location);
+    if ($t !== '' && $t !== $location) {
+        $variants[] = $t;
+    }
+    $collapsed = $t === '' ? '' : (string) preg_replace('/\s+/u', ' ', $t);
+    if ($collapsed !== '' && !in_array($collapsed, $variants, true)) {
+        $variants[] = $collapsed;
+    }
+    $seen = [];
+    foreach ($variants as $v) {
+        if ($v === '' || isset($seen[$v])) {
+            continue;
+        }
+        $seen[$v] = true;
+        $rows = file_module_zones_for_location_exact($mysqli, $v);
+        if ($rows !== []) {
+            return $rows;
+        }
+    }
+    return [];
+}
+
+/** @return list<string> */
+function file_module_zones_for_location_exact(mysqli $mysqli, string $location): array
+{
     $stmt = $mysqli->prepare('SELECT zone_name FROM zone WHERE location_name = ? ORDER BY zone_name');
     if (!$stmt) {
         return [];
