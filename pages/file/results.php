@@ -233,25 +233,27 @@ require __DIR__ . '/../../includes/nav.php';
     border-radius: 9999px;
     border: 1px solid var(--file-res-teal-soft);
 }
-.file-res-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-    gap: 1rem;
+.file-res-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 .file-res-card {
     position: relative;
     display: flex;
     gap: 0;
+    width: 100%;
     background: #fff;
     border-radius: 14px;
     border: 1px solid rgba(226, 232, 240, 0.95);
     box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 .file-res-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.09);
+    border-color: rgba(26, 107, 92, 0.2);
 }
 .file-res-card__rail {
     width: 5px;
@@ -261,10 +263,28 @@ require __DIR__ . '/../../includes/nav.php';
 .file-res-card__inner {
     flex: 1;
     min-width: 0;
-    padding: 1rem 1rem 1rem 0.85rem;
+    padding: 0.9rem 1rem 1rem 0.85rem;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.65rem;
+}
+.file-res-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+}
+@media (min-width: 768px) {
+    .file-res-card__inner {
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem 1.5rem;
+        padding: 0.85rem 1.15rem 0.85rem 0.9rem;
+    }
+    .file-res-card__content {
+        flex: 1;
+        gap: 0.45rem;
+    }
 }
 .file-res-card__top {
     display: flex;
@@ -333,14 +353,31 @@ require __DIR__ . '/../../includes/nav.php';
     opacity: 0.88;
 }
 .file-res-card__action {
-    margin-top: auto;
-    padding-top: 0.25rem;
+    margin-top: 0;
+    padding-top: 0.15rem;
 }
 .file-res-card__action .btn {
     width: 100%;
     font-weight: 700;
     border-radius: 10px;
     min-height: 2.5rem;
+}
+@media (min-width: 768px) {
+    .file-res-card__action {
+        flex-shrink: 0;
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+        padding-top: 0;
+        padding-left: 0.25rem;
+        border-left: 1px solid rgba(226, 232, 240, 0.9);
+        margin-left: 0.25rem;
+    }
+    .file-res-card__action .btn {
+        width: auto;
+        min-width: 7.75rem;
+        white-space: nowrap;
+    }
 }
 .file-res-empty {
     text-align: center;
@@ -426,7 +463,7 @@ require __DIR__ . '/../../includes/nav.php';
                     $children = (int) $c['children'];
                     $paxDisp = h((string) $c['no_of_pax']);
                     ?>
-                    <div class="file-res-card-grid">
+                    <div class="file-res-card-list">
                         <?php $n = 1; foreach ($results as $row): ?>
                             <?php
                             $pr = file_module_compute_prices($row, $adults, $children);
@@ -441,26 +478,28 @@ require __DIR__ . '/../../includes/nav.php';
                             <article class="file-res-card">
                                 <div class="file-res-card__rail" aria-hidden="true"></div>
                                 <div class="file-res-card__inner">
-                                    <div class="file-res-card__top">
-                                        <p class="file-res-card__service">
-                                            <span class="file-res-icon-wrap--muted"><?= file_results_icon_svg('route') ?></span>
-                                            <span><?= h($svcTitle) ?></span>
-                                        </p>
-                                        <span class="file-res-card__badge">#<?= $n ?></span>
-                                    </div>
-                                    <div class="file-res-card__chips">
-                                        <span class="file-res-chip<?= $vehChipClass ?>" title="Vehicle type">
-                                            <?= file_results_icon_svg($vehSvg) ?>
-                                            <?= h($vtype !== '' ? $vtype : 'Vehicle') ?>
-                                        </span>
-                                        <span class="file-res-chip file-res-chip--price" title="Total price">
-                                            <?= file_results_icon_svg('price') ?>
-                                            RM <?= h($priceDisp) ?>
-                                        </span>
-                                        <span class="file-res-chip" title="Maximum passengers">
-                                            <?= file_results_icon_svg('users') ?>
-                                            Max <?= $paxDisp ?> pax
-                                        </span>
+                                    <div class="file-res-card__content">
+                                        <div class="file-res-card__top">
+                                            <p class="file-res-card__service">
+                                                <span class="file-res-icon-wrap--muted"><?= file_results_icon_svg('route') ?></span>
+                                                <span><?= h($svcTitle) ?></span>
+                                            </p>
+                                            <span class="file-res-card__badge">#<?= $n ?></span>
+                                        </div>
+                                        <div class="file-res-card__chips">
+                                            <span class="file-res-chip<?= $vehChipClass ?>" title="Vehicle type">
+                                                <?= file_results_icon_svg($vehSvg) ?>
+                                                <?= h($vtype !== '' ? $vtype : 'Vehicle') ?>
+                                            </span>
+                                            <span class="file-res-chip file-res-chip--price" title="Total price">
+                                                <?= file_results_icon_svg('price') ?>
+                                                RM <?= h($priceDisp) ?>
+                                            </span>
+                                            <span class="file-res-chip" title="Maximum passengers">
+                                                <?= file_results_icon_svg('users') ?>
+                                                Max <?= $paxDisp ?> pax
+                                            </span>
+                                        </div>
                                     </div>
                                     <div class="file-res-card__action">
                                         <a class="btn btn-success text-white shadow-md hover:shadow-lg" href="index.php?page=file_book&amp;service_id=<?= $sid ?>">Book now</a>
