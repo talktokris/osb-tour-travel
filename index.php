@@ -86,6 +86,12 @@ if ($page === 'login') {
     require __DIR__ . '/pages/invoice/index.php';
 } elseif ($page === 'sms') {
     require __DIR__ . '/pages/sms/index.php';
+} elseif ($page === 'sms_test') {
+    require __DIR__ . '/pages/sms/test.php';
+} elseif ($page === 'sms_credit') {
+    require __DIR__ . '/pages/sms/credit.php';
+} elseif ($page === 'sms_history') {
+    require __DIR__ . '/pages/sms/history.php';
 } elseif ($page === 'setup') {
     require __DIR__ . '/pages/setup/index.php';
 } elseif ($page === 'setup_agents') {
