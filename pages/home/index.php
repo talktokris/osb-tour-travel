@@ -274,17 +274,17 @@ if ($showLetterView) {
                         <input type="hidden" name="home_booking_search" value="1">
                         <!-- Row 1: same horizontal layout as old app -->
                         <div class="flex flex-wrap xl:flex-nowrap items-end gap-2 xl:gap-3 w-full">
-                            <div class="flex flex-col min-w-[8.5rem] flex-1">
+                            <div class="flex flex-col min-w-34 flex-1">
                                 <span class="text-xs font-medium text-center sm:text-left mb-1 text-base-content/80">Guest Name :</span>
                                 <input type="text" name="search_pax" id="home-dash-pax" class="input input-bordered input-sm w-full h-9 bg-white text-sm" value="<?= h($searchPax) ?>" autocomplete="off" list="home-dash-pax-dl">
                                 <datalist id="home-dash-pax-dl"></datalist>
                             </div>
-                            <div class="flex flex-col min-w-[8.5rem] flex-1">
+                            <div class="flex flex-col min-w-34 flex-1">
                                 <span class="text-xs font-medium text-center sm:text-left mb-1 text-base-content/80">File No:</span>
                                 <input type="text" name="search_file_no" id="home-dash-file" class="input input-bordered input-sm w-full h-9 bg-white text-sm" value="<?= h($searchFileNo) ?>" autocomplete="off" list="home-dash-file-dl">
                                 <datalist id="home-dash-file-dl"></datalist>
                             </div>
-                            <div class="flex flex-col min-w-[9rem] flex-1">
+                            <div class="flex flex-col min-w-36 flex-1">
                                 <span class="text-xs font-medium text-center sm:text-left mb-1 text-base-content/80">Country:</span>
                                 <select name="country" class="select select-bordered select-sm w-full h-9 min-h-9 bg-white text-sm">
                                     <option value="">Select Country</option>
@@ -293,7 +293,7 @@ if ($showLetterView) {
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="flex flex-col min-w-[9rem] flex-1">
+                            <div class="flex flex-col min-w-36 flex-1">
                                 <span class="text-xs font-medium text-center sm:text-left mb-1 text-base-content/80">City :</span>
                                 <select name="city" class="select select-bordered select-sm w-full h-9 min-h-9 bg-white text-sm">
                                     <option value="">Select City</option>

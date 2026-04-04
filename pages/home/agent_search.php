@@ -27,6 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $csrf = home_dashboard_csrf_token();
 $flash = home_dashboard_flash_get();
+
+$agentLogoPlaceholderSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="160" height="96" viewBox="0 0 160 96" role="img" aria-label="No logo"><rect width="160" height="96" fill="#f1f5f9" rx="6"/><rect x="28" y="22" width="104" height="52" fill="#e2e8f0" rx="4"/><circle cx="64" cy="46" r="10" fill="#cbd5e1"/><path fill="#cbd5e1" d="M44 66h72v8H44z"/><text x="80" y="86" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="system-ui,Segoe UI,sans-serif">No logo</text></svg>';
+$agentLogoPlaceholderDataUri = 'data:image/svg+xml,' . rawurlencode($agentLogoPlaceholderSvg);
 ?>
 <style>
     .home-agent-input-join {
@@ -169,14 +172,20 @@ $flash = home_dashboard_flash_get();
                                             $logoUrl = $logo !== '' && is_file(setup_agents_upload_dir() . '/' . basename($logo))
                                                 ? setup_agents_upload_url_path() . '/' . rawurlencode(basename($logo))
                                                 : '';
+                                            $logoSrc = $logoUrl !== '' ? $logoUrl : $agentLogoPlaceholderDataUri;
                                             ?>
                                             <tr class="<?= $i % 2 === 0 ? 'bg-base-200/40' : '' ?>">
                                                 <td><?= $i + 1 ?></td>
                                                 <td>
                                                     <div class="font-medium"><?= h($name) ?></div>
-                                                    <?php if ($logoUrl !== ''): ?>
-                                                        <img src="<?= h($logoUrl) ?>" alt="" class="mt-2 max-h-16 rounded border border-base-300 object-contain">
-                                                    <?php endif; ?>
+                                                    <img src="<?= h($logoSrc) ?>"
+                                                         alt=""
+                                                         width="160"
+                                                         height="96"
+                                                         class="mt-2 block max-w-[160px] max-h-24 w-auto h-auto rounded border border-base-300 bg-base-200/50 object-contain object-center"
+                                                         loading="lazy"
+                                                         decoding="async"
+                                                         <?php if ($logoUrl !== ''): ?>data-fallback="<?= h($agentLogoPlaceholderDataUri) ?>" onerror="this.onerror=null;if(this.dataset.fallback)this.src=this.dataset.fallback;"<?php endif; ?>>
                                                 </td>
                                                 <td class="text-sm max-w-md">
                                                     <div><span class="text-base-content/60">Address:</span> <?= h((string) ($row['agent_address'] ?? '')) ?></div>
