@@ -179,7 +179,7 @@
     $isHomeNav = in_array($currentPage, $homeNavPages, true);
     $smsNavPages = ['sms', 'sms_test', 'sms_credit', 'sms_history'];
     $isSmsNav = in_array($currentPage, $smsNavPages, true);
-    $fileNavPages = ['file', 'file_book', 'file_preview', 'file_send_email'];
+    $fileNavPages = ['file', 'file_results', 'file_book', 'file_preview', 'file_send_email'];
     $isFileNav = in_array($currentPage, $fileNavPages, true);
     $hasAgentCookie = !empty($_COOKIE['agent_cookie']) && trim((string) $_COOKIE['agent_cookie']) !== '';
     ?>

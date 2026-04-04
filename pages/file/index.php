@@ -22,50 +22,6 @@ $csrf = file_module_csrf_token();
 $flash = file_module_flash_get();
 $state = file_module_state();
 $c = $state['criteria'];
-$results = null;
-$searchError = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['file_do_search'])) {
-    $token = (string) ($_POST['_token'] ?? '');
-    if (!file_module_csrf_validate($token)) {
-        $searchError = 'Invalid request token.';
-    } else {
-        $post = [
-            'from_country' => (string) ($_POST['from_country'] ?? ''),
-            'from_city' => (string) ($_POST['from_city'] ?? ''),
-            'from_location' => (string) ($_POST['from_location'] ?? ''),
-            'from_zone' => (string) ($_POST['from_zone'] ?? ''),
-            'to_country' => (string) ($_POST['to_country'] ?? ''),
-            'to_city' => (string) ($_POST['to_city'] ?? ''),
-            'to_location' => (string) ($_POST['to_location'] ?? ''),
-            'to_zone' => (string) ($_POST['to_zone'] ?? ''),
-            'service_name' => (string) ($_POST['service_name'] ?? ''),
-            'vehicle_type' => (string) ($_POST['vehicle_type'] ?? ''),
-            'no_of_vachile' => (string) ($_POST['no_of_vachile'] ?? '1'),
-            'service_cat' => (string) ($_POST['service_cat'] ?? 'Private'),
-            'service_date' => (string) ($_POST['service_date'] ?? ''),
-            'adults' => (string) ($_POST['adults'] ?? ''),
-            'children' => (string) ($_POST['children'] ?? ''),
-            'no_of_pax' => (string) ($_POST['no_of_pax'] ?? ''),
-        ];
-        if ($post['to_country'] === '') {
-            $post['to_country'] = $post['from_country'];
-        }
-        if ($post['from_country'] === '' || $post['from_city'] === '' || $post['from_location'] === ''
-            || $post['to_city'] === '' || $post['to_location'] === '' || $post['service_date'] === ''
-            || $post['no_of_pax'] === '') {
-            $searchError = 'Please complete country, pick-up, drop-off, service date, and pax.';
-        } elseif (!in_array($post['service_cat'], ['Private', 'SIC'], true)) {
-            $searchError = 'Choose Private or SIC.';
-        } else {
-            file_module_save_criteria($post);
-            $c = file_module_state()['criteria'];
-            $results = file_module_search_services($mysqli, $c);
-        }
-    }
-} else {
-    $c = $state['criteria'];
-}
 
 $countries = file_module_countries($mysqli);
 $vehicleTypes = file_module_vehicle_types($mysqli);
@@ -292,13 +248,10 @@ select.file-ts-zone-empty {
             <?php $breadcrumbCurrent = 'Transfer search'; require __DIR__ . '/../../includes/breadcrumb.php'; ?>
 
             <?php if ($flash): ?>
-                <div class="alert <?= $flash['type'] === 'success' ? 'alert-success' : 'alert-info' ?>"><span><?= h($flash['message']) ?></span></div>
-            <?php endif; ?>
-            <?php if ($searchError !== ''): ?>
-                <div class="alert alert-warning"><span><?= h($searchError) ?></span></div>
+                <div class="alert <?= $flash['type'] === 'success' ? 'alert-success' : ($flash['type'] === 'warning' ? 'alert-warning' : 'alert-info') ?>"><span><?= h($flash['message']) ?></span></div>
             <?php endif; ?>
 
-            <form method="post" action="index.php?page=file" id="file-search-form" class="file-ts-form">
+            <form method="post" action="index.php?page=file_results" id="file-search-form" class="file-ts-form">
                 <input type="hidden" name="_token" value="<?= h($csrf) ?>">
                 <input type="hidden" name="file_do_search" value="1">
                 <input type="hidden" name="to_country" id="fa-to-country" value="<?= h($c['to_country'] !== '' ? $c['to_country'] : $c['from_country']) ?>">
@@ -401,39 +354,6 @@ select.file-ts-zone-empty {
 
                 <button type="submit" class="btn btn-sm btn-success text-white px-6 file-ts-search">Search</button>
             </form>
-
-            <?php if (is_array($results)): ?>
-                <div class="rounded-sm border border-base-300 bg-[#ffccdf]/40 p-4 overflow-x-auto">
-                    <h3 class="font-semibold text-success mb-2">Results</h3>
-                    <?php if ($results === []): ?>
-                        <p class="text-success font-medium">No result found</p>
-                    <?php else: ?>
-                        <?php
-                        $adults = (int) $c['adults'];
-                        $children = (int) $c['children'];
-                        ?>
-                        <table class="table table-sm table-zebra bg-base-100">
-                            <thead><tr><th>No.</th><th>Service</th><th>Vehicle</th><th>Price</th><th>Max pax</th><th></th></tr></thead>
-                            <tbody>
-                            <?php $n = 1; foreach ($results as $row): ?>
-                                <?php
-                                $pr = file_module_compute_prices($row, $adults, $children);
-                                $sid = (int) ($row['service_id'] ?? 0);
-                                ?>
-                                <tr>
-                                    <td><?= $n++ ?></td>
-                                    <td><?= h((string) ($row['service_name_english'] ?? '')) ?></td>
-                                    <td><?= h((string) ($row['vehicle_type'] ?? '')) ?></td>
-                                    <td class="font-semibold"><?= h($pr['selling']) ?></td>
-                                    <td><?= h($c['no_of_pax']) ?></td>
-                                    <td><a class="btn btn-xs btn-success text-white" href="index.php?page=file_book&amp;service_id=<?= $sid ?>">Book now</a></td>
-                                </tr>
-                            <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
         </div>
     </main>
 </div>

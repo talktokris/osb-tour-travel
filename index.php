@@ -76,6 +76,8 @@ if ($page === 'login') {
     require __DIR__ . '/pages/bookings/index.php';
 } elseif ($page === 'file') {
     require __DIR__ . '/pages/file/index.php';
+} elseif ($page === 'file_results') {
+    require __DIR__ . '/pages/file/results.php';
 } elseif ($page === 'file_book') {
     require __DIR__ . '/pages/file/book.php';
 } elseif ($page === 'file_preview') {
