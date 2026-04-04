@@ -28,6 +28,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $csrf = home_dashboard_csrf_token();
 $flash = home_dashboard_flash_get();
 ?>
+<style>
+    .home-agent-input-join {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-height: 2.75rem;
+        height: 2.75rem;
+        padding: 0 0.75rem;
+        gap: 0.5rem;
+        border: 1px solid color-mix(in oklab, var(--color-base-content, #64748b) 20%, transparent);
+        border-radius: var(--rounded-btn, 0.5rem);
+        background: var(--color-base-100, #fff);
+        box-sizing: border-box;
+    }
+    .home-agent-input-join:focus-within {
+        border-color: var(--color-primary, #2563eb);
+        outline: 2px solid color-mix(in oklab, var(--color-primary, #2563eb) 35%, transparent);
+        outline-offset: 1px;
+    }
+    .home-agent-input-join input {
+        flex: 1 1 0%;
+        min-width: 0;
+        height: 100%;
+        border: 0;
+        background: transparent;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        outline: none;
+    }
+    .home-agent-input-join svg {
+        flex-shrink: 0;
+        width: 1rem;
+        height: 1rem;
+        opacity: 0.45;
+    }
+</style>
 
 <main class="w-full max-w-[1000px] mx-auto px-3 sm:px-4 pb-6">
         <div class="space-y-4">
@@ -51,14 +87,12 @@ $flash = home_dashboard_flash_get();
                     <form method="post" action="index.php?page=home_agent_search" class="flex flex-wrap items-end gap-3">
                         <input type="hidden" name="_token" value="<?= h($csrf) ?>">
                         <div class="form-control flex-1 min-w-[220px]">
-                            <div class="relative">
-                                <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" aria-hidden="true">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                </span>
+                            <div class="home-agent-input-join" role="group" aria-label="Search agents">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                 <input type="text" name="search_word" id="home-agent-search-input" placeholder="Code or name"
-                                       class="input input-bordered w-full h-11 pl-9" value="<?= h($searchWord) ?>" maxlength="100" autocomplete="off" list="home-agent-search-datalist">
-                                <datalist id="home-agent-search-datalist"></datalist>
+                                       value="<?= h($searchWord) ?>" maxlength="100" autocomplete="off" list="home-agent-search-datalist">
                             </div>
+                            <datalist id="home-agent-search-datalist"></datalist>
                         </div>
                         <button type="submit" class="btn btn-sm px-6 text-white font-semibold border-0" style="background:linear-gradient(180deg,#5cb85c,#449d44);">Search</button>
                     </form>

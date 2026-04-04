@@ -67,6 +67,106 @@ if ($showLetterView) {
         font-weight: 700;
         letter-spacing: 0.01em;
     }
+    /* Match legacy home.php: fixed left column + fluid right (always side-by-side from 600px) */
+    .home-dashboard-columns {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        width: 100%;
+    }
+    @media (min-width: 600px) {
+        .home-dashboard-columns {
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 1.5rem; /* same as setup: gap-6 */
+        }
+        /* Match setup pages sidebar: Tailwind w-72 = 18rem */
+        .home-dashboard-agent-col {
+            width: 18rem;
+            max-width: 18rem;
+            flex-shrink: 0;
+        }
+        .home-dashboard-main-col {
+            flex: 1;
+            min-width: 0;
+        }
+    }
+    /* Icon + text in one control (avoids absolute positioning quirks) */
+    .home-agent-input-join {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-height: 2.75rem;
+        height: 2.75rem;
+        padding: 0 0.75rem;
+        gap: 0.5rem;
+        border: 1px solid color-mix(in oklab, var(--color-base-content, #64748b) 20%, transparent);
+        border-radius: var(--rounded-btn, 0.5rem);
+        background: var(--color-base-100, #fff);
+        box-sizing: border-box;
+    }
+    .home-agent-input-join:focus-within {
+        border-color: var(--color-primary, #2563eb);
+        outline: 2px solid color-mix(in oklab, var(--color-primary, #2563eb) 35%, transparent);
+        outline-offset: 1px;
+    }
+    .home-agent-input-join input {
+        flex: 1 1 0%;
+        min-width: 0;
+        height: 100%;
+        border: 0;
+        background: transparent;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        outline: none;
+    }
+    .home-agent-input-join svg {
+        flex-shrink: 0;
+        width: 1rem;
+        height: 1rem;
+        opacity: 0.45;
+    }
+    /* Full-width A–Z: equal columns */
+    .home-az-strip {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.125rem;
+        box-sizing: border-box;
+    }
+    .home-az-link {
+        flex: 1 1 0%;
+        min-width: 0;
+        text-align: center;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        line-height: 1.2;
+        padding: 0.35rem 0.05rem;
+        border-radius: 0.25rem;
+        text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .home-az-link:hover {
+        text-decoration: underline;
+    }
+    @media (max-width: 599px) {
+        .home-az-strip {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.25rem 0.15rem;
+        }
+        .home-az-link {
+            flex: 0 0 auto;
+            min-width: 1.5rem;
+            padding: 0.25rem 0.35rem;
+        }
+    }
 </style>
 
 <main class="w-full max-w-[1000px] mx-auto px-3 sm:px-4 pb-6">
@@ -77,29 +177,26 @@ if ($showLetterView) {
                 </div>
             <?php endif; ?>
 
-            <!-- Legacy-style: agent column + wide booking panel (no left nav sidebar) -->
-            <div class="flex flex-col lg:flex-row gap-5 lg:gap-6 items-stretch lg:items-start">
-                <!-- Agent search — wider column, more room like old app -->
-                <div class="home-legacy-agent-panel rounded-sm p-4 lg:w-[min(100%,280px)] shrink-0 flex flex-col min-h-[168px]">
+            <!-- Legacy home.php: left = Agent Search box, right = booking + lists -->
+            <div class="home-dashboard-columns">
+                <aside class="home-dashboard-agent-col home-legacy-agent-panel rounded-sm p-4 flex flex-col min-h-[168px] w-full" aria-label="Agent search">
                     <h2 class="home-legacy-title-green mb-3">Agent Search</h2>
                     <form method="post" action="index.php?page=home_agent_search" class="flex flex-col gap-3 flex-1">
                         <input type="hidden" name="_token" value="<?= h($csrf) ?>">
-                        <div class="relative flex-1 min-h-[2.75rem]">
-                            <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40" aria-hidden="true">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                            </span>
+                        <div class="home-agent-input-join w-full" role="group" aria-label="Search agents">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                             <input type="text" name="search_word" id="home-dash-agent-input" placeholder="Code or name"
-                                   class="input input-bordered w-full h-11 pl-9 text-sm bg-base-100" maxlength="100" autocomplete="off" list="home-dash-agent-dl">
-                            <datalist id="home-dash-agent-dl"></datalist>
+                                   maxlength="100" autocomplete="off" list="home-dash-agent-dl">
                         </div>
-                        <div class="flex justify-end mt-auto pt-1">
+                        <datalist id="home-dash-agent-dl"></datalist>
+                        <div class="flex justify-end pt-1">
                             <button type="submit" class="btn btn-success btn-sm px-6 min-h-9 h-9 border-0 text-white font-semibold shadow-sm" style="background:linear-gradient(180deg,#5cb85c,#449d44);">Search</button>
                         </div>
                     </form>
-                </div>
+                </aside>
 
-                <!-- Direct transport — horizontal row fields like legacy home.php -->
-                <div class="flex-1 min-w-0 home-legacy-booking-panel rounded-sm p-4 sm:p-5">
+                <div class="home-dashboard-main-col flex flex-col gap-4 w-full min-w-0">
+                <div class="home-legacy-booking-panel rounded-sm p-4 sm:p-5 w-full">
                     <div class="flex flex-wrap items-start justify-between gap-2 mb-3">
                         <h2 class="home-legacy-title-green leading-tight">Direct Transport Booking Pending Home</h2>
                         <a href="index.php?page=home_cancel_report" class="text-sm font-bold text-error hover:underline shrink-0">Cancel Bookings</a>
@@ -108,7 +205,7 @@ if ($showLetterView) {
                         <input type="hidden" name="_token" value="<?= h($csrf) ?>">
                         <input type="hidden" name="home_booking_search" value="1">
                         <!-- Row 1: same horizontal layout as old app -->
-                        <div class="flex flex-wrap lg:flex-nowrap items-end gap-2 lg:gap-3 w-full">
+                        <div class="flex flex-wrap xl:flex-nowrap items-end gap-2 xl:gap-3 w-full">
                             <div class="flex flex-col min-w-[8.5rem] flex-1">
                                 <span class="text-xs font-medium text-center sm:text-left mb-1 text-base-content/80">Guest Name :</span>
                                 <input type="text" name="search_pax" id="home-dash-pax" class="input input-bordered input-sm w-full h-9 bg-white text-sm" value="<?= h($searchPax) ?>" autocomplete="off" list="home-dash-pax-dl">
@@ -138,15 +235,15 @@ if ($showLetterView) {
                                 </select>
                             </div>
                             <div class="flex flex-col justify-end shrink-0 pb-px">
-                                <span class="text-xs mb-1 opacity-0 select-none hidden lg:block">.</span>
+                                <span class="text-xs mb-1 opacity-0 select-none hidden xl:block">.</span>
                                 <button type="submit" class="btn btn-success btn-sm px-5 min-h-9 h-9 border-0 text-white font-semibold whitespace-nowrap shadow-sm" style="background:linear-gradient(180deg,#5cb85c,#449d44);">Search</button>
                             </div>
                         </div>
                         <?php if ($bookingSearchError !== ''): ?>
                             <p class="text-error text-sm"><?= h($bookingSearchError) ?></p>
                         <?php endif; ?>
-                        <!-- Row 2: A–Z strip -->
-                        <div class="flex flex-wrap items-center gap-x-0.5 gap-y-1 pt-1 border-t border-amber-200/80">
+                        <!-- Row 2: A–Z strip — full width, equal spacing -->
+                        <div class="home-az-strip pt-2 pb-0.5 border-t border-amber-200/80">
                             <?php foreach ($strip as $item): ?>
                                 <?php
                                 $cnt = home_dashboard_count_pending_supplier_like($mysqli, $item['pattern']);
@@ -157,7 +254,7 @@ if ($showLetterView) {
                                     'letter' => home_dashboard_letter_query_value($item['label'], $item['pattern']),
                                 ]);
                                 ?>
-                                <a href="<?= h($href) ?>" class="text-sm font-bold no-underline hover:underline px-1.5 <?= h($cls) ?> <?= $isActive ? 'underline decoration-2 underline-offset-2' : '' ?>"><?= h($item['label']) ?></a>
+                                <a href="<?= h($href) ?>" class="home-az-link <?= h($cls) ?> <?= $isActive ? 'underline decoration-2 underline-offset-2 ring-1 ring-base-300/80 bg-base-200/40' : '' ?>"><?= h($item['label']) ?></a>
                             <?php endforeach; ?>
                         </div>
                     </form>
@@ -166,7 +263,6 @@ if ($showLetterView) {
                         — browse suppliers by letter, then open pending lines per supplier.
                     </p>
                 </div>
-            </div>
 
             <?php if (is_array($bookingRows)): ?>
                 <div class="card bg-base-100 shadow-xl border border-base-300">
@@ -341,6 +437,9 @@ if ($showLetterView) {
                     </div>
                 </div>
             <?php endif; ?>
+
+                </div><!-- /.home-dashboard-main-col -->
+            </div><!-- /.home-dashboard-columns -->
 
             <p class="text-sm text-base-content/70">
                 Welcome, <span class="font-medium"><?= h($_SESSION['user_name'] ?? 'User') ?></span>.
