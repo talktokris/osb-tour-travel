@@ -91,7 +91,7 @@ $apiBase = 'index.php?page=file_api';
 }
 .file-ts-row {
     display: grid;
-    grid-template-columns: 7.5rem minmax(0, 1fr);
+    grid-template-columns: minmax(10.5rem, max-content) minmax(0, 1fr);
     column-gap: 8px;
     row-gap: 2px;
     align-items: center;
@@ -100,12 +100,12 @@ $apiBase = 'index.php?page=file_api';
 .file-ts-row:last-child { margin-bottom: 0; }
 .file-ts-lbl {
     font-size: 11px;
-    line-height: 1.15;
+    line-height: 1.25;
     color: #222;
     align-self: center;
+    white-space: nowrap;
+    padding-right: 4px;
 }
-.file-ts-lbl .t { display: block; }
-.file-ts-lbl .c { display: block; }
 .file-ts-ctl .select,
 .file-ts-ctl .input {
     min-height: 1.85rem;
@@ -149,7 +149,11 @@ $apiBase = 'index.php?page=file_api';
     box-shadow: 0 1px 2px rgba(0,0,0,.12);
 }
 .file-ts-pax .input { max-width: 5rem; }
+/* Flatpickr: match compact form height */
+.file-ts-date-wrap { max-width: 11rem; }
+.file-ts-date-wrap .flatpickr-input { cursor: pointer; }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 <div class="flex gap-6 w-full pb-6">
     <aside class="hidden lg:block w-72 shrink-0"><?php require __DIR__ . '/sidebar.php'; ?></aside>
@@ -173,7 +177,7 @@ $apiBase = 'index.php?page=file_api';
                     <h2>Transfer Search</h2>
 
                     <div class="file-ts-row">
-                        <div class="file-ts-lbl"><span class="t">Country</span><span class="c">:</span></div>
+                        <div class="file-ts-lbl">Country :</div>
                         <div class="file-ts-ctl">
                             <select name="from_country" id="fa-from-country" class="select select-bordered w-full bg-white" required>
                                 <option value="">Select Country</option>
@@ -185,7 +189,7 @@ $apiBase = 'index.php?page=file_api';
                     </div>
 
                     <div class="file-ts-row">
-                        <div class="file-ts-lbl"><span class="t">Pick Up</span><span class="c">:</span></div>
+                        <div class="file-ts-lbl">Pick Up :</div>
                         <div class="file-ts-ctl file-ts-pair">
                             <select name="from_city" id="fa-from-city" class="select select-bordered w-full bg-white" required></select>
                             <select name="from_location" id="fa-from-location" class="select select-bordered w-full bg-white" required></select>
@@ -194,7 +198,7 @@ $apiBase = 'index.php?page=file_api';
                     </div>
 
                     <div class="file-ts-row">
-                        <div class="file-ts-lbl"><span class="t">Drop Off</span><span class="c">:</span></div>
+                        <div class="file-ts-lbl">Drop Off :</div>
                         <div class="file-ts-ctl file-ts-pair">
                             <select name="to_city" id="fa-to-city" class="select select-bordered w-full bg-white" required></select>
                             <select name="to_location" id="fa-to-location" class="select select-bordered w-full bg-white" required></select>
@@ -203,7 +207,7 @@ $apiBase = 'index.php?page=file_api';
                     </div>
 
                     <div class="file-ts-row">
-                        <div class="file-ts-lbl"><span class="t">Services</span><span class="c">:</span></div>
+                        <div class="file-ts-lbl">Services :</div>
                         <div class="file-ts-ctl">
                             <select name="service_name" id="fa-service" class="select select-bordered w-full bg-white">
                                 <option value="">Select Services</option>
@@ -212,7 +216,7 @@ $apiBase = 'index.php?page=file_api';
                     </div>
 
                     <div class="file-ts-row">
-                        <div class="file-ts-lbl"><span class="t">Vehicle Type</span><span class="c">:</span></div>
+                        <div class="file-ts-lbl">Vehicle Type :</div>
                         <div class="file-ts-ctl">
                             <select name="vehicle_type" class="select select-bordered w-full bg-white max-w-xs">
                                 <option value="">Select Vehicle Type</option>
@@ -224,7 +228,7 @@ $apiBase = 'index.php?page=file_api';
                     </div>
 
                     <div class="file-ts-row">
-                        <div class="file-ts-lbl"><span class="t">No of Unit</span><span class="c">:</span></div>
+                        <div class="file-ts-lbl">No of Unit :</div>
                         <div class="file-ts-ctl file-ts-veh">
                             <select name="no_of_vachile" class="select select-bordered bg-white file-ts-units">
                                 <?php for ($i = 1; $i <= 10; $i++): ?>
@@ -241,21 +245,21 @@ $apiBase = 'index.php?page=file_api';
 
                 <div class="file-ts-panel">
                     <div class="file-ts-row">
-                        <div class="file-ts-lbl"><span class="t">Service Date</span><span class="c">:</span></div>
-                        <div class="file-ts-ctl">
-                            <input type="text" name="service_date" class="input input-bordered w-full max-w-xs bg-white" placeholder="dd-mm-yyyy" value="<?= h($c['service_date']) ?>" required>
+                        <div class="file-ts-lbl">Service Date :</div>
+                        <div class="file-ts-ctl file-ts-date-wrap">
+                            <input type="text" name="service_date" id="fa-service-date" class="input input-bordered w-full bg-white" placeholder="dd-mm-yyyy" value="<?= h($c['service_date']) ?>" required autocomplete="off">
                         </div>
                     </div>
                     <div class="file-ts-row file-ts-pax">
-                        <div class="file-ts-lbl"><span class="t">Number of Adults</span><span class="c">:</span></div>
+                        <div class="file-ts-lbl">Number of Adults :</div>
                         <div class="file-ts-ctl"><input type="text" name="adults" id="fa-adults" class="input input-bordered bg-white" value="<?= h($c['adults']) ?>"></div>
                     </div>
                     <div class="file-ts-row file-ts-pax">
-                        <div class="file-ts-lbl"><span class="t">Number of Children</span><span class="c">:</span></div>
+                        <div class="file-ts-lbl">Number of Children :</div>
                         <div class="file-ts-ctl"><input type="text" name="children" id="fa-children" class="input input-bordered bg-white" value="<?= h($c['children']) ?>"></div>
                     </div>
                     <div class="file-ts-row file-ts-pax">
-                        <div class="file-ts-lbl"><span class="t">Number of Pax</span><span class="c">:</span></div>
+                        <div class="file-ts-lbl">Number of Pax :</div>
                         <div class="file-ts-ctl"><input type="text" name="no_of_pax" id="fa-pax" class="input input-bordered bg-white" value="<?= h($c['no_of_pax']) ?>"></div>
                     </div>
                 </div>
@@ -299,6 +303,7 @@ $apiBase = 'index.php?page=file_api';
     </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 (function () {
     var api = <?= json_encode($apiBase, JSON_THROW_ON_ERROR) ?>;
@@ -360,10 +365,25 @@ $apiBase = 'index.php?page=file_api';
 
     fc.addEventListener('change', function () {
         toHidden.value = fc.value;
-        get(api + '&action=cities&q=' + encodeURIComponent(fc.value)).then(function (d) {
-            fillSelect(fcity, d.items || [], saved.from_city, 'Select City');
+        var country = fc.value;
+        if (!country) {
+            fillSelect(fcity, [], '', 'Select City');
+            fillSelect(tcity, [], '', 'Select City');
             floc.innerHTML = '<option value=\"\">Select Location</option>';
             fzone.innerHTML = '<option value=\"\">Select Zone</option>';
+            tloc.innerHTML = '<option value=\"\">Select Location</option>';
+            tzone.innerHTML = '<option value=\"\">Select Zone</option>';
+            refreshServices();
+            return;
+        }
+        get(api + '&action=cities&q=' + encodeURIComponent(country)).then(function (d) {
+            var items = d.items || [];
+            fillSelect(fcity, items, saved.from_city, 'Select City');
+            floc.innerHTML = '<option value=\"\">Select Location</option>';
+            fzone.innerHTML = '<option value=\"\">Select Zone</option>';
+            fillSelect(tcity, items, saved.to_city, 'Select City');
+            tloc.innerHTML = '<option value=\"\">Select Location</option>';
+            tzone.innerHTML = '<option value=\"\">Select Zone</option>';
         });
     });
 
@@ -384,12 +404,6 @@ $apiBase = 'index.php?page=file_api';
             fillSelect(fzone, d.items || [], saved.from_zone, 'Select Zone');
             refreshServices();
         });
-    });
-
-    get(api + '&action=cities_all').then(function (d) {
-        fillSelect(tcity, d.items || [], saved.to_city, 'Select City');
-        tloc.innerHTML = '<option value=\"\">Select Location</option>';
-        tzone.innerHTML = '<option value=\"\">Select Zone</option>';
     });
 
     tcity.addEventListener('change', function () {
@@ -449,6 +463,10 @@ $apiBase = 'index.php?page=file_api';
     }
     document.getElementById('fa-adults').addEventListener('keyup', sumPax);
     document.getElementById('fa-children').addEventListener('keyup', sumPax);
+
+    if (typeof flatpickr === 'function') {
+        flatpickr('#fa-service-date', { dateFormat: 'd-m-Y', allowInput: true, clickOpens: true });
+    }
 })();
 </script>
 
