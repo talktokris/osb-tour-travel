@@ -179,6 +179,8 @@
     $isHomeNav = in_array($currentPage, $homeNavPages, true);
     $smsNavPages = ['sms', 'sms_test', 'sms_credit', 'sms_history'];
     $isSmsNav = in_array($currentPage, $smsNavPages, true);
+    $fileNavPages = ['file', 'file_book', 'file_preview', 'file_send_email'];
+    $isFileNav = in_array($currentPage, $fileNavPages, true);
     $hasAgentCookie = !empty($_COOKIE['agent_cookie']) && trim((string) $_COOKIE['agent_cookie']) !== '';
     ?>
     <header style="position:fixed;top:0;left:0;right:0;z-index:20;background:#ffffff;border-bottom:1px solid #d7dee7;box-shadow:0 6px 20px rgba(15,23,42,0.10);">
@@ -203,7 +205,7 @@
         <div style="background:linear-gradient(90deg,#0c4a8a 0%,#0b77bb 55%,#0a94c8 100%);border-top:1px solid rgba(255,255,255,0.30);box-shadow:inset 0 1px 0 rgba(255,255,255,0.18);">
             <nav style="max-width:1400px;margin:0 auto;padding:8px 16px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;overflow-x:auto;">
                 <a href="index.php?page=home" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $isHomeNav ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">Home</a>
-                <a href="index.php?page=file" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'file' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">File / Assg</a>
+                <a href="index.php?page=file" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $isFileNav ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">File / Assg</a>
                 <a href="index.php?page=search" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'search' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">Search</a>
                 <a href="index.php?page=report" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'report' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">Report</a>
                 <a href="index.php?page=driver" style="height:34px;padding:0 12px;display:inline-flex;align-items:center;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;<?= $currentPage === 'driver' ? 'background:#ffffff;color:#0c4a8a;box-shadow:0 4px 10px rgba(15,23,42,0.20);' : 'color:#ffffff;' ?>">Driver</a>

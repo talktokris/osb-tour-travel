@@ -1,0 +1,13 @@
+{
+    "name": "withinearth/new-app-travel",
+    "description": "OSB Tour new application",
+    "require": {
+        "php": ">=8.1",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "config": {
+        "platform": {
+            "php": "8.1"
+        }
+    }
+}

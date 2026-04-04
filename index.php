@@ -76,6 +76,14 @@ if ($page === 'login') {
     require __DIR__ . '/pages/bookings/index.php';
 } elseif ($page === 'file') {
     require __DIR__ . '/pages/file/index.php';
+} elseif ($page === 'file_book') {
+    require __DIR__ . '/pages/file/book.php';
+} elseif ($page === 'file_preview') {
+    require __DIR__ . '/pages/file/preview.php';
+} elseif ($page === 'file_send_email') {
+    require __DIR__ . '/pages/file/send_email.php';
+} elseif ($page === 'file_api') {
+    require __DIR__ . '/pages/file/api.php';
 } elseif ($page === 'search') {
     require __DIR__ . '/pages/search/index.php';
 } elseif ($page === 'report') {
