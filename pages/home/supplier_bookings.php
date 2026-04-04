@@ -15,7 +15,7 @@ $csrf = home_dashboard_csrf_token();
 $rows = $supplier !== '' ? home_dashboard_file_entries_pending_for_supplier($mysqli, $supplier) : [];
 ?>
 
-<main class="w-full max-w-[1000px] mx-auto px-3 sm:px-4 pb-6">
+<main class="w-full max-w-none px-3 sm:px-5 lg:px-6 pb-6">
         <div class="space-y-4">
             <?php $breadcrumbCurrent = 'Supplier bookings'; require __DIR__ . '/../../includes/breadcrumb.php'; ?>
 

@@ -18,7 +18,7 @@ $suppliers = $pattern !== null
 $strip = home_dashboard_az_letter_strip();
 ?>
 
-<main class="w-full max-w-[1000px] mx-auto px-3 sm:px-4 pb-6">
+<main class="w-full max-w-none px-3 sm:px-5 lg:px-6 pb-6">
         <div class="space-y-4">
             <?php $breadcrumbCurrent = 'Supplier directory'; require __DIR__ . '/../../includes/breadcrumb.php'; ?>
 

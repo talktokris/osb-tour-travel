@@ -235,7 +235,7 @@ if ($showLetterView) {
     }
 </style>
 
-<main class="w-full max-w-[1000px] mx-auto px-3 sm:px-4 pb-6">
+<main class="w-full max-w-none px-3 sm:px-5 lg:px-6 pb-6">
         <div class="space-y-4">
             <?php if ($flash): ?>
                 <div class="alert <?= $flash['type'] === 'success' ? 'alert-success' : 'alert-error' ?> shadow-sm text-sm">
