@@ -64,74 +64,90 @@ require __DIR__ . '/panel_styles.php';
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <style>
-    /* Row 1: input → calendar (jQuery inserts img after #sms-from-date). Search is on row 2 inside the panel. */
-    .sms-send-sms-field-group {
+    /* User-edit style: date text field with calendar control inside the right edge (like “Date of Birth”). */
+    .sms-send-sms-compact {
         width: fit-content;
         max-width: 100%;
     }
-    .sms-datepicker-line {
+    .sms-dob-input-wrap {
+        position: relative;
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 12.75rem;
+    }
+    .sms-dob-input-wrap .sms-dob-input {
+        width: 100%;
+        height: 2.25rem;
+        min-height: 2.25rem;
+        padding-left: 0.65rem;
+        padding-right: 2.35rem;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        border: 1px solid color-mix(in oklab, var(--color-base-content, #64748b) 22%, transparent);
+        border-radius: var(--rounded-btn, 0.5rem);
+        background: #fff;
+        box-sizing: border-box;
+    }
+    .sms-dob-input-wrap .sms-dob-input:focus {
+        outline: 2px solid color-mix(in oklab, var(--color-primary, #2563eb) 35%, transparent);
+        outline-offset: 1px;
+        border-color: var(--color-primary, #2563eb);
+    }
+    .sms-dob-cal-btn {
+        position: absolute;
+        right: 3px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 2rem;
+        height: 1.75rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0.25rem;
+        background: transparent;
+        cursor: pointer;
+        color: #475569;
+    }
+    .sms-dob-cal-btn:hover {
+        background: color-mix(in oklab, var(--color-base-content, #64748b) 10%, transparent);
+        color: #1e293b;
+    }
+    .sms-dob-cal-btn:focus-visible {
+        outline: 2px solid var(--color-primary, #2563eb);
+        outline-offset: 1px;
+    }
+    .sms-send-sms-actions {
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
         gap: 0.5rem;
-        width: fit-content;
-        max-width: 100%;
-        min-width: 0;
-    }
-    .sms-datepicker-line .ui-datepicker-trigger {
-        flex: 0 0 auto;
-        display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
-        width: 2.25rem;
-        height: 2rem;
-        min-width: 2.25rem;
-        min-height: 2rem;
-        margin: 0 !important;
-        position: relative;
-        z-index: 2;
-        cursor: pointer;
-        border: 1px solid color-mix(in oklab, var(--color-base-content, #64748b) 22%, transparent);
-        border-radius: var(--rounded-btn, 0.5rem);
-        background: var(--color-base-100, #fff);
-        padding: 0;
-        box-sizing: border-box;
-    }
-    .sms-datepicker-line .ui-datepicker-trigger:hover {
-        background: color-mix(in oklab, var(--color-base-content, #64748b) 6%, var(--color-base-100, #fff));
-    }
-    .sms-datepicker-line .ui-datepicker-trigger img {
-        display: block;
-        width: 1.125rem;
-        height: 1.125rem;
-        opacity: 0.85;
-    }
-    .sms-search-row {
-        display: flex;
-        justify-content: flex-end;
         width: 100%;
-        margin-top: 0.75rem;
-        padding-top: 0.65rem;
-        border-top: 1px solid rgba(184, 212, 168, 0.55);
+        max-width: 19.5rem;
     }
-    .sms-search-row .sms-search-btn {
-        min-width: 5.5rem;
+    .sms-send-sms-actions .sms-search-btn {
+        flex: 0 0 auto;
+        min-width: 5.25rem;
+        height: 2.25rem;
+        min-height: 2.25rem;
         box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
     }
 </style>
 <script>
 $(function () {
-    var calIcon = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(
-        '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>'
-    );
-    $('#sms-from-date').datepicker({
+    var $inp = $('#sms-from-date');
+    $inp.datepicker({
         dateFormat: 'dd-mm-yy',
         changeMonth: true,
         changeYear: true,
-        showOn: 'both',
-        buttonImage: calIcon,
-        buttonImageOnly: true,
-        buttonText: 'Open calendar'
+        showOn: 'focus'
+    });
+    $('#sms-calendar-inline-btn').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        $inp.datepicker('show');
     });
 });
 </script>
@@ -154,22 +170,23 @@ $(function () {
                 <div class="alert alert-error shadow-sm"><span><?= h($searchError) ?></span></div>
             <?php endif; ?>
 
-            <div class="sms-legacy-panel rounded-sm p-4 sm:p-5 w-full max-w-sm shadow-sm">
-                <h2 class="sms-legacy-title mb-4 text-base sm:text-lg">Send SMS List</h2>
+            <div class="sms-legacy-panel rounded-sm p-3.5 sm:p-4 w-fit max-w-full shadow-sm sms-send-sms-compact">
+                <h2 class="sms-legacy-title mb-3 text-base">Send SMS List</h2>
                 <form method="post" action="index.php?page=sms">
                     <input type="hidden" name="_token" value="<?= h($csrf) ?>">
                     <input type="hidden" name="sms_action" value="search">
-                    <div class="form-control w-full items-stretch">
-                        <label class="label py-0 pb-1.5 justify-start px-0" for="sms-from-date"><span class="label-text text-sm font-medium">Date :</span></label>
-                        <div class="sms-send-sms-field-group">
-                            <div class="sms-datepicker-line">
+                    <div class="form-control w-full p-0">
+                        <label class="label py-0 pb-1.5 justify-start px-0 min-h-0 h-auto" for="sms-from-date"><span class="label-text text-sm font-medium">Date :</span></label>
+                        <div class="sms-send-sms-actions">
+                            <div class="sms-dob-input-wrap">
                                 <input type="text" name="from_date" id="sms-from-date" autocomplete="off"
-                                       class="input input-bordered input-sm bg-white w-[9.5rem] sm:w-36 shrink-0"
+                                       class="sms-dob-input"
                                        value="<?= h($fromDateInput) ?>" placeholder="dd-mm-yy">
+                                <button type="button" class="sms-dob-cal-btn" id="sms-calendar-inline-btn" title="Show date picker" aria-label="Show date picker">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                </button>
                             </div>
-                            <div class="sms-search-row">
-                                <button type="submit" class="btn btn-sm sms-legacy-btn sms-search-btn px-6 min-h-9 h-9">Search</button>
-                            </div>
+                            <button type="submit" class="btn btn-sm sms-legacy-btn sms-search-btn px-5">Search</button>
                         </div>
                     </div>
                 </form>
