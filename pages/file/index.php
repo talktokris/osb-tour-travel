@@ -72,6 +72,85 @@ $vehicleTypes = file_module_vehicle_types($mysqli);
 $apiBase = 'index.php?page=file_api';
 ?>
 
+<style>
+/* Legacy-style compact transfer search (cream panels, teal border, label column + colon) */
+.file-ts-form { max-width: 52rem; }
+.file-ts-panel {
+    border: 1px solid #1a6b5c;
+    background: #fffce8;
+    padding: 6px 10px 8px;
+    margin-bottom: 8px;
+}
+.file-ts-panel h2 {
+    color: #00a651;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+}
+.file-ts-row {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    column-gap: 8px;
+    row-gap: 2px;
+    align-items: center;
+    margin-bottom: 4px;
+}
+.file-ts-row:last-child { margin-bottom: 0; }
+.file-ts-lbl {
+    font-size: 11px;
+    line-height: 1.15;
+    color: #222;
+    align-self: center;
+}
+.file-ts-lbl .t { display: block; }
+.file-ts-lbl .c { display: block; }
+.file-ts-ctl .select,
+.file-ts-ctl .input {
+    min-height: 1.85rem;
+    height: 1.85rem;
+    font-size: 12px;
+    padding-top: 0.15rem;
+    padding-bottom: 0.15rem;
+}
+/* City | Location | Zone (zone column wider for long hotel names) */
+.file-ts-pair {
+    display: grid;
+    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1fr) minmax(0, 1.35fr);
+    gap: 5px;
+    width: 100%;
+}
+.file-ts-veh {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+}
+.file-ts-veh .select { width: auto; min-width: 7.5rem; }
+.file-ts-veh .file-ts-units { width: 3.25rem; min-width: 3.25rem; }
+.file-ts-radios {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+}
+.file-ts-radios label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    margin: 0;
+    white-space: nowrap;
+}
+.file-ts-radios input { width: 14px; height: 14px; }
+.file-ts-search.btn {
+    margin-top: 2px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.12);
+}
+.file-ts-pax .input { max-width: 5rem; }
+</style>
+
 <div class="flex gap-6 w-full pb-6">
     <aside class="hidden lg:block w-72 shrink-0"><?php require __DIR__ . '/sidebar.php'; ?></aside>
     <main class="flex-1 min-w-0">
@@ -85,99 +164,104 @@ $apiBase = 'index.php?page=file_api';
                 <div class="alert alert-warning"><span><?= h($searchError) ?></span></div>
             <?php endif; ?>
 
-            <div class="rounded-sm border border-base-300 bg-[#ffffee] p-4 sm:p-5 shadow-sm">
-                <h2 class="text-lg font-semibold text-success mb-3">Transfer Search</h2>
-                <form method="post" action="index.php?page=file" id="file-search-form" class="space-y-3 max-w-4xl">
-                    <input type="hidden" name="_token" value="<?= h($csrf) ?>">
-                    <input type="hidden" name="file_do_search" value="1">
+            <form method="post" action="index.php?page=file" id="file-search-form" class="file-ts-form">
+                <input type="hidden" name="_token" value="<?= h($csrf) ?>">
+                <input type="hidden" name="file_do_search" value="1">
+                <input type="hidden" name="to_country" id="fa-to-country" value="<?= h($c['to_country'] !== '' ? $c['to_country'] : $c['from_country']) ?>">
 
-                    <label class="form-control w-full max-w-md">
-                        <span class="label-text">Country</span>
-                        <select name="from_country" id="fa-from-country" class="select select-bordered select-sm w-full bg-white" required>
-                            <option value="">Select country</option>
-                            <?php foreach ($countries as $cn): ?>
-                                <option value="<?= h($cn) ?>" <?= $c['from_country'] === $cn ? 'selected' : '' ?>><?= h($cn) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </label>
-                    <input type="hidden" name="to_country" id="fa-to-country" value="<?= h($c['to_country'] !== '' ? $c['to_country'] : $c['from_country']) ?>">
+                <div class="file-ts-panel">
+                    <h2>Transfer Search</h2>
 
-                    <div class="flex flex-wrap gap-3 items-end">
-                        <label class="form-control min-w-[10rem]">
-                            <span class="label-text">Pick up — City</span>
-                            <select name="from_city" id="fa-from-city" class="select select-bordered select-sm w-full bg-white" required></select>
-                        </label>
-                        <label class="form-control min-w-[10rem]">
-                            <span class="label-text">Location</span>
-                            <select name="from_location" id="fa-from-location" class="select select-bordered select-sm w-full bg-white" required></select>
-                        </label>
-                        <label class="form-control min-w-[10rem]">
-                            <span class="label-text">Zone</span>
-                            <select name="from_zone" id="fa-from-zone" class="select select-bordered select-sm w-full bg-white"><option value="">Select zone</option></select>
-                        </label>
+                    <div class="file-ts-row">
+                        <div class="file-ts-lbl"><span class="t">Country</span><span class="c">:</span></div>
+                        <div class="file-ts-ctl">
+                            <select name="from_country" id="fa-from-country" class="select select-bordered w-full bg-white" required>
+                                <option value="">Select Country</option>
+                                <?php foreach ($countries as $cn): ?>
+                                    <option value="<?= h($cn) ?>" <?= $c['from_country'] === $cn ? 'selected' : '' ?>><?= h($cn) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="flex flex-wrap gap-3 items-end">
-                        <label class="form-control min-w-[10rem]">
-                            <span class="label-text">Drop off — City</span>
-                            <select name="to_city" id="fa-to-city" class="select select-bordered select-sm w-full bg-white" required></select>
-                        </label>
-                        <label class="form-control min-w-[10rem]">
-                            <span class="label-text">Location</span>
-                            <select name="to_location" id="fa-to-location" class="select select-bordered select-sm w-full bg-white" required></select>
-                        </label>
-                        <label class="form-control min-w-[10rem]">
-                            <span class="label-text">Zone</span>
-                            <select name="to_zone" id="fa-to-zone" class="select select-bordered select-sm w-full bg-white"><option value="">Select zone</option></select>
-                        </label>
+                    <div class="file-ts-row">
+                        <div class="file-ts-lbl"><span class="t">Pick Up</span><span class="c">:</span></div>
+                        <div class="file-ts-ctl file-ts-pair">
+                            <select name="from_city" id="fa-from-city" class="select select-bordered w-full bg-white" required></select>
+                            <select name="from_location" id="fa-from-location" class="select select-bordered w-full bg-white" required></select>
+                            <select name="from_zone" id="fa-from-zone" class="select select-bordered w-full bg-white"><option value="">Select Zone</option></select>
+                        </div>
                     </div>
 
-                    <label class="form-control w-full max-w-xl">
-                        <span class="label-text">Services</span>
-                        <select name="service_name" id="fa-service" class="select select-bordered select-sm w-full bg-white">
-                            <option value="">All matching services</option>
-                        </select>
-                    </label>
+                    <div class="file-ts-row">
+                        <div class="file-ts-lbl"><span class="t">Drop Off</span><span class="c">:</span></div>
+                        <div class="file-ts-ctl file-ts-pair">
+                            <select name="to_city" id="fa-to-city" class="select select-bordered w-full bg-white" required></select>
+                            <select name="to_location" id="fa-to-location" class="select select-bordered w-full bg-white" required></select>
+                            <select name="to_zone" id="fa-to-zone" class="select select-bordered w-full bg-white"><option value="">Select Zone</option></select>
+                        </div>
+                    </div>
 
-                    <div class="flex flex-wrap gap-3 items-end">
-                        <label class="form-control min-w-[12rem]">
-                            <span class="label-text">Vehicle type</span>
-                            <select name="vehicle_type" class="select select-bordered select-sm w-full bg-white">
-                                <option value="">Any</option>
+                    <div class="file-ts-row">
+                        <div class="file-ts-lbl"><span class="t">Services</span><span class="c">:</span></div>
+                        <div class="file-ts-ctl">
+                            <select name="service_name" id="fa-service" class="select select-bordered w-full bg-white">
+                                <option value="">Select Services</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="file-ts-row">
+                        <div class="file-ts-lbl"><span class="t">Vehicle Type</span><span class="c">:</span></div>
+                        <div class="file-ts-ctl">
+                            <select name="vehicle_type" class="select select-bordered w-full bg-white max-w-xs">
+                                <option value="">Select Vehicle Type</option>
                                 <?php foreach ($vehicleTypes as $vt): ?>
                                     <option value="<?= h($vt) ?>" <?= $c['vehicle_type'] === $vt ? 'selected' : '' ?>><?= h($vt) ?></option>
                                 <?php endforeach; ?>
                             </select>
-                        </label>
-                        <label class="form-control w-24">
-                            <span class="label-text">No of unit</span>
-                            <select name="no_of_vachile" class="select select-bordered select-sm w-full bg-white">
+                        </div>
+                    </div>
+
+                    <div class="file-ts-row">
+                        <div class="file-ts-lbl"><span class="t">No of Unit</span><span class="c">:</span></div>
+                        <div class="file-ts-ctl file-ts-veh">
+                            <select name="no_of_vachile" class="select select-bordered bg-white file-ts-units">
                                 <?php for ($i = 1; $i <= 10; $i++): ?>
                                     <option value="<?= $i ?>" <?= $c['no_of_vachile'] === (string) $i ? 'selected' : '' ?>><?= $i ?></option>
                                 <?php endfor; ?>
                             </select>
-                        </label>
-                        <div class="flex gap-4 items-center pt-6">
-                            <label class="label cursor-pointer gap-2"><input type="radio" name="service_cat" value="Private" class="radio radio-sm" <?= ($c['service_cat'] ?? '') === 'SIC' ? '' : 'checked' ?>> Private</label>
-                            <label class="label cursor-pointer gap-2"><input type="radio" name="service_cat" value="SIC" class="radio radio-sm" <?= ($c['service_cat'] ?? '') === 'SIC' ? 'checked' : '' ?>> SIC</label>
+                            <div class="file-ts-radios">
+                                <label><input type="radio" name="service_cat" value="Private" <?= ($c['service_cat'] ?? '') === 'SIC' ? '' : 'checked' ?>> Private</label>
+                                <label><input type="radio" name="service_cat" value="SIC" <?= ($c['service_cat'] ?? '') === 'SIC' ? 'checked' : '' ?>> SIC</label>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="rounded-sm border border-warning/40 bg-base-100/80 p-3 space-y-2 max-w-xl">
-                        <label class="form-control">
-                            <span class="label-text">Service date</span>
-                            <input type="text" name="service_date" class="input input-bordered input-sm w-full bg-white" placeholder="dd-mm-yyyy" value="<?= h($c['service_date']) ?>" required>
-                        </label>
-                        <div class="flex flex-wrap gap-2">
-                            <label class="form-control w-28"><span class="label-text">Adults</span><input type="text" name="adults" id="fa-adults" class="input input-bordered input-sm bg-white" value="<?= h($c['adults']) ?>"></label>
-                            <label class="form-control w-28"><span class="label-text">Children</span><input type="text" name="children" id="fa-children" class="input input-bordered input-sm bg-white" value="<?= h($c['children']) ?>"></label>
-                            <label class="form-control w-28"><span class="label-text">Pax</span><input type="text" name="no_of_pax" id="fa-pax" class="input input-bordered input-sm bg-white" value="<?= h($c['no_of_pax']) ?>"></label>
+                <div class="file-ts-panel">
+                    <div class="file-ts-row">
+                        <div class="file-ts-lbl"><span class="t">Service Date</span><span class="c">:</span></div>
+                        <div class="file-ts-ctl">
+                            <input type="text" name="service_date" class="input input-bordered w-full max-w-xs bg-white" placeholder="dd-mm-yyyy" value="<?= h($c['service_date']) ?>" required>
                         </div>
                     </div>
+                    <div class="file-ts-row file-ts-pax">
+                        <div class="file-ts-lbl"><span class="t">Number of Adults</span><span class="c">:</span></div>
+                        <div class="file-ts-ctl"><input type="text" name="adults" id="fa-adults" class="input input-bordered bg-white" value="<?= h($c['adults']) ?>"></div>
+                    </div>
+                    <div class="file-ts-row file-ts-pax">
+                        <div class="file-ts-lbl"><span class="t">Number of Children</span><span class="c">:</span></div>
+                        <div class="file-ts-ctl"><input type="text" name="children" id="fa-children" class="input input-bordered bg-white" value="<?= h($c['children']) ?>"></div>
+                    </div>
+                    <div class="file-ts-row file-ts-pax">
+                        <div class="file-ts-lbl"><span class="t">Number of Pax</span><span class="c">:</span></div>
+                        <div class="file-ts-ctl"><input type="text" name="no_of_pax" id="fa-pax" class="input input-bordered bg-white" value="<?= h($c['no_of_pax']) ?>"></div>
+                    </div>
+                </div>
 
-                    <button type="submit" class="btn btn-sm btn-success text-white px-6">Search</button>
-                </form>
-            </div>
+                <button type="submit" class="btn btn-sm btn-success text-white px-6 file-ts-search">Search</button>
+            </form>
 
             <?php if (is_array($results)): ?>
                 <div class="rounded-sm border border-base-300 bg-[#ffccdf]/40 p-4 overflow-x-auto">
@@ -260,7 +344,7 @@ $apiBase = 'index.php?page=file_api';
     function refreshServices() {
         var fromL = floc.value;
         var toL = tloc.value;
-        svc.innerHTML = '<option value=\"\">All matching services</option>';
+        svc.innerHTML = '<option value=\"\">Select Services</option>';
         if (!fromL || !toL) return;
         get(api + '&action=services_between&q=' + encodeURIComponent(fromL) + '&to=' + encodeURIComponent(toL)).then(function (d) {
             if (!d.items) return;
@@ -277,42 +361,52 @@ $apiBase = 'index.php?page=file_api';
     fc.addEventListener('change', function () {
         toHidden.value = fc.value;
         get(api + '&action=cities&q=' + encodeURIComponent(fc.value)).then(function (d) {
-            fillSelect(fcity, d.items || [], saved.from_city, 'Select city');
-            floc.innerHTML = '<option value=\"\">Select location</option>';
-            fzone.innerHTML = '<option value=\"\">Select zone</option>';
+            fillSelect(fcity, d.items || [], saved.from_city, 'Select City');
+            floc.innerHTML = '<option value=\"\">Select Location</option>';
+            fzone.innerHTML = '<option value=\"\">Select Zone</option>';
         });
     });
 
     fcity.addEventListener('change', function () {
         get(api + '&action=locations&q=' + encodeURIComponent(fcity.value)).then(function (d) {
-            fillSelect(floc, d.items || [], saved.from_location, 'Select location');
-            fzone.innerHTML = '<option value=\"\">Select zone</option>';
+            fillSelect(floc, d.items || [], saved.from_location, 'Select Location');
+            fzone.innerHTML = '<option value=\"\">Select Zone</option>';
         });
     });
 
     floc.addEventListener('change', function () {
+        if (!floc.value) {
+            fzone.innerHTML = '<option value=\"\">Select Zone</option>';
+            refreshServices();
+            return;
+        }
         get(api + '&action=zones&q=' + encodeURIComponent(floc.value)).then(function (d) {
-            fillSelect(fzone, d.items || [], saved.from_zone, 'Select zone');
+            fillSelect(fzone, d.items || [], saved.from_zone, 'Select Zone');
             refreshServices();
         });
     });
 
     get(api + '&action=cities_all').then(function (d) {
-        fillSelect(tcity, d.items || [], saved.to_city, 'Select city');
-        tloc.innerHTML = '<option value=\"\">Select location</option>';
-        tzone.innerHTML = '<option value=\"\">Select zone</option>';
+        fillSelect(tcity, d.items || [], saved.to_city, 'Select City');
+        tloc.innerHTML = '<option value=\"\">Select Location</option>';
+        tzone.innerHTML = '<option value=\"\">Select Zone</option>';
     });
 
     tcity.addEventListener('change', function () {
         get(api + '&action=locations&q=' + encodeURIComponent(tcity.value)).then(function (d) {
-            fillSelect(tloc, d.items || [], saved.to_location, 'Select location');
-            tzone.innerHTML = '<option value=\"\">Select zone</option>';
+            fillSelect(tloc, d.items || [], saved.to_location, 'Select Location');
+            tzone.innerHTML = '<option value=\"\">Select Zone</option>';
         });
     });
 
     tloc.addEventListener('change', function () {
+        if (!tloc.value) {
+            tzone.innerHTML = '<option value=\"\">Select Zone</option>';
+            refreshServices();
+            return;
+        }
         get(api + '&action=zones&q=' + encodeURIComponent(tloc.value)).then(function (d) {
-            fillSelect(tzone, d.items || [], saved.to_zone, 'Select zone');
+            fillSelect(tzone, d.items || [], saved.to_zone, 'Select Zone');
             refreshServices();
         });
     });
