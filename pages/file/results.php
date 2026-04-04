@@ -114,6 +114,10 @@ function file_results_icon_svg(string $name): string
             return '<svg ' . $a . '><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
         case 'price':
             return '<svg ' . $a . '><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>';
+        case 'pin':
+            return '<svg ' . $a . '><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>';
+        case 'arrow-right':
+            return '<svg ' . $a . '><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
         case 'car':
         default:
             return '<svg ' . $a . '><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-.1-1.9-.2c-.5-.2-.9-.5-1.1-.9L12 5H5L3 7v12c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>';
@@ -266,7 +270,14 @@ require __DIR__ . '/../../includes/nav.php';
     padding: 0.9rem 1rem 1rem 0.85rem;
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
+    gap: 0.75rem;
+}
+.file-res-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
 }
 .file-res-card__content {
     display: flex;
@@ -274,16 +285,109 @@ require __DIR__ . '/../../includes/nav.php';
     gap: 0.5rem;
     min-width: 0;
 }
+.file-res-card__highlights {
+    border-radius: 12px;
+    padding: 0.7rem 0.85rem 0.8rem;
+    border: 1px solid rgba(26, 107, 92, 0.14);
+    background:
+        linear-gradient(135deg, rgba(240, 253, 250, 0.95) 0%, rgba(255, 251, 235, 0.5) 48%, rgba(254, 243, 248, 0.65) 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    min-width: 0;
+}
+.file-res-highlights__label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #0f766e;
+    margin: 0 0 0.5rem;
+    opacity: 0.9;
+}
+.file-res-highlights__route {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.35rem 0.5rem;
+    align-items: start;
+}
+.file-res-route-point {
+    display: flex;
+    gap: 0.4rem;
+    min-width: 0;
+}
+.file-res-route-point__icon {
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(26, 107, 92, 0.1);
+    color: #1a6b5c;
+}
+.file-res-route-point__icon .file-res-icon-svg { opacity: 1; }
+.file-res-route-point__text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+.file-res-route-point__tag {
+    font-size: 0.625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #64748b;
+}
+.file-res-route-point__name {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.25;
+    word-break: break-word;
+}
+.file-res-route-point__sub {
+    font-size: 0.6875rem;
+    color: #64748b;
+    line-height: 1.2;
+}
+.file-res-route-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1.1rem;
+    color: #94a3b8;
+    opacity: 0.9;
+}
+@media (max-width: 520px) {
+    .file-res-highlights__route {
+        grid-template-columns: 1fr;
+    }
+    .file-res-route-arrow {
+        padding: 0;
+        transform: rotate(90deg);
+        margin: -0.25rem auto;
+    }
+}
 @media (min-width: 768px) {
     .file-res-card__inner {
         flex-direction: row;
-        align-items: center;
-        gap: 1rem 1.5rem;
+        align-items: stretch;
+        gap: 1rem 1.25rem;
         padding: 0.85rem 1.15rem 0.85rem 0.9rem;
     }
+    .file-res-card__body {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 1rem;
+    }
     .file-res-card__content {
-        flex: 1;
+        flex: 0 1 34%;
+        max-width: 22rem;
         gap: 0.45rem;
+    }
+    .file-res-card__highlights {
+        flex: 1 1 0;
     }
 }
 .file-res-card__top {
@@ -355,6 +459,13 @@ require __DIR__ . '/../../includes/nav.php';
 .file-res-card__action {
     margin-top: 0;
     padding-top: 0.15rem;
+}
+@media (max-width: 767px) {
+    .file-res-card__action {
+        border-top: 1px solid rgba(226, 232, 240, 0.95);
+        padding-top: 0.65rem;
+        margin-top: 0.1rem;
+    }
 }
 .file-res-card__action .btn {
     width: 100%;
@@ -474,31 +585,63 @@ require __DIR__ . '/../../includes/nav.php';
                             $priceDisp = file_results_format_price_display($pr['selling']);
                             $vehChipClass = $vIcon === 'luxury' ? ' file-res-chip--luxury' : '';
                             $vehSvg = $vIcon === 'van' ? 'van' : ($vIcon === 'luxury' ? 'luxury' : 'car');
+                            $fromLocDb = trim((string) ($row['from_locaion'] ?? ''));
+                            $toLocDb = trim((string) ($row['to_locaion'] ?? ''));
+                            $fromCityDb = trim((string) ($row['from_city'] ?? ''));
+                            $toCityDb = trim((string) ($row['to_city'] ?? ''));
                             ?>
                             <article class="file-res-card">
                                 <div class="file-res-card__rail" aria-hidden="true"></div>
                                 <div class="file-res-card__inner">
-                                    <div class="file-res-card__content">
-                                        <div class="file-res-card__top">
-                                            <p class="file-res-card__service">
-                                                <span class="file-res-icon-wrap--muted"><?= file_results_icon_svg('route') ?></span>
-                                                <span><?= h($svcTitle) ?></span>
-                                            </p>
-                                            <span class="file-res-card__badge">#<?= $n ?></span>
+                                    <div class="file-res-card__body">
+                                        <div class="file-res-card__content">
+                                            <div class="file-res-card__top">
+                                                <p class="file-res-card__service">
+                                                    <span class="file-res-icon-wrap--muted"><?= file_results_icon_svg('route') ?></span>
+                                                    <span><?= h($svcTitle) ?></span>
+                                                </p>
+                                                <span class="file-res-card__badge">#<?= $n ?></span>
+                                            </div>
+                                            <div class="file-res-card__chips">
+                                                <span class="file-res-chip<?= $vehChipClass ?>" title="Vehicle type">
+                                                    <?= file_results_icon_svg($vehSvg) ?>
+                                                    <?= h($vtype !== '' ? $vtype : 'Vehicle') ?>
+                                                </span>
+                                                <span class="file-res-chip file-res-chip--price" title="Total price">
+                                                    <?= file_results_icon_svg('price') ?>
+                                                    RM <?= h($priceDisp) ?>
+                                                </span>
+                                                <span class="file-res-chip" title="Maximum passengers">
+                                                    <?= file_results_icon_svg('users') ?>
+                                                    Max <?= $paxDisp ?> pax
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div class="file-res-card__chips">
-                                            <span class="file-res-chip<?= $vehChipClass ?>" title="Vehicle type">
-                                                <?= file_results_icon_svg($vehSvg) ?>
-                                                <?= h($vtype !== '' ? $vtype : 'Vehicle') ?>
-                                            </span>
-                                            <span class="file-res-chip file-res-chip--price" title="Total price">
-                                                <?= file_results_icon_svg('price') ?>
-                                                RM <?= h($priceDisp) ?>
-                                            </span>
-                                            <span class="file-res-chip" title="Maximum passengers">
-                                                <?= file_results_icon_svg('users') ?>
-                                                Max <?= $paxDisp ?> pax
-                                            </span>
+                                        <div class="file-res-card__highlights">
+                                            <p class="file-res-highlights__label">Route</p>
+                                            <div class="file-res-highlights__route">
+                                                <div class="file-res-route-point">
+                                                    <span class="file-res-route-point__icon" aria-hidden="true"><?= file_results_icon_svg('pin') ?></span>
+                                                    <div class="file-res-route-point__text">
+                                                        <span class="file-res-route-point__tag">Pick-up</span>
+                                                        <span class="file-res-route-point__name"><?= h($fromLocDb !== '' ? $fromLocDb : '—') ?></span>
+                                                        <?php if ($fromCityDb !== ''): ?>
+                                                            <span class="file-res-route-point__sub"><?= h($fromCityDb) ?></span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="file-res-route-arrow" aria-hidden="true"><?= file_results_icon_svg('arrow-right') ?></div>
+                                                <div class="file-res-route-point">
+                                                    <span class="file-res-route-point__icon" aria-hidden="true"><?= file_results_icon_svg('pin') ?></span>
+                                                    <div class="file-res-route-point__text">
+                                                        <span class="file-res-route-point__tag">Drop-off</span>
+                                                        <span class="file-res-route-point__name"><?= h($toLocDb !== '' ? $toLocDb : '—') ?></span>
+                                                        <?php if ($toCityDb !== ''): ?>
+                                                            <span class="file-res-route-point__sub"><?= h($toCityDb) ?></span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="file-res-card__action">
