@@ -123,7 +123,7 @@ require __DIR__ . '/panel_styles.php';
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.75rem;
         width: 100%;
         max-width: 19.5rem;
     }
@@ -170,13 +170,13 @@ $(function () {
                 <div class="alert alert-error shadow-sm"><span><?= h($searchError) ?></span></div>
             <?php endif; ?>
 
-            <div class="sms-legacy-panel rounded-sm p-3.5 sm:p-4 w-fit max-w-full shadow-sm sms-send-sms-compact">
-                <h2 class="sms-legacy-title mb-3 text-base">Send SMS List</h2>
+            <div class="sms-legacy-panel rounded-md px-5 py-5 sm:px-6 sm:py-5 w-fit max-w-full shadow-sm sms-send-sms-compact">
+                <h2 class="sms-legacy-title mb-4 text-base">Send SMS List</h2>
                 <form method="post" action="index.php?page=sms">
                     <input type="hidden" name="_token" value="<?= h($csrf) ?>">
                     <input type="hidden" name="sms_action" value="search">
                     <div class="form-control w-full p-0">
-                        <label class="label py-0 pb-1.5 justify-start px-0 min-h-0 h-auto" for="sms-from-date"><span class="label-text text-sm font-medium">Date :</span></label>
+                        <label class="label py-0 pb-2 justify-start px-0 min-h-0 h-auto" for="sms-from-date"><span class="label-text text-sm font-medium">Date :</span></label>
                         <div class="sms-send-sms-actions">
                             <div class="sms-dob-input-wrap">
                                 <input type="text" name="from_date" id="sms-from-date" autocomplete="off"
