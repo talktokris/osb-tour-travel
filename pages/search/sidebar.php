@@ -28,9 +28,6 @@ $link = static function (string $m, string $label) use ($sm): void {
         $link('city', 'Search by City services');
         $link('arrival', 'Arrival, Dep, Tours, Over…');
         $link('combined', 'Search by (all fields)');
-        $link('departure', 'Grouped — Departure');
-        $link('overland', 'Grouped — Overland');
-        $link('tours', 'Search by tour category');
         ?>
     </ul>
 </aside>

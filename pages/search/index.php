@@ -49,9 +49,6 @@ $titles = [
     'city' => 'Search by City Service',
     'arrival' => 'Search by Arrival / Departure / Over',
     'combined' => 'Search by (combined)',
-    'departure' => 'Arrival, Dep, Tours — Departure (by agent)',
-    'overland' => 'Arrival, Dep, Tours — Overland (by agent)',
-    'tours' => 'Search by Tours (service category)',
 ];
 
 $pageTitle = $titles[$mode] ?? 'Search';
@@ -462,10 +459,8 @@ require __DIR__ . '/../../includes/nav.php';
                 $hasSearchError = !empty($searchOutcome['error']);
                 $variant = (string) $searchOutcome['variant'];
                 $rows = $searchOutcome['rows'];
-                $groups = $searchOutcome['groups'] ?? null;
-                $hasNested = $variant === 'nested' && is_array($groups) && $groups !== [];
                 $hasFlat = $rows !== [];
-                $showResultsTable = !$isValidation && !$hasSearchError && ($hasNested || $hasFlat);
+                $showResultsTable = !$isValidation && !$hasSearchError && $hasFlat;
                 ?>
                 <?php if ($showResultsTable): ?>
                     <?php

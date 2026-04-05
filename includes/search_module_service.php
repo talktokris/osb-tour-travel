@@ -5,7 +5,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/file_module_service.php';
 
 const SEARCH_MODULE_ROW_LIMIT = 500;
-const SEARCH_MODULE_NESTED_FILE_LIMIT = 200;
 
 /**
  * Validation failure: drives the search UI message list (per-page compulsory fields).
@@ -29,7 +28,7 @@ function search_module_valid_modes(): array
 {
     return [
         'agent', 'supplier', 'file_no', 'pax', 'vehicle_type', 'tour_type', 'driver', 'vehicle_no',
-        'service_date', 'city', 'arrival', 'combined', 'departure', 'overland', 'tours',
+        'service_date', 'city', 'arrival', 'combined',
     ];
 }
 
@@ -202,8 +201,6 @@ function search_module_run(mysqli $mysqli, string $mode, array $post): array
         'city' => search_module_run_city($mysqli, $user, $post),
         'arrival' => search_module_run_arrival($mysqli, $user, $post),
         'combined' => search_module_run_combined($mysqli, $user, $post),
-        'departure', 'overland' => search_module_run_nested_agent($mysqli, $user, $post),
-        'tours' => search_module_run_tours($mysqli, $user, $post),
         default => search_module_run_agent($mysqli, $user, $post),
     };
 }
@@ -470,22 +467,6 @@ function search_module_run_arrival(mysqli $mysqli, string $user, array $post): a
  * @param array<string, string> $post
  * @return array{variant:string, rows:list<array<string,mixed>>, groups:null, error:?string}
  */
-function search_module_run_tours(mysqli $mysqli, string $user, array $post): array
-{
-    $term = trim($post['search_word'] ?? '');
-    if ($term === '') {
-        return search_module_validation_fail('tours', ['Tour / service category']);
-    }
-    $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.service_cat = ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
-    $rows = search_module_stmt_fetch_all($mysqli, $sql, 'ss', [$term, $user]);
-
-    return ['variant' => 'tours', 'rows' => $rows, 'groups' => null, 'error' => null];
-}
-
-/**
- * @param array<string, string> $post
- * @return array{variant:string, rows:list<array<string,mixed>>, groups:null, error:?string}
- */
 function search_module_run_combined(mysqli $mysqli, string $user, array $post): array
 {
     $parts = ['fe.user_enter_by = ?'];
@@ -579,68 +560,6 @@ function search_module_run_combined(mysqli $mysqli, string $user, array $post): 
     $rows = search_module_stmt_fetch_all($mysqli, $sql, $types, $params);
 
     return ['variant' => 'combined', 'rows' => $rows, 'groups' => null, 'error' => null];
-}
-
-/**
- * @param array<string, string> $post
- * @return array{variant:string, rows:list<array<string,mixed>>, groups:list<array{file_count_no:string,header:array<string,mixed>,lines:list<array<string,mixed>>}>, error:?string}
- */
-function search_module_run_nested_agent(mysqli $mysqli, string $user, array $post): array
-{
-    $agent = trim($post['search_word'] ?? '');
-    if ($agent === '') {
-        return search_module_validation_fail('nested', ['Agent name (exact match)'], []);
-    }
-    $sql = 'SELECT fe.file_count_no FROM file_entry fe WHERE fe.agent_name = ? AND fe.user_enter_by = ? GROUP BY fe.file_count_no ORDER BY MAX(fe.file_id) DESC LIMIT ' . (int) SEARCH_MODULE_NESTED_FILE_LIMIT;
-    $stmt = $mysqli->prepare($sql);
-    if (!$stmt) {
-        return ['variant' => 'nested', 'rows' => [], 'groups' => [], 'error' => 'Search failed.', 'validation_issues' => null];
-    }
-    $stmt->bind_param('ss', $agent, $user);
-    $stmt->execute();
-    $res = $stmt->get_result();
-    $counts = [];
-    if ($res) {
-        while ($row = $res->fetch_assoc()) {
-            $fcn = trim((string) ($row['file_count_no'] ?? ''));
-            if ($fcn !== '') {
-                $counts[] = $fcn;
-            }
-        }
-    }
-    $stmt->close();
-
-    $groups = [];
-    foreach ($counts as $fcn) {
-        $lines = search_module_stmt_fetch_all(
-            $mysqli,
-            'SELECT fe.* FROM file_entry fe WHERE fe.file_count_no = ? AND fe.user_enter_by = ? ORDER BY fe.file_id ASC',
-            'ss',
-            [$fcn, $user]
-        );
-        if ($lines === []) {
-            continue;
-        }
-        $headerStmt = $mysqli->prepare('SELECT fe.* FROM file_entry fe WHERE fe.file_count_no = ? AND fe.user_enter_by = ? ORDER BY fe.file_id DESC LIMIT 1');
-        $header = $lines[0];
-        if ($headerStmt) {
-            $headerStmt->bind_param('ss', $fcn, $user);
-            if ($headerStmt->execute()) {
-                $hr = $headerStmt->get_result();
-                if ($hr && ($hrow = $hr->fetch_assoc())) {
-                    $header = $hrow;
-                }
-            }
-            $headerStmt->close();
-        }
-        $groups[] = [
-            'file_count_no' => $fcn,
-            'header' => $header,
-            'lines' => $lines,
-        ];
-    }
-
-    return ['variant' => 'nested', 'rows' => [], 'groups' => $groups, 'error' => null];
 }
 
 function search_module_safe_redirect(string $candidate, string $fallback): string
