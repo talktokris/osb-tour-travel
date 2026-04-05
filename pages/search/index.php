@@ -99,6 +99,71 @@ require __DIR__ . '/../../includes/nav.php';
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
+/* Combined search: wider card, denser fields, less vertical padding */
+.search-module-scope .search-form-shell--wide {
+    max-width: none;
+    width: 100%;
+}
+.search-module-scope .search-form-yellow--compact {
+    padding: 0.75rem 0.9rem;
+}
+@media (min-width: 640px) {
+    .search-module-scope .search-form-yellow--compact {
+        padding: 0.85rem 1rem;
+    }
+}
+.search-module-scope .search-module-card--combined .card-body {
+    padding-top: 0.65rem;
+    padding-bottom: 0.75rem;
+}
+.search-module-scope .search-module-card--combined .card-title {
+    margin-bottom: 0.35rem;
+    font-size: 1rem;
+    line-height: 1.35;
+}
+.search-module-scope .search-form-combined .form-control {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0;
+    margin: 0;
+}
+.search-module-scope .search-form-combined .label-text {
+    font-size: 0.6875rem;
+    line-height: 1.2;
+    padding: 0;
+    margin: 0;
+    font-weight: 600;
+    color: #475569;
+    letter-spacing: 0.02em;
+}
+.search-module-scope .search-form-combined .input,
+.search-module-scope .search-form-combined .select,
+.search-module-scope .search-form-combined input.input {
+    border-color: #94a3b8;
+}
+.search-module-scope .search-form-combined .input:focus,
+.search-module-scope .search-form-combined .select:focus,
+.search-module-scope .search-form-combined input.input:focus {
+    outline: none;
+    border-color: #1a6b5c;
+    box-shadow: 0 0 0 2px color-mix(in oklab, #00a651 28%, transparent);
+}
+.search-module-scope .search-form-combined .search-dob-input {
+    border-color: #94a3b8;
+}
+.search-module-scope .search-form-combined .search-form-date-row {
+    gap: 0.35rem 0.5rem;
+    margin-top: 0.125rem;
+    align-items: center;
+}
+.search-module-scope .search-form-combined .search-form-date-to {
+    color: rgb(100 116 139);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 0 0.125rem;
+    flex-shrink: 0;
+}
 /* Autocomplete: full width, light panel (replaces dark native datalist) */
 .search-ac-wrap {
     position: relative;
@@ -350,15 +415,22 @@ require __DIR__ . '/../../includes/nav.php';
                 </div>
             <?php endif; ?>
 
-            <div class="card bg-base-100 shadow-xl border border-base-300 search-module-card max-w-2xl w-full mx-auto">
+            <?php
+            $isCombinedSearch = ($mode === 'combined');
+            $searchFormSpaceClass = $isCombinedSearch ? 'space-y-2' : 'space-y-3 sm:space-y-3.5';
+            $searchCardWidthClass = $isCombinedSearch ? 'max-w-5xl search-module-card--combined' : 'max-w-2xl';
+            $searchShellClass = 'search-form-shell' . ($isCombinedSearch ? ' search-form-shell--wide' : '');
+            $searchYellowClass = 'rounded-box border border-warning/40 search-form-yellow' . ($isCombinedSearch ? ' search-form-yellow--compact' : '');
+            ?>
+            <div class="card bg-base-100 shadow-xl border border-base-300 search-module-card <?= $searchCardWidthClass ?> w-full mx-auto">
                 <div class="card-body">
                     <h3 class="card-title text-base sm:text-lg" style="color:#009900"><?= h($pageTitle) ?></h3>
-                    <div class="search-form-shell">
-                    <div class="rounded-box border border-warning/40 search-form-yellow" style="background:#ffffe8">
-                        <form method="post" action="index.php?page=search&amp;mode=<?= rawurlencode($mode) ?>" class="space-y-3 sm:space-y-3.5">
+                    <div class="<?= h($searchShellClass) ?>">
+                    <div class="<?= h($searchYellowClass) ?>" style="background:#ffffe8">
+                        <form method="post" action="index.php?page=search&amp;mode=<?= rawurlencode($mode) ?>" class="<?= h($searchFormSpaceClass) ?>">
                             <?php require $formFile; ?>
-                            <div class="pt-1">
-                                <button type="submit" class="btn btn-success btn-sm text-white min-h-9">Search</button>
+                            <div class="<?= $isCombinedSearch ? 'pt-0.5' : 'pt-1' ?>">
+                                <button type="submit" class="btn btn-success btn-sm text-white <?= $isCombinedSearch ? 'min-h-8' : 'min-h-9' ?>">Search</button>
                             </div>
                         </form>
                     </div>

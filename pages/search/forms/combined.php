@@ -3,37 +3,39 @@
 /** @var list<string> $vehicleTypes */
 /** @var list<string> $tourCats */
 /** @var list<string> $serviceTypes */
+
+$inp = 'input input-bordered input-sm search-field bg-white w-full js-ac';
 ?>
 <input type="hidden" name="mode" value="combined">
 <input type="hidden" name="search_submit" value="1">
-<div class="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-2.5 w-full">
+<div class="search-form-combined grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-3 gap-y-1.5 w-full">
     <label class="form-control w-full">
-        <span class="label-text text-xs">Agent Name</span>
-        <input type="text" name="search_agent" class="js-ac w-full" data-ac-field="agent"
+        <span class="label-text">Agent Name</span>
+        <input type="text" name="search_agent" class="<?= h($inp) ?>" data-ac-field="agent"
                value="<?= h((string) ($fv['search_agent'] ?? '')) ?>" autocomplete="off">
     </label>
     <label class="form-control w-full">
-        <span class="label-text text-xs">Supplier Name</span>
-        <input type="text" name="search_supplier" class="js-ac w-full" data-ac-field="supplier"
+        <span class="label-text">Supplier Name</span>
+        <input type="text" name="search_supplier" class="<?= h($inp) ?>" data-ac-field="supplier"
                value="<?= h((string) ($fv['search_supplier'] ?? '')) ?>" autocomplete="off">
     </label>
     <label class="form-control w-full">
-        <span class="label-text text-xs">Ref No.</span>
-        <input type="text" name="search_ref" class="js-ac w-full" data-ac-field="ref_no"
+        <span class="label-text">Ref No.</span>
+        <input type="text" name="search_ref" class="<?= h($inp) ?>" data-ac-field="ref_no"
                value="<?= h((string) ($fv['search_ref'] ?? '')) ?>" autocomplete="off">
     </label>
     <label class="form-control w-full">
-        <span class="label-text text-xs">File No.</span>
-        <input type="text" name="search_file_no" class="js-ac w-full" data-ac-field="file_no"
+        <span class="label-text">File No.</span>
+        <input type="text" name="search_file_no" class="<?= h($inp) ?>" data-ac-field="file_no"
                value="<?= h((string) ($fv['search_file_no'] ?? '')) ?>" autocomplete="off">
     </label>
     <label class="form-control w-full">
-        <span class="label-text text-xs">Pax Name</span>
-        <input type="text" name="search_pax" class="js-ac w-full" data-ac-field="pax"
+        <span class="label-text">Pax Name</span>
+        <input type="text" name="search_pax" class="<?= h($inp) ?>" data-ac-field="pax"
                value="<?= h((string) ($fv['search_pax'] ?? '')) ?>" autocomplete="off">
     </label>
     <label class="form-control w-full">
-        <span class="label-text text-xs">Vehicle Type</span>
+        <span class="label-text">Vehicle Type</span>
         <select name="vehicle_search_word" class="select select-bordered select-sm search-field w-full bg-white">
             <option value="">None</option>
             <?php
@@ -45,7 +47,7 @@
         </select>
     </label>
     <label class="form-control w-full">
-        <span class="label-text text-xs">Tour Type</span>
+        <span class="label-text">Tour Type</span>
         <select name="tour_search_word" class="select select-bordered select-sm search-field w-full bg-white">
             <option value="">None</option>
             <?php
@@ -57,17 +59,17 @@
         </select>
     </label>
     <label class="form-control w-full">
-        <span class="label-text text-xs">Driver Name</span>
-        <input type="text" name="search_driver" class="js-ac w-full" data-ac-field="driver"
+        <span class="label-text">Driver Name</span>
+        <input type="text" name="search_driver" class="<?= h($inp) ?>" data-ac-field="driver"
                value="<?= h((string) ($fv['search_driver'] ?? '')) ?>" autocomplete="off">
     </label>
     <label class="form-control w-full">
-        <span class="label-text text-xs">Vehicle No.</span>
-        <input type="text" name="search_vehicles" class="js-ac w-full" data-ac-field="vehicle_no"
+        <span class="label-text">Vehicle No.</span>
+        <input type="text" name="search_vehicles" class="<?= h($inp) ?>" data-ac-field="vehicle_no"
                value="<?= h((string) ($fv['search_vehicles'] ?? '')) ?>" autocomplete="off">
     </label>
     <label class="form-control w-full">
-        <span class="label-text text-xs">Service Date (exact)</span>
+        <span class="label-text">Service Date (exact)</span>
         <?php
         $name = 'select_date';
         $value = (string) ($fv['select_date'] ?? '');
@@ -75,13 +77,13 @@
         require __DIR__ . '/../date_field.php';
         ?>
     </label>
-    <label class="form-control w-full">
-        <span class="label-text text-xs">City Service</span>
-        <input type="text" name="search_city" class="js-ac w-full" data-ac-field="city"
+    <label class="form-control w-full sm:col-span-2 xl:col-span-2">
+        <span class="label-text">City Service</span>
+        <input type="text" name="search_city" class="<?= h($inp) ?>" data-ac-field="city"
                value="<?= h((string) ($fv['search_city'] ?? '')) ?>" autocomplete="off">
     </label>
-    <label class="form-control w-full md:col-span-2">
-        <span class="label-text text-xs">Dep, Arrival &amp; Over</span>
+    <label class="form-control w-full sm:col-span-2 xl:col-span-3">
+        <span class="label-text">Dep, Arrival &amp; Over</span>
         <select name="search_word" class="select select-bordered select-sm search-field w-full bg-white">
             <option value="">None</option>
             <?php
@@ -92,9 +94,9 @@
             ?>
         </select>
     </label>
-    <div class="form-control w-full md:col-span-2">
-        <span class="label-text text-xs">From Date to To Date</span>
-        <div class="flex flex-wrap items-end gap-2 sm:gap-3 mt-1">
+    <div class="form-control w-full sm:col-span-2 xl:col-span-3">
+        <span class="label-text">From Date to To Date</span>
+        <div class="search-form-date-row flex flex-wrap">
             <div class="shrink-0">
                 <?php
                 $name = 'from_date';
@@ -103,7 +105,7 @@
                 require __DIR__ . '/../date_field.php';
                 ?>
             </div>
-            <span class="text-xs text-base-content/70 pb-2">to</span>
+            <span class="search-form-date-to">to</span>
             <div class="shrink-0">
                 <?php
                 $name = 'to_date';
