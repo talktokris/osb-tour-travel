@@ -249,25 +249,27 @@ require __DIR__ . '/../../includes/nav.php';
     border-color: #6ee7b7;
     color: #14532d;
 }
+/* Search outcome: center message boxes (validation / error / no results) like the form card */
+.search-outcome-centered {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+}
 /* Search outcome: validation, errors, empty state */
 .search-feedback {
     display: flex;
     gap: 1rem;
     align-items: flex-start;
-    max-width: 42rem;
+    max-width: 42rem; /* same as max-w-2xl / .search-form-shell */
     width: 100%;
+    flex-shrink: 0;
     margin-left: auto;
     margin-right: auto;
     padding: 1.15rem 1.25rem;
     border-radius: 0.75rem;
     border: 1px solid #e2e8f0;
     box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06), 0 2px 8px rgba(15, 23, 42, 0.04);
-}
-@media (min-width: 1024px) {
-    .search-feedback {
-        margin-left: 0;
-        margin-right: 0;
-    }
 }
 .search-feedback__icon {
     flex-shrink: 0;
@@ -348,7 +350,7 @@ require __DIR__ . '/../../includes/nav.php';
                 </div>
             <?php endif; ?>
 
-            <div class="card bg-base-100 shadow-xl border border-base-300 search-module-card max-w-2xl w-full mx-auto lg:mx-0">
+            <div class="card bg-base-100 shadow-xl border border-base-300 search-module-card max-w-2xl w-full mx-auto">
                 <div class="card-body">
                     <h3 class="card-title text-base sm:text-lg" style="color:#009900"><?= h($pageTitle) ?></h3>
                     <div class="search-form-shell">
@@ -374,47 +376,53 @@ require __DIR__ . '/../../includes/nav.php';
                 $groups = $searchOutcome['groups'] ?? null;
                 $hasNested = $variant === 'nested' && is_array($groups) && $groups !== [];
                 $hasFlat = $rows !== [];
+                $showResultsTable = !$isValidation && !$hasSearchError && ($hasNested || $hasFlat);
                 ?>
-                <?php if ($isValidation): ?>
-                    <div class="search-feedback search-feedback--validation" role="alert" aria-live="polite">
-                        <div class="search-feedback__icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        </div>
-                        <div class="search-feedback__body">
-                            <h4 class="search-feedback__title">Required fields</h4>
-                            <p class="search-feedback__text">Please fill in the following before searching:</p>
-                            <ul class="search-feedback__list">
-                                <?php foreach ($validationIssues as $issue): ?>
-                                    <li><?= h((string) $issue) ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                            <p class="search-feedback__hint">Date fields use format <strong>dd-mm-yyyy</strong> (calendar picker or typed).</p>
-                        </div>
-                    </div>
-                <?php elseif ($hasSearchError): ?>
-                    <div class="search-feedback search-feedback--error" role="alert" aria-live="assertive">
-                        <div class="search-feedback__icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                        </div>
-                        <div class="search-feedback__body">
-                            <h4 class="search-feedback__title">Search could not complete</h4>
-                            <p class="search-feedback__text"><?= h((string) $searchOutcome['error']) ?></p>
-                        </div>
-                    </div>
-                <?php elseif (!$hasNested && !$hasFlat): ?>
-                    <div class="search-feedback search-feedback--empty" role="status" aria-live="polite">
-                        <div class="search-feedback__icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                        </div>
-                        <div class="search-feedback__body">
-                            <h4 class="search-feedback__title">No matching records</h4>
-                            <p class="search-feedback__text">Nothing in your data matched this search. Try different keywords, widen the date range, or check spelling.</p>
-                        </div>
-                    </div>
-                <?php else:
+                <?php if ($showResultsTable): ?>
+                    <?php
                     $redirect = $redirectBack;
                     require __DIR__ . '/results_table.php';
                     ?>
+                <?php else: ?>
+                    <div class="search-outcome-centered">
+                    <?php if ($isValidation): ?>
+                        <div class="search-feedback search-feedback--validation" role="alert" aria-live="polite">
+                            <div class="search-feedback__icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                            </div>
+                            <div class="search-feedback__body">
+                                <h4 class="search-feedback__title">Required fields</h4>
+                                <p class="search-feedback__text">Please fill in the following before searching:</p>
+                                <ul class="search-feedback__list">
+                                    <?php foreach ($validationIssues as $issue): ?>
+                                        <li><?= h((string) $issue) ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                                <p class="search-feedback__hint">Date fields use format <strong>dd-mm-yyyy</strong> (calendar picker or typed).</p>
+                            </div>
+                        </div>
+                    <?php elseif ($hasSearchError): ?>
+                        <div class="search-feedback search-feedback--error" role="alert" aria-live="assertive">
+                            <div class="search-feedback__icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                            </div>
+                            <div class="search-feedback__body">
+                                <h4 class="search-feedback__title">Search could not complete</h4>
+                                <p class="search-feedback__text"><?= h((string) $searchOutcome['error']) ?></p>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <div class="search-feedback search-feedback--empty" role="status" aria-live="polite">
+                            <div class="search-feedback__icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                            </div>
+                            <div class="search-feedback__body">
+                                <h4 class="search-feedback__title">No matching records</h4>
+                                <p class="search-feedback__text">Nothing in your data matched this search. Try different keywords, widen the date range, or check spelling.</p>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    </div>
                 <?php endif; ?>
             <?php endif; ?>
         </div>
