@@ -244,7 +244,7 @@ require __DIR__ . '/../../includes/nav.php';
     background: #fff;
     box-shadow: none;
     overflow: hidden;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 .book-form--compact .book-card > .book-guest-head:first-child {
     border-radius: 0;
@@ -262,6 +262,9 @@ require __DIR__ . '/../../includes/nav.php';
 .book-form--compact .book-card__body {
     padding: 10px 12px 12px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
 }
 .book-row {
     display: flex;
@@ -328,8 +331,8 @@ require __DIR__ . '/../../includes/nav.php';
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 4px 12px;
-    margin-top: 2px;
+    gap: 6px 12px;
+    margin-top: 0;
 }
 .book-guest-head {
     display: grid;
@@ -350,28 +353,28 @@ require __DIR__ . '/../../includes/nav.php';
 .book-guest-row {
     display: grid;
     grid-template-columns: 1.25rem 4.5rem 1fr 1fr;
-    gap: 3px 5px;
+    gap: 5px 6px;
     align-items: center;
 }
 .book-guest-extras {
     display: grid;
     grid-template-columns: 1.25rem 4.5rem 1fr 1fr;
-    gap: 2px 5px;
-    margin-top: 2px;
+    gap: 5px 6px;
+    margin-top: 0;
     align-items: end;
 }
 .book-stack-mini {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 2px;
     min-width: 0;
 }
 .book-stack-mini__lbl {
     font-size: 10px;
     font-weight: 600;
     color: #1a1a1a;
-    line-height: 1.1;
-    margin-bottom: 1px;
+    line-height: 1.15;
+    margin-bottom: 2px;
 }
 @media (max-width: 640px) {
     .book-guest-head,
@@ -389,7 +392,8 @@ require __DIR__ . '/../../includes/nav.php';
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
-    gap: 3px 8px;
+    gap: 6px 10px;
+    padding-bottom: 2px;
 }
 .book-timing-hm {
     display: inline-flex;
@@ -446,8 +450,8 @@ require __DIR__ . '/../../includes/nav.php';
     flex-wrap: wrap;
     gap: 6px;
     align-items: center;
-    margin-top: 8px;
-    padding: 0 12px 4px;
+    margin-top: 12px;
+    padding: 4px 12px 6px;
     box-sizing: border-box;
 }
 @media (min-width: 768px) {
@@ -575,7 +579,7 @@ span.flatpickr-weekday {
             <div class="book-sel__price" aria-live="polite">Total <span class="tabular-nums">RM <?= h($priceShow) ?></span> <span class="font-normal text-xs opacity-80">(for this search)</span></div>
         </div>
 
-        <form method="post" action="index.php?page=file_book&amp;service_id=<?= $serviceId ?>" class="book-form--compact space-y-1">
+        <form method="post" action="index.php?page=file_book&amp;service_id=<?= $serviceId ?>" class="book-form--compact space-y-2">
             <input type="hidden" name="_token" value="<?= h($csrf) ?>">
             <input type="hidden" name="file_add_basket" value="1">
             <input type="hidden" name="file_count_no" value="<?= h($fv['file_count_no']) ?>">
@@ -627,7 +631,7 @@ span.flatpickr-weekday {
 
             <div class="book-card">
                 <p class="book-card__head">Timing &amp; flight details</p>
-                <div class="book-card__body space-y-1">
+                <div class="book-card__body">
                     <div class="book-timing-row">
                         <span class="book-inline-lbl book-timing-lead">Flight details</span>
                         <div class="book-stack-mini">
@@ -691,7 +695,7 @@ span.flatpickr-weekday {
 
             <div class="book-card">
                 <p class="book-card__head">Supplier details</p>
-                <div class="book-card__body space-y-1">
+                <div class="book-card__body">
                     <div class="book-contact-row">
                         <div class="book-field-inline book-field-inline--grow">
                             <span class="book-inline-lbl">Supplier name :</span>
