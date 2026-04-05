@@ -182,32 +182,27 @@ function driver_module_pending_rows(mysqli $mysqli, array $filters, string $user
     return $out;
 }
 
-/** @return list<array<string, mixed>> */
-function driver_module_completed_rows(mysqli $mysqli, string $userEnterBy): array
+/**
+ * Completed jobs: legacy completed_job.php used `WHERE job_complited != ''` with no user_enter_by filter.
+ * file_entry.user_enter_by often stores reservation/staff codes (e.g. res5), not user_login.Username (Kris),
+ * so scoping by session username hid all historical completed rows.
+ *
+ * @return list<array<string, mixed>>
+ */
+function driver_module_completed_rows(mysqli $mysqli): array
 {
-    if ($userEnterBy === '') {
-        return [];
-    }
-
     $sql = 'SELECT fe.ref_no, fe.file_no, fe.last_name, fe.first_name, fe.from_city, fe.to_city, fe.service_date, '
         . 'fe.driver_name, fe.vehicle_no, fe.job_complited '
-        . 'FROM file_entry fe WHERE fe.user_enter_by = ? AND fe.job_complited IS NOT NULL AND fe.job_complited <> \'\' '
+        . 'FROM file_entry fe WHERE TRIM(COALESCE(fe.job_complited, \'\')) <> \'\' '
         . 'ORDER BY fe.date DESC LIMIT ' . (int) DRIVER_MODULE_ROW_LIMIT;
 
-    $stmt = $mysqli->prepare($sql);
-    if (!$stmt) {
-        return [];
-    }
-    $stmt->bind_param('s', $userEnterBy);
-    $stmt->execute();
-    $res = $stmt->get_result();
+    $res = $mysqli->query($sql);
     $out = [];
     if ($res) {
         while ($row = $res->fetch_assoc()) {
             $out[] = $row;
         }
     }
-    $stmt->close();
 
     return $out;
 }

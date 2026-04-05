@@ -61,7 +61,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'POST') && (($fv['driver_pending_submit'] ??
     ], $userEnterBy);
 }
 
-$completedRows = $driverSub === 'completed' ? driver_module_completed_rows($mysqli, $userEnterBy) : null;
+$completedRows = $driverSub === 'completed' ? driver_module_completed_rows($mysqli) : null;
 $recentRows = $driverSub === 'recent' ? driver_module_recent_rows($mysqli, $userEnterBy) : null;
 
 if ($driverSub === 'pending' && $pendingRows === null) {
