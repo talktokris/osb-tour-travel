@@ -273,7 +273,7 @@ $paxMobileH = (string) ($head['pax_mobile'] ?? '');
 
 <div class="flex gap-6 w-full pb-6">
     <aside class="hidden lg:block w-72 shrink-0"><?php require __DIR__ . '/sidebar.php'; ?></aside>
-    <main class="flex-1 min-w-0 space-y-3">
+    <main class="flex-1 min-w-0 space-y-3 max-w-5xl">
         <?php $breadcrumbCurrent = 'File preview'; require __DIR__ . '/../../includes/breadcrumb.php'; ?>
         <?php if ($flash): ?>
             <?php $ft = $flash['type'] ?? ''; ?>
