@@ -78,10 +78,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['file_add_basket'])) {
                 } else {
                     $driverName = trim((string) ($_POST['driver_name'] ?? ''));
                     $dm = file_module_driver_mobile($mysqli, $driverName);
-                    $fhr = (string) ($_POST['fhr'] ?? '0');
-                    $fmin = (string) ($_POST['fmin'] ?? '0');
-                    $phr = (string) ($_POST['phr'] ?? '0');
-                    $pmin = (string) ($_POST['pmin'] ?? '0');
+                    $fhr = trim((string) ($_POST['fhr'] ?? ''));
+                    $fmin = trim((string) ($_POST['fmin'] ?? ''));
+                    $phr = trim((string) ($_POST['phr'] ?? ''));
+                    $pmin = trim((string) ($_POST['pmin'] ?? ''));
                     $row = [
                         'agent_name' => file_module_agent_name(),
                         'from_location' => $c['from_location'],
@@ -154,11 +154,11 @@ $fv = [
     'pax_mobile' => $posted ? (string) ($post['pax_mobile'] ?? '') : $g['pax_mobile'],
     'ref_no' => $posted ? (string) ($post['ref_no'] ?? '') : $g['ref_no'],
     'service_date' => $posted ? trim((string) ($post['service_date'] ?? '')) : $c['service_date'],
-    'fhr' => $posted ? (string) ($post['fhr'] ?? '0') : '0',
-    'fmin' => $posted ? (string) ($post['fmin'] ?? '0') : '0',
+    'fhr' => $posted ? trim((string) ($post['fhr'] ?? '')) : '',
+    'fmin' => $posted ? trim((string) ($post['fmin'] ?? '')) : '',
     'flight_no' => $posted ? (string) ($post['flight_no'] ?? '') : '',
-    'phr' => $posted ? (string) ($post['phr'] ?? '0') : '0',
-    'pmin' => $posted ? (string) ($post['pmin'] ?? '0') : '0',
+    'phr' => $posted ? trim((string) ($post['phr'] ?? '')) : '',
+    'pmin' => $posted ? trim((string) ($post['pmin'] ?? '')) : '',
     'pickup_from' => $posted ? (string) ($post['pickup_from'] ?? '') : $pickDef,
     'drop_off' => $posted ? (string) ($post['drop_off'] ?? '') : $dropDef,
     'supplier_name' => $posted ? (string) ($post['supplier_name'] ?? '') : '',
@@ -231,30 +231,33 @@ require __DIR__ . '/../../includes/nav.php';
     font-weight: 700;
     color: #0f766e;
 }
-.book-form--compact { font-size: 12px; }
+.book-form--compact {
+    font-size: 12px;
+    max-width: 45.5rem;
+}
 .book-form--compact .book-card {
-    border: 1px solid rgba(26, 107, 92, 0.22);
-    border-radius: 4px;
+    border: 1px solid #2a8f4a;
+    border-radius: 0;
     background: #fff;
     box-shadow: none;
     overflow: hidden;
-    margin-bottom: 0.25rem;
+    margin-bottom: 2px;
 }
 .book-form--compact .book-card > .book-guest-head:first-child {
-    border-radius: 3px 3px 0 0;
+    border-radius: 0;
 }
 .book-form--compact .book-card__head {
-    background: #0f766e;
+    background: #009900;
     color: #fff;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.01em;
-    padding: 0.22rem 0.45rem;
+    letter-spacing: 0;
+    padding: 3px 6px;
     margin: 0;
-    line-height: 1.2;
+    line-height: 1.15;
 }
 .book-form--compact .book-card__body {
-    padding: 0.3rem 0.45rem 0.4rem;
+    padding: 3px 5px 4px;
 }
 .book-row {
     display: flex;
@@ -284,26 +287,26 @@ require __DIR__ . '/../../includes/nav.php';
     display: inline-flex;
     align-items: center;
     flex-wrap: nowrap;
-    gap: 0.3rem;
+    gap: 3px 5px;
     min-width: 0;
 }
 .book-field-inline--grow {
     flex: 1 1 auto;
-    min-width: 12rem;
+    min-width: 10rem;
 }
 .book-inline-lbl {
     font-size: 11px;
     font-weight: 600;
-    color: #334155;
+    color: #1a1a1a;
     white-space: nowrap;
     flex-shrink: 0;
-    line-height: 1.2;
+    line-height: 1.15;
 }
 .book-lbl-slot {
-    flex: 0 0 7rem;
-    max-width: 7rem;
+    flex: 0 0 7.5rem;
+    max-width: 7.5rem;
     text-align: right;
-    padding-right: 0.2rem;
+    padding-right: 3px;
     box-sizing: border-box;
 }
 @media (max-width: 480px) {
@@ -321,68 +324,111 @@ require __DIR__ . '/../../includes/nav.php';
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem 1.25rem;
-    margin-top: 0.3rem;
+    gap: 4px 12px;
+    margin-top: 2px;
 }
 .book-guest-head {
     display: grid;
     grid-template-columns: 1.25rem 4.5rem 1fr 1fr;
-    gap: 0.35rem;
+    gap: 3px 5px;
     align-items: center;
     font-size: 10px;
     font-weight: 700;
     color: #fff;
     text-transform: none;
-    padding: 0.22rem 0.45rem;
+    padding: 3px 6px;
     margin: 0;
     width: 100%;
     box-sizing: border-box;
-    background: #0f766e;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    background: #009900;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 .book-guest-row {
     display: grid;
     grid-template-columns: 1.25rem 4.5rem 1fr 1fr;
-    gap: 0.35rem;
+    gap: 3px 5px;
     align-items: center;
+}
+.book-guest-extras {
+    display: grid;
+    grid-template-columns: 1.25rem 4.5rem 1fr 1fr;
+    gap: 2px 5px;
+    margin-top: 2px;
+    align-items: end;
+}
+.book-stack-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+}
+.book-stack-mini__lbl {
+    font-size: 10px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.1;
+    margin-bottom: 1px;
 }
 @media (max-width: 640px) {
     .book-guest-head,
     .book-guest-row { grid-template-columns: 1.25rem 4rem 1fr; }
     .book-guest-head span:nth-child(4),
     .book-guest-row > :nth-child(4) { grid-column: 2 / -1; }
+    .book-guest-extras {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+    .book-guest-extras__pad { display: none; }
+    .book-stack-mini { grid-column: 1 / -1; }
 }
 .book-timing-row {
     display: flex;
     flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 3px 8px;
+}
+.book-timing-hm {
+    display: inline-flex;
     align-items: center;
-    gap: 0.4rem 0.65rem;
+    gap: 2px;
+}
+.book-timing-lead {
+    align-self: flex-end;
+    padding-bottom: 2px;
+    margin-right: 2px;
 }
 .book-form--compact .input.input-sm,
 .book-form--compact .select.select-sm {
-    min-height: 1.55rem;
-    height: 1.55rem;
-    padding: 0.05rem 0.3rem;
+    min-height: 1.45rem;
+    height: 1.45rem;
+    padding: 1px 4px;
     font-size: 12px;
-    line-height: 1.2;
+    line-height: 1.15;
 }
 .book-form--compact .textarea.textarea-sm {
     min-height: 2.75rem;
-    padding: 0.2rem 0.35rem;
+    padding: 3px 5px;
     font-size: 12px;
-    line-height: 1.25;
+    line-height: 1.2;
 }
 .book-form--compact .select.select-sm {
     padding-top: 0;
     padding-bottom: 0;
 }
-.book-form--compact .w-time { width: 3.1rem; min-width: 3.1rem; }
+.book-form--compact .book-select-hm {
+    width: 2.75rem;
+    min-width: 2.75rem;
+    max-width: 2.75rem;
+    padding-left: 2px;
+    padding-right: 2px;
+    font-size: 11px;
+}
 .book-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
+    gap: 6px;
     align-items: center;
-    margin-top: 0.35rem;
+    margin-top: 4px;
 }
 @media (min-width: 768px) {
     .book-actions { justify-content: flex-end; }
@@ -394,10 +440,10 @@ require __DIR__ . '/../../includes/nav.php';
 }
 .file-ts-dob-wrap .file-ts-dob-input {
     width: 100%;
-    height: 1.55rem;
-    min-height: 1.55rem;
-    padding-left: 0.35rem;
-    padding-right: 1.85rem;
+    height: 1.45rem;
+    min-height: 1.45rem;
+    padding-left: 4px;
+    padding-right: 1.65rem;
     font-size: 12px;
     border: 1px solid #94a3b8;
     border-radius: 0.2rem;
@@ -544,14 +590,16 @@ span.flatpickr-weekday {
                         <input type="text" name="last_name" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['last_name']) ?>" required aria-label="Last name">
                         <input type="text" name="first_name" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['first_name']) ?>" required aria-label="First name">
                     </div>
-                    <div class="book-contact-row">
-                        <div class="book-field-inline book-field-inline--grow">
-                            <span class="book-inline-lbl">Guest mobile no :</span>
-                            <input type="text" name="pax_mobile" class="input input-bordered input-sm bg-white flex-1 min-w-32" value="<?= h($fv['pax_mobile']) ?>" inputmode="tel" autocomplete="tel">
+                    <div class="book-guest-extras">
+                        <span class="book-guest-extras__pad" aria-hidden="true"></span>
+                        <span class="book-guest-extras__pad" aria-hidden="true"></span>
+                        <div class="book-stack-mini">
+                            <span class="book-stack-mini__lbl">Guest mobile no</span>
+                            <input type="text" name="pax_mobile" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['pax_mobile']) ?>" inputmode="tel" autocomplete="tel">
                         </div>
-                        <div class="book-field-inline book-field-inline--grow">
-                            <span class="book-inline-lbl">Ref no :</span>
-                            <input type="text" name="ref_no" class="input input-bordered input-sm bg-white flex-1 min-w-32" value="<?= h($fv['ref_no']) ?>">
+                        <div class="book-stack-mini">
+                            <span class="book-stack-mini__lbl">Ref no</span>
+                            <input type="text" name="ref_no" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['ref_no']) ?>">
                         </div>
                     </div>
                 </div>
@@ -561,9 +609,9 @@ span.flatpickr-weekday {
                 <p class="book-card__head">Timing &amp; flight details</p>
                 <div class="book-card__body space-y-1">
                     <div class="book-timing-row">
-                        <span class="book-inline-lbl">Flight details</span>
-                        <div class="book-field-inline">
-                            <span class="book-inline-lbl">Service date</span>
+                        <span class="book-inline-lbl book-timing-lead">Flight details</span>
+                        <div class="book-stack-mini">
+                            <span class="book-stack-mini__lbl">Service date</span>
                             <div class="file-ts-dob-wrap">
                                 <input type="text" name="service_date" id="fb-service-date" class="file-ts-dob-input" placeholder="dd-mm-yyyy" value="<?= h($fv['service_date']) ?>" required autocomplete="off" inputmode="numeric">
                                 <button type="button" class="file-ts-dob-cal-btn" id="fb-service-date-cal" title="Open calendar" aria-label="Open calendar">
@@ -571,26 +619,42 @@ span.flatpickr-weekday {
                                 </button>
                             </div>
                         </div>
-                        <div class="book-field-inline">
-                            <span class="book-inline-lbl">Flight time</span>
-                            <div class="flex gap-0.5 items-center">
-                                <select name="fhr" class="select select-bordered select-sm bg-white w-time" aria-label="Flight hour"><?php for ($h = 0; $h <= 23; $h++): ?>
-                                    <option value="<?= $h ?>" <?= (string) $h === $fv['fhr'] ? 'selected' : '' ?>><?= $h ?></option><?php endfor; ?></select>
-                                <select name="fmin" class="select select-bordered select-sm bg-white w-time" aria-label="Flight minute"><?php for ($m = 0; $m <= 59; $m++): ?>
-                                    <option value="<?= $m ?>" <?= (string) $m === $fv['fmin'] ? 'selected' : '' ?>><?= str_pad((string) $m, 2, '0', STR_PAD_LEFT) ?></option><?php endfor; ?></select>
+                        <div class="book-stack-mini">
+                            <span class="book-stack-mini__lbl">Flight time</span>
+                            <div class="book-timing-hm">
+                                <select name="fhr" class="select select-bordered select-sm bg-white book-select-hm" aria-label="Flight hour">
+                                    <option value="" <?= $fv['fhr'] === '' ? 'selected' : '' ?>>HR</option>
+                                    <?php for ($h = 0; $h <= 23; $h++): ?>
+                                        <option value="<?= $h ?>" <?= ($fv['fhr'] !== '' && (int) $fv['fhr'] === $h) ? 'selected' : '' ?>><?= str_pad((string) $h, 2, '0', STR_PAD_LEFT) ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                                <select name="fmin" class="select select-bordered select-sm bg-white book-select-hm" aria-label="Flight minute">
+                                    <option value="" <?= $fv['fmin'] === '' ? 'selected' : '' ?>>MIN</option>
+                                    <?php for ($m = 0; $m <= 59; $m++): ?>
+                                        <option value="<?= $m ?>" <?= ($fv['fmin'] !== '' && (int) $fv['fmin'] === $m) ? 'selected' : '' ?>><?= str_pad((string) $m, 2, '0', STR_PAD_LEFT) ?></option>
+                                    <?php endfor; ?>
+                                </select>
                             </div>
                         </div>
-                        <div class="book-field-inline">
-                            <span class="book-inline-lbl">Flight no</span>
-                            <input type="text" name="flight_no" class="input input-bordered input-sm bg-white w-24 max-w-28" value="<?= h($fv['flight_no']) ?>">
+                        <div class="book-stack-mini">
+                            <span class="book-stack-mini__lbl">Flight no</span>
+                            <input type="text" name="flight_no" class="input input-bordered input-sm bg-white w-20 max-w-24" value="<?= h($fv['flight_no']) ?>">
                         </div>
-                        <div class="book-field-inline">
-                            <span class="book-inline-lbl">Pickup time</span>
-                            <div class="flex gap-0.5 items-center">
-                                <select name="phr" class="select select-bordered select-sm bg-white w-time" aria-label="Pickup hour"><?php for ($h = 0; $h <= 23; $h++): ?>
-                                    <option value="<?= $h ?>" <?= (string) $h === $fv['phr'] ? 'selected' : '' ?>><?= $h ?></option><?php endfor; ?></select>
-                                <select name="pmin" class="select select-bordered select-sm bg-white w-time" aria-label="Pickup minute"><?php for ($m = 0; $m <= 59; $m++): ?>
-                                    <option value="<?= $m ?>" <?= (string) $m === $fv['pmin'] ? 'selected' : '' ?>><?= str_pad((string) $m, 2, '0', STR_PAD_LEFT) ?></option><?php endfor; ?></select>
+                        <div class="book-stack-mini">
+                            <span class="book-stack-mini__lbl">Pickup time</span>
+                            <div class="book-timing-hm">
+                                <select name="phr" class="select select-bordered select-sm bg-white book-select-hm" aria-label="Pickup hour">
+                                    <option value="" <?= $fv['phr'] === '' ? 'selected' : '' ?>>HR</option>
+                                    <?php for ($h = 0; $h <= 23; $h++): ?>
+                                        <option value="<?= $h ?>" <?= ($fv['phr'] !== '' && (int) $fv['phr'] === $h) ? 'selected' : '' ?>><?= str_pad((string) $h, 2, '0', STR_PAD_LEFT) ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                                <select name="pmin" class="select select-bordered select-sm bg-white book-select-hm" aria-label="Pickup minute">
+                                    <option value="" <?= $fv['pmin'] === '' ? 'selected' : '' ?>>MIN</option>
+                                    <?php for ($m = 0; $m <= 59; $m++): ?>
+                                        <option value="<?= $m ?>" <?= ($fv['pmin'] !== '' && (int) $fv['pmin'] === $m) ? 'selected' : '' ?>><?= str_pad((string) $m, 2, '0', STR_PAD_LEFT) ?></option>
+                                    <?php endfor; ?>
+                                </select>
                             </div>
                         </div>
                     </div>
