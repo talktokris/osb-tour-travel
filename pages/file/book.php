@@ -182,16 +182,17 @@ require __DIR__ . '/../../includes/nav.php';
 .book-sel {
     border: 1px solid #c9b87a;
     background: #fffce8;
-    padding: 6px 8px 8px;
-    margin-bottom: 2px;
+    padding: 12px 14px 14px;
+    margin-bottom: 6px;
+    box-sizing: border-box;
 }
 .book-sel__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    margin-bottom: 4px;
-    padding-bottom: 4px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
     border-bottom: 1px solid rgba(26, 107, 92, 0.18);
 }
 .book-sel__title {
@@ -203,9 +204,9 @@ require __DIR__ . '/../../includes/nav.php';
 .book-sel__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 2px 10px;
+    gap: 4px 12px;
     font-size: 11px;
-    line-height: 1.35;
+    line-height: 1.4;
 }
 @media (max-width: 900px) {
     .book-sel__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -222,8 +223,8 @@ require __DIR__ . '/../../includes/nav.php';
 .book-sel__row strong { color: #1e293b; font-weight: 700; }
 .book-sel__row--full { grid-column: 1 / -1; }
 .book-sel__price {
-    margin-top: 4px;
-    padding: 4px 8px;
+    margin-top: 10px;
+    padding: 8px 10px;
     border-radius: 4px;
     background: rgba(20, 184, 166, 0.12);
     border: 1px solid rgba(20, 184, 166, 0.28);
