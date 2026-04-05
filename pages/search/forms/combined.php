@@ -8,7 +8,7 @@ $inp = 'input input-bordered input-sm search-field bg-white w-full js-ac';
 ?>
 <input type="hidden" name="mode" value="combined">
 <input type="hidden" name="search_submit" value="1">
-<div class="search-form-combined grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-3 gap-y-1.5 w-full">
+<div class="search-form-combined grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 sm:gap-x-8 gap-y-3 sm:gap-y-3.5 w-full">
     <label class="form-control w-full">
         <span class="label-text">Agent Name</span>
         <input type="text" name="search_agent" class="<?= h($inp) ?>" data-ac-field="agent"

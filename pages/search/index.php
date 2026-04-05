@@ -121,10 +121,27 @@ require __DIR__ . '/../../includes/nav.php';
     font-size: 1rem;
     line-height: 1.35;
 }
+/* Combined grid: real gutters (Tailwind gap-* may be missing from built tailwind.css for PHP files) */
+.search-module-scope .search-form-combined {
+    column-gap: 1.25rem;
+    row-gap: 0.75rem;
+}
+@media (min-width: 640px) {
+    .search-module-scope .search-form-combined {
+        column-gap: 2rem;
+        row-gap: 0.875rem;
+    }
+}
+@media (min-width: 1280px) {
+    .search-module-scope .search-form-combined {
+        column-gap: 1.75rem;
+        row-gap: 0.875rem;
+    }
+}
 .search-module-scope .search-form-combined .form-control {
     display: flex;
     flex-direction: column;
-    gap: 0.125rem;
+    gap: 0.3rem;
     padding: 0;
     margin: 0;
 }
@@ -154,7 +171,7 @@ require __DIR__ . '/../../includes/nav.php';
 }
 .search-module-scope .search-form-combined .search-form-date-row {
     gap: 0.35rem 0.5rem;
-    margin-top: 0.125rem;
+    margin-top: 0.2rem;
     align-items: center;
 }
 .search-module-scope .search-form-combined .search-form-date-to {
@@ -417,7 +434,7 @@ require __DIR__ . '/../../includes/nav.php';
 
             <?php
             $isCombinedSearch = ($mode === 'combined');
-            $searchFormSpaceClass = $isCombinedSearch ? 'space-y-2' : 'space-y-3 sm:space-y-3.5';
+            $searchFormSpaceClass = $isCombinedSearch ? 'space-y-3' : 'space-y-3 sm:space-y-3.5';
             $searchCardWidthClass = $isCombinedSearch ? 'max-w-5xl search-module-card--combined' : 'max-w-2xl';
             $searchShellClass = 'search-form-shell' . ($isCombinedSearch ? ' search-form-shell--wide' : '');
             $searchYellowClass = 'rounded-box border border-warning/40 search-form-yellow' . ($isCombinedSearch ? ' search-form-yellow--compact' : '');
