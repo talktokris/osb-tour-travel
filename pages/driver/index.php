@@ -94,6 +94,30 @@ require __DIR__ . '/../../includes/nav.php';
     padding: 0.45rem 0.75rem; font-size: 0.8125rem; cursor: pointer; border-bottom: 1px solid #f1f5f9;
 }
 .driver-module-scope .search-ac-dd li:hover, .driver-module-scope .search-ac-dd li.is-active { background: #ecfdf5; color: #14532d; }
+.driver-module-scope .driver-form-yellow {
+    background: #ffffe8;
+    box-sizing: border-box;
+    padding: 1.35rem 1.5rem 1.45rem;
+}
+@media (min-width: 640px) {
+    .driver-module-scope .driver-form-yellow {
+        padding: 1.55rem 1.85rem 1.6rem;
+    }
+}
+.driver-module-scope .driver-form-fieldstack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+}
+.driver-module-scope .driver-form-fieldstack .form-control {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.driver-module-scope .driver-form-actions {
+    margin-top: 0.35rem;
+    padding-top: 0.85rem;
+}
 </style>
 
 <div class="flex gap-6 w-full driver-module-scope">
@@ -116,10 +140,11 @@ require __DIR__ . '/../../includes/nav.php';
                 <div class="card bg-base-100 shadow-xl border border-base-300 max-w-3xl w-full">
                     <div class="card-body">
                         <h3 class="card-title text-lg" style="color:#009900">Search by</h3>
-                        <div class="rounded-box border border-warning/40 p-5" style="background:#ffffe8">
-                            <form method="post" action="index.php?page=driver&amp;sub=search" class="space-y-3">
+                        <div class="rounded-box border border-warning/40 driver-form-yellow">
+                            <form method="post" action="index.php?page=driver&amp;sub=search">
                                 <input type="hidden" name="csrf" value="<?= h($csrf) ?>">
                                 <input type="hidden" name="driver_search_submit" value="1">
+                                <div class="driver-form-fieldstack">
                                 <label class="form-control w-full">
                                     <span class="label-text text-xs font-semibold">Search by Driver Name</span>
                                     <input type="text" name="search_driver" value="<?= h((string) ($fv['search_driver'] ?? '')) ?>"
@@ -168,7 +193,8 @@ require __DIR__ . '/../../includes/nav.php';
                                         <button type="button" class="btn btn-ghost btn-sm border border-base-300 js-driver-date-cal" data-target="driver_search_date" title="Calendar">📅</button>
                                     </div>
                                 </label>
-                                <div class="flex justify-end pt-2">
+                                </div>
+                                <div class="driver-form-actions flex justify-end">
                                     <button type="submit" class="btn btn-success btn-sm text-white">Search</button>
                                 </div>
                             </form>
@@ -225,10 +251,11 @@ require __DIR__ . '/../../includes/nav.php';
                 <div class="card bg-base-100 shadow-xl border border-base-300 max-w-xl w-full">
                     <div class="card-body">
                         <h3 class="card-title text-lg" style="color:#009900">Search by</h3>
-                        <div class="rounded-box border border-warning/40 p-5" style="background:#ffffe8">
-                            <form method="post" action="index.php?page=driver&amp;sub=pending" class="space-y-3">
+                        <div class="rounded-box border border-warning/40 driver-form-yellow">
+                            <form method="post" action="index.php?page=driver&amp;sub=pending">
                                 <input type="hidden" name="csrf" value="<?= h($csrf) ?>">
                                 <input type="hidden" name="driver_pending_submit" value="1">
+                                <div class="driver-form-fieldstack">
                                 <label class="form-control w-full">
                                     <span class="label-text text-xs font-semibold">Search by Supplier</span>
                                     <input type="text" name="search_supplier" value="<?= h((string) ($fv['search_supplier'] ?? '')) ?>"
@@ -242,7 +269,8 @@ require __DIR__ . '/../../includes/nav.php';
                                         <button type="button" class="btn btn-ghost btn-sm border border-base-300 js-driver-date-cal" data-target="driver_pending_date">📅</button>
                                     </div>
                                 </label>
-                                <div class="flex justify-center pt-2">
+                                </div>
+                                <div class="driver-form-actions flex justify-center">
                                     <button type="submit" class="btn btn-success btn-sm text-white">Search</button>
                                 </div>
                             </form>
