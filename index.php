@@ -88,6 +88,10 @@ if ($page === 'login') {
     require __DIR__ . '/pages/file/api.php';
 } elseif ($page === 'search') {
     require __DIR__ . '/pages/search/index.php';
+} elseif ($page === 'search_delete') {
+    require __DIR__ . '/pages/search/delete_entry.php';
+} elseif ($page === 'search_autocomplete') {
+    require __DIR__ . '/pages/search/autocomplete.php';
 } elseif ($page === 'report') {
     require __DIR__ . '/pages/report/index.php';
 } elseif ($page === 'driver') {
