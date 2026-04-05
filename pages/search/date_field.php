@@ -10,7 +10,7 @@ declare(strict_types=1);
 $__searchDateRequired = !empty($dateRequired);
 
 ?>
-<div class="search-dob-wrap w-full max-w-[11.5rem]">
+<div class="search-dob-wrap w-full max-w-46">
     <input type="text" name="<?= h($name) ?>" id="<?= h($id) ?>"
            class="search-dob-input js-search-date-input w-full"
            placeholder="dd-mm-yyyy" value="<?= h($value) ?>" autocomplete="off" inputmode="numeric"<?= $__searchDateRequired ? ' required' : '' ?>>
