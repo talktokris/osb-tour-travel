@@ -416,21 +416,21 @@ span.flatpickr-weekday {
                                 <?php endforeach; ?>
                             </select>
                         </label>
-                        <label class="form-control flex-1 min-w-[10rem]">
+                        <label class="form-control flex-1 min-w-40">
                             <span class="label-text book-field-label">Last name</span>
                             <input type="text" name="last_name" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['last_name']) ?>" required>
                         </label>
-                        <label class="form-control flex-1 min-w-[10rem]">
+                        <label class="form-control flex-1 min-w-40">
                             <span class="label-text book-field-label">First name</span>
                             <input type="text" name="first_name" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['first_name']) ?>" required>
                         </label>
                     </div>
                     <div class="flex flex-wrap gap-3">
-                        <label class="form-control flex-1 min-w-[12rem]">
+                        <label class="form-control flex-1 min-w-48">
                             <span class="label-text book-field-label">Guest mobile</span>
                             <input type="text" name="pax_mobile" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['pax_mobile']) ?>">
                         </label>
-                        <label class="form-control flex-1 min-w-[12rem]">
+                        <label class="form-control flex-1 min-w-48">
                             <span class="label-text book-field-label">Ref no</span>
                             <input type="text" name="ref_no" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['ref_no']) ?>">
                         </label>
@@ -453,20 +453,20 @@ span.flatpickr-weekday {
                         </label>
                         <div class="flex flex-wrap gap-2 items-end">
                             <span class="book-field-label w-full">Flight time</span>
-                            <select name="fhr" class="select select-bordered select-sm bg-white w-[4.5rem]" aria-label="Flight hour"><?php for ($h = 0; $h <= 23; $h++): ?>
+                            <select name="fhr" class="select select-bordered select-sm bg-white w-18" aria-label="Flight hour"><?php for ($h = 0; $h <= 23; $h++): ?>
                                 <option value="<?= $h ?>" <?= (string) $h === $fv['fhr'] ? 'selected' : '' ?>><?= $h ?></option><?php endfor; ?></select>
-                            <select name="fmin" class="select select-bordered select-sm bg-white w-[4.5rem]" aria-label="Flight minute"><?php for ($m = 0; $m <= 59; $m++): ?>
+                            <select name="fmin" class="select select-bordered select-sm bg-white w-18" aria-label="Flight minute"><?php for ($m = 0; $m <= 59; $m++): ?>
                                 <option value="<?= $m ?>" <?= (string) $m === $fv['fmin'] ? 'selected' : '' ?>><?= str_pad((string) $m, 2, '0', STR_PAD_LEFT) ?></option><?php endfor; ?></select>
                         </div>
-                        <label class="form-control w-auto min-w-[7rem]">
+                        <label class="form-control w-auto min-w-28">
                             <span class="label-text book-field-label">Flight no</span>
                             <input type="text" name="flight_no" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['flight_no']) ?>">
                         </label>
                         <div class="flex flex-wrap gap-2 items-end">
                             <span class="book-field-label w-full">Pickup time</span>
-                            <select name="phr" class="select select-bordered select-sm bg-white w-[4.5rem]" aria-label="Pickup hour"><?php for ($h = 0; $h <= 23; $h++): ?>
+                            <select name="phr" class="select select-bordered select-sm bg-white w-18" aria-label="Pickup hour"><?php for ($h = 0; $h <= 23; $h++): ?>
                                 <option value="<?= $h ?>" <?= (string) $h === $fv['phr'] ? 'selected' : '' ?>><?= $h ?></option><?php endfor; ?></select>
-                            <select name="pmin" class="select select-bordered select-sm bg-white w-[4.5rem]" aria-label="Pickup minute"><?php for ($m = 0; $m <= 59; $m++): ?>
+                            <select name="pmin" class="select select-bordered select-sm bg-white w-18" aria-label="Pickup minute"><?php for ($m = 0; $m <= 59; $m++): ?>
                                 <option value="<?= $m ?>" <?= (string) $m === $fv['pmin'] ? 'selected' : '' ?>><?= str_pad((string) $m, 2, '0', STR_PAD_LEFT) ?></option><?php endfor; ?></select>
                         </div>
                     </div>
@@ -485,7 +485,7 @@ span.flatpickr-weekday {
                 <p class="book-card__head">Supplier details</p>
                 <div class="book-card__body space-y-3">
                     <div class="flex flex-wrap gap-3">
-                        <label class="form-control flex-1 min-w-[12rem]">
+                        <label class="form-control flex-1 min-w-48">
                             <span class="label-text book-field-label">Supplier name</span>
                             <select name="supplier_name" class="select select-bordered select-sm bg-white w-full" required>
                                 <option value="">Select supplier</option>
@@ -494,7 +494,7 @@ span.flatpickr-weekday {
                                 <?php endforeach; ?>
                             </select>
                         </label>
-                        <label class="form-control flex-1 min-w-[12rem]">
+                        <label class="form-control flex-1 min-w-48">
                             <span class="label-text book-field-label">Driver name</span>
                             <select name="driver_name" class="select select-bordered select-sm bg-white w-full">
                                 <option value="">Select driver</option>
