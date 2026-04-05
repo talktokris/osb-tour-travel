@@ -48,3 +48,10 @@ function normalize_arabic_text(string $value): string {
     return $value;
 }
 
+/**
+ * Optional base URL for driver app push (legacy GET: ?regId=&message=).
+ * Example: http://wetrf.com/mobile_app_files/gcm_app_sms/send_message.php
+ * Leave empty to skip network send; notification page still works for display.
+ */
+$DRIVER_PUSH_NOTIFICATION_URL = '';
+

@@ -96,6 +96,12 @@ if ($page === 'login') {
     require __DIR__ . '/pages/report/index.php';
 } elseif ($page === 'driver') {
     require __DIR__ . '/pages/driver/index.php';
+} elseif ($page === 'driver_assign') {
+    require __DIR__ . '/pages/driver/assign.php';
+} elseif ($page === 'driver_notification') {
+    require __DIR__ . '/pages/driver/notification.php';
+} elseif ($page === 'driver_autocomplete') {
+    require __DIR__ . '/pages/driver/autocomplete.php';
 } elseif ($page === 'invoice') {
     require __DIR__ . '/pages/invoice/index.php';
 } elseif ($page === 'sms') {
