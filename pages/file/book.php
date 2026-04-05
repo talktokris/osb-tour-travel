@@ -235,6 +235,8 @@ require __DIR__ . '/../../includes/nav.php';
     font-size: 12px;
     width: 100%;
     max-width: none;
+    box-sizing: border-box;
+    padding: 0 2px;
 }
 .book-form--compact .book-card {
     border: 1px solid #2a8f4a;
@@ -253,12 +255,13 @@ require __DIR__ . '/../../includes/nav.php';
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0;
-    padding: 3px 6px;
+    padding: 5px 12px;
     margin: 0;
     line-height: 1.15;
 }
 .book-form--compact .book-card__body {
-    padding: 3px 5px 4px;
+    padding: 10px 12px 12px;
+    box-sizing: border-box;
 }
 .book-row {
     display: flex;
@@ -337,7 +340,7 @@ require __DIR__ . '/../../includes/nav.php';
     font-weight: 700;
     color: #fff;
     text-transform: none;
-    padding: 3px 6px;
+    padding: 5px 12px;
     margin: 0;
     width: 100%;
     box-sizing: border-box;
@@ -416,20 +419,36 @@ require __DIR__ . '/../../includes/nav.php';
     padding-top: 0;
     padding-bottom: 0;
 }
-.book-form--compact .book-select-hm {
-    width: 2.75rem;
-    min-width: 2.75rem;
-    max-width: 2.75rem;
-    padding-left: 2px;
-    padding-right: 2px;
+/* Wider HR/MIN selects + extra right padding so native caret does not cover text */
+.book-form--compact select.book-select-hm {
+    width: 4.125rem;
+    min-width: 4.125rem;
+    max-width: 4.125rem;
+    padding-left: 6px;
+    padding-right: 1.5rem;
     font-size: 11px;
+    text-align: left;
+    box-sizing: border-box;
+    color: #1a1a1a;
+    background-color: #fff;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    background-size: 11px 11px;
+}
+.book-form--compact select.book-select-hm::-ms-expand {
+    display: none;
 }
 .book-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
     align-items: center;
-    margin-top: 4px;
+    margin-top: 8px;
+    padding: 0 12px 4px;
+    box-sizing: border-box;
 }
 @media (min-width: 768px) {
     .book-actions { justify-content: flex-end; }
