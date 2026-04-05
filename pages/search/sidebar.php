@@ -7,9 +7,9 @@ require_once __DIR__ . '/../../includes/search_module_service.php';
 $sm = $mode ?? search_module_normalize_mode((string) ($_GET['mode'] ?? 'agent'));
 
 $link = static function (string $m, string $label) use ($sm): void {
-    $active = $sm === $m ? ' !bg-sky-100 !border-sky-400 !text-sky-900 font-semibold' : '';
+    $liClass = 'w-full' . ($sm === $m ? ' active' : '');
     $href = 'index.php?page=search&mode=' . rawurlencode($m);
-    echo '<li class="w-full"><a href="' . h($href) . '" class="' . $active . '">' . h($label) . '</a></li>';
+    echo '<li class="' . h($liClass) . '"><a href="' . h($href) . '">' . h($label) . '</a></li>';
 };
 ?>
 <aside class="module-sidebar">
