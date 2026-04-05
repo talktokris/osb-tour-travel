@@ -6,5 +6,5 @@
 <label class="form-control w-full">
     <span class="label-text text-xs">Search by File No</span>
     <input type="text" name="search_word" class="js-ac w-full" data-ac-field="file_no"
-           value="<?= h((string) ($fv['search_word'] ?? '')) ?>" autocomplete="off">
+           value="<?= h((string) ($fv['search_word'] ?? '')) ?>" autocomplete="off" required>
 </label>

@@ -249,6 +249,87 @@ require __DIR__ . '/../../includes/nav.php';
     border-color: #6ee7b7;
     color: #14532d;
 }
+/* Search outcome: validation, errors, empty state */
+.search-feedback {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    max-width: 42rem;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.15rem 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06), 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+@media (min-width: 1024px) {
+    .search-feedback {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+.search-feedback__icon {
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.search-feedback__body { min-width: 0; flex: 1; }
+.search-feedback__title {
+    margin: 0 0 0.35rem 0;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+.search-feedback__text {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: #475569;
+}
+.search-feedback__list {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1.15rem;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: #334155;
+}
+.search-feedback__hint {
+    margin: 0.65rem 0 0 0;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+.search-feedback--validation {
+    background: linear-gradient(135deg, #fffbeb 0%, #fff7ed 100%);
+    border-color: #fcd34d;
+}
+.search-feedback--validation .search-feedback__icon {
+    background: #fef3c7;
+    color: #b45309;
+}
+.search-feedback--validation .search-feedback__title { color: #92400e; }
+.search-feedback--error {
+    background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+    border-color: #fca5a5;
+}
+.search-feedback--error .search-feedback__icon {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+.search-feedback--error .search-feedback__title { color: #991b1b; }
+.search-feedback--empty {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-color: #cbd5e1;
+}
+.search-feedback--empty .search-feedback__icon {
+    background: #e2e8f0;
+    color: #475569;
+}
+.search-feedback--empty .search-feedback__title { color: #1e293b; }
 </style>
 
 <div class="flex gap-6 w-full search-module-scope">
@@ -284,22 +365,56 @@ require __DIR__ . '/../../includes/nav.php';
             </div>
 
             <?php if ($searchOutcome !== null): ?>
-                <?php if (!empty($searchOutcome['error'])): ?>
-                    <div class="alert alert-warning text-sm"><?= h((string) $searchOutcome['error']) ?></div>
-                    <?php else: ?>
-                        <?php
-                        $variant = (string) $searchOutcome['variant'];
-                        $rows = $searchOutcome['rows'];
-                        $groups = $searchOutcome['groups'] ?? null;
-                        $hasNested = $variant === 'nested' && is_array($groups) && $groups !== [];
-                        $hasFlat = $rows !== [];
-                        if (!$hasNested && !$hasFlat): ?>
-                        <p class="text-sm text-base-content/80 py-4">No result found.</p>
-                    <?php else:
-                        $redirect = $redirectBack;
-                        require __DIR__ . '/results_table.php';
-                        ?>
-                    <?php endif; ?>
+                <?php
+                $validationIssues = $searchOutcome['validation_issues'] ?? null;
+                $isValidation = is_array($validationIssues) && $validationIssues !== [];
+                $hasSearchError = !empty($searchOutcome['error']);
+                $variant = (string) $searchOutcome['variant'];
+                $rows = $searchOutcome['rows'];
+                $groups = $searchOutcome['groups'] ?? null;
+                $hasNested = $variant === 'nested' && is_array($groups) && $groups !== [];
+                $hasFlat = $rows !== [];
+                ?>
+                <?php if ($isValidation): ?>
+                    <div class="search-feedback search-feedback--validation" role="alert" aria-live="polite">
+                        <div class="search-feedback__icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                        <div class="search-feedback__body">
+                            <h4 class="search-feedback__title">Required fields</h4>
+                            <p class="search-feedback__text">Please fill in the following before searching:</p>
+                            <ul class="search-feedback__list">
+                                <?php foreach ($validationIssues as $issue): ?>
+                                    <li><?= h((string) $issue) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <p class="search-feedback__hint">Date fields use format <strong>dd-mm-yyyy</strong> (calendar picker or typed).</p>
+                        </div>
+                    </div>
+                <?php elseif ($hasSearchError): ?>
+                    <div class="search-feedback search-feedback--error" role="alert" aria-live="assertive">
+                        <div class="search-feedback__icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                        </div>
+                        <div class="search-feedback__body">
+                            <h4 class="search-feedback__title">Search could not complete</h4>
+                            <p class="search-feedback__text"><?= h((string) $searchOutcome['error']) ?></p>
+                        </div>
+                    </div>
+                <?php elseif (!$hasNested && !$hasFlat): ?>
+                    <div class="search-feedback search-feedback--empty" role="status" aria-live="polite">
+                        <div class="search-feedback__icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        </div>
+                        <div class="search-feedback__body">
+                            <h4 class="search-feedback__title">No matching records</h4>
+                            <p class="search-feedback__text">Nothing in your data matched this search. Try different keywords, widen the date range, or check spelling.</p>
+                        </div>
+                    </div>
+                <?php else:
+                    $redirect = $redirectBack;
+                    require __DIR__ . '/results_table.php';
+                    ?>
                 <?php endif; ?>
             <?php endif; ?>
         </div>

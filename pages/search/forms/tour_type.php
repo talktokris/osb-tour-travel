@@ -6,7 +6,7 @@
 <input type="hidden" name="search_submit" value="1">
 <label class="form-control w-full">
     <span class="label-text text-xs">Search by Tour Type</span>
-    <select name="search_word" class="select select-bordered select-sm search-field w-full bg-white">
+    <select name="search_word" class="select select-bordered select-sm search-field w-full bg-white" required>
         <option value="">Select type</option>
         <?php
         $sel = (string) ($fv['search_word'] ?? '');
@@ -23,6 +23,7 @@
         $name = 'from_date';
         $value = (string) ($fv['from_date'] ?? '');
         $id = 'search-tt-from';
+        $dateRequired = true;
         require __DIR__ . '/../date_field.php';
         ?>
     </label>
@@ -32,6 +33,7 @@
         $name = 'to_date';
         $value = (string) ($fv['to_date'] ?? '');
         $id = 'search-tt-to';
+        $dateRequired = true;
         require __DIR__ . '/../date_field.php';
         ?>
     </label>

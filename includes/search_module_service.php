@@ -7,6 +7,23 @@ require_once __DIR__ . '/file_module_service.php';
 const SEARCH_MODULE_ROW_LIMIT = 500;
 const SEARCH_MODULE_NESTED_FILE_LIMIT = 200;
 
+/**
+ * Validation failure: drives the search UI message list (per-page compulsory fields).
+ *
+ * @param list<string> $labels
+ * @return array{variant:string, rows:list, groups:?list, error:null, validation_issues:list<string>}
+ */
+function search_module_validation_fail(string $variant, array $labels, ?array $groups = null): array
+{
+    return [
+        'variant' => $variant,
+        'rows' => [],
+        'groups' => $groups,
+        'error' => null,
+        'validation_issues' => array_values($labels),
+    ];
+}
+
 /** @return list<string> */
 function search_module_valid_modes(): array
 {
@@ -154,7 +171,7 @@ function search_module_service_type_names(mysqli $mysqli): array
 
 /**
  * @param array<string, string> $post
- * @return array{variant:string, rows:list<array<string,mixed>>, groups:?list<array{file_count_no:string,header:array<string,mixed>,lines:list<array<string,mixed>>}>, error:?string}
+ * @return array{variant:string, rows:list<array<string,mixed>>, groups:?list<array{file_count_no:string,header:array<string,mixed>,lines:list<array<string,mixed>>}>, error:?string, validation_issues:?list<string>}
  */
 function search_module_run(mysqli $mysqli, string $mode, array $post): array
 {
@@ -163,6 +180,7 @@ function search_module_run(mysqli $mysqli, string $mode, array $post): array
         'rows' => [],
         'groups' => null,
         'error' => null,
+        'validation_issues' => null,
     ];
     $user = search_module_username();
     if ($user === '') {
@@ -198,7 +216,7 @@ function search_module_run_agent(mysqli $mysqli, string $user, array $post): arr
 {
     $term = trim($post['search_word'] ?? '');
     if ($term === '') {
-        return ['variant' => 'wide', 'rows' => [], 'groups' => null, 'error' => null];
+        return search_module_validation_fail('wide', ['Agent name']);
     }
     $like = '%' . $term . '%';
     $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.agent_name LIKE ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
@@ -215,7 +233,7 @@ function search_module_run_supplier(mysqli $mysqli, string $user, array $post): 
 {
     $term = trim($post['search_word'] ?? '');
     if ($term === '') {
-        return ['variant' => 'wide', 'rows' => [], 'groups' => null, 'error' => null];
+        return search_module_validation_fail('wide', ['Supplier name']);
     }
     $like = '%' . $term . '%';
     $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.supplier_name LIKE ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
@@ -232,7 +250,7 @@ function search_module_run_file_no(mysqli $mysqli, string $user, array $post): a
 {
     $term = trim($post['search_word'] ?? '');
     if ($term === '') {
-        return ['variant' => 'wide', 'rows' => [], 'groups' => null, 'error' => null];
+        return search_module_validation_fail('wide', ['File number']);
     }
     $like = '%' . $term . '%';
     $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.file_no LIKE ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
@@ -249,7 +267,7 @@ function search_module_run_pax(mysqli $mysqli, string $user, array $post): array
 {
     $term = trim($post['search_word'] ?? '');
     if ($term === '') {
-        return ['variant' => 'wide', 'rows' => [], 'groups' => null, 'error' => null];
+        return search_module_validation_fail('wide', ['Pax name']);
     }
     $like = '%' . $term . '%';
     $sql = 'SELECT fe.* FROM file_entry fe WHERE (fe.first_name LIKE ? OR fe.last_name LIKE ?) AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
@@ -268,12 +286,18 @@ function search_module_run_vehicle_type(mysqli $mysqli, string $user, array $pos
     $from = file_module_parse_service_date(trim($post['from_date'] ?? ''));
     $to = file_module_parse_service_date(trim($post['to_date'] ?? ''));
     if ($term === '' || $from === null || $to === null) {
-        return [
-            'variant' => 'vehicle_type_last',
-            'rows' => [],
-            'groups' => null,
-            'error' => 'Vehicle type, from date, and to date (dd-mm-yyyy) are required.',
-        ];
+        $issues = [];
+        if ($term === '') {
+            $issues[] = 'Vehicle type';
+        }
+        if ($from === null) {
+            $issues[] = 'From date (dd-mm-yyyy)';
+        }
+        if ($to === null) {
+            $issues[] = 'To date (dd-mm-yyyy)';
+        }
+
+        return search_module_validation_fail('vehicle_type_last', $issues);
     }
     $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.vehicle_type = ? AND fe.service_date BETWEEN ? AND ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
     $rows = search_module_stmt_fetch_all($mysqli, $sql, 'ssss', [$term, $from, $to, $user]);
@@ -291,12 +315,18 @@ function search_module_run_tour_type(mysqli $mysqli, string $user, array $post):
     $from = file_module_parse_service_date(trim($post['from_date'] ?? ''));
     $to = file_module_parse_service_date(trim($post['to_date'] ?? ''));
     if ($term === '' || $from === null || $to === null) {
-        return [
-            'variant' => 'wide',
-            'rows' => [],
-            'groups' => null,
-            'error' => 'Tour type, from date, and to date (dd-mm-yyyy) are required.',
-        ];
+        $issues = [];
+        if ($term === '') {
+            $issues[] = 'Tour type';
+        }
+        if ($from === null) {
+            $issues[] = 'From date (dd-mm-yyyy)';
+        }
+        if ($to === null) {
+            $issues[] = 'To date (dd-mm-yyyy)';
+        }
+
+        return search_module_validation_fail('wide', $issues);
     }
     $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.service_cat = ? AND fe.service_date BETWEEN ? AND ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
     $rows = search_module_stmt_fetch_all($mysqli, $sql, 'ssss', [$term, $from, $to, $user]);
@@ -314,12 +344,18 @@ function search_module_run_driver(mysqli $mysqli, string $user, array $post): ar
     $from = file_module_parse_service_date(trim($post['from_date'] ?? ''));
     $to = file_module_parse_service_date(trim($post['to_date'] ?? ''));
     if ($term === '' || $from === null || $to === null) {
-        return [
-            'variant' => 'wide',
-            'rows' => [],
-            'groups' => null,
-            'error' => 'Driver name, from date, and to date (dd-mm-yyyy) are required.',
-        ];
+        $issues = [];
+        if ($term === '') {
+            $issues[] = 'Driver name';
+        }
+        if ($from === null) {
+            $issues[] = 'From date (dd-mm-yyyy)';
+        }
+        if ($to === null) {
+            $issues[] = 'To date (dd-mm-yyyy)';
+        }
+
+        return search_module_validation_fail('wide', $issues);
     }
     $like = '%' . $term . '%';
     $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.driver_name LIKE ? AND fe.service_date BETWEEN ? AND ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
@@ -338,12 +374,18 @@ function search_module_run_vehicle_no(mysqli $mysqli, string $user, array $post)
     $from = file_module_parse_service_date(trim($post['from_date'] ?? ''));
     $to = file_module_parse_service_date(trim($post['to_date'] ?? ''));
     if ($term === '' || $from === null || $to === null) {
-        return [
-            'variant' => 'wide',
-            'rows' => [],
-            'groups' => null,
-            'error' => 'Vehicle number, from date, and to date (dd-mm-yyyy) are required.',
-        ];
+        $issues = [];
+        if ($term === '') {
+            $issues[] = 'Vehicle number';
+        }
+        if ($from === null) {
+            $issues[] = 'From date (dd-mm-yyyy)';
+        }
+        if ($to === null) {
+            $issues[] = 'To date (dd-mm-yyyy)';
+        }
+
+        return search_module_validation_fail('wide', $issues);
     }
     $like = '%' . $term . '%';
     $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.vehicle_no LIKE ? AND fe.service_date BETWEEN ? AND ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
@@ -361,12 +403,15 @@ function search_module_run_service_date(mysqli $mysqli, string $user, array $pos
     $from = file_module_parse_service_date(trim($post['from_date'] ?? ''));
     $to = file_module_parse_service_date(trim($post['to_date'] ?? ''));
     if ($from === null || $to === null) {
-        return [
-            'variant' => 'wide',
-            'rows' => [],
-            'groups' => null,
-            'error' => 'From date and to date (dd-mm-yyyy) are required.',
-        ];
+        $issues = [];
+        if ($from === null) {
+            $issues[] = 'From date (dd-mm-yyyy)';
+        }
+        if ($to === null) {
+            $issues[] = 'To date (dd-mm-yyyy)';
+        }
+
+        return search_module_validation_fail('wide', $issues);
     }
     $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.service_date <> \'\' AND fe.service_date <> \'0000-00-00\' AND fe.service_date BETWEEN ? AND ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
     $rows = search_module_stmt_fetch_all($mysqli, $sql, 'sss', [$from, $to, $user]);
@@ -382,7 +427,7 @@ function search_module_run_city(mysqli $mysqli, string $user, array $post): arra
 {
     $term = trim($post['search_word'] ?? '');
     if ($term === '') {
-        return ['variant' => 'wide', 'rows' => [], 'groups' => null, 'error' => null];
+        return search_module_validation_fail('wide', ['City']);
     }
     $like = '%' . $term . '%';
     $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.to_city LIKE ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
@@ -401,12 +446,18 @@ function search_module_run_arrival(mysqli $mysqli, string $user, array $post): a
     $from = file_module_parse_service_date(trim($post['from_date'] ?? ''));
     $to = file_module_parse_service_date(trim($post['to_date'] ?? ''));
     if ($term === '' || $from === null || $to === null) {
-        return [
-            'variant' => 'wide',
-            'rows' => [],
-            'groups' => null,
-            'error' => 'Service type, from date, and to date (dd-mm-yyyy) are required.',
-        ];
+        $issues = [];
+        if ($term === '') {
+            $issues[] = 'Dep / Arrival / Over type';
+        }
+        if ($from === null) {
+            $issues[] = 'From date (dd-mm-yyyy)';
+        }
+        if ($to === null) {
+            $issues[] = 'To date (dd-mm-yyyy)';
+        }
+
+        return search_module_validation_fail('wide', $issues);
     }
     $like = '%' . $term . '%';
     $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.service_type LIKE ? AND fe.service_date BETWEEN ? AND ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
@@ -423,7 +474,7 @@ function search_module_run_tours(mysqli $mysqli, string $user, array $post): arr
 {
     $term = trim($post['search_word'] ?? '');
     if ($term === '') {
-        return ['variant' => 'tours', 'rows' => [], 'groups' => null, 'error' => null];
+        return search_module_validation_fail('tours', ['Tour / service category']);
     }
     $sql = 'SELECT fe.* FROM file_entry fe WHERE fe.service_cat = ? AND fe.user_enter_by = ? ORDER BY fe.service_date DESC LIMIT ' . (int) SEARCH_MODULE_ROW_LIMIT;
     $rows = search_module_stmt_fetch_all($mysqli, $sql, 'ss', [$term, $user]);
@@ -538,12 +589,12 @@ function search_module_run_nested_agent(mysqli $mysqli, string $user, array $pos
 {
     $agent = trim($post['search_word'] ?? '');
     if ($agent === '') {
-        return ['variant' => 'nested', 'rows' => [], 'groups' => [], 'error' => null];
+        return search_module_validation_fail('nested', ['Agent name (exact match)'], []);
     }
     $sql = 'SELECT fe.file_count_no FROM file_entry fe WHERE fe.agent_name = ? AND fe.user_enter_by = ? GROUP BY fe.file_count_no ORDER BY MAX(fe.file_id) DESC LIMIT ' . (int) SEARCH_MODULE_NESTED_FILE_LIMIT;
     $stmt = $mysqli->prepare($sql);
     if (!$stmt) {
-        return ['variant' => 'nested', 'rows' => [], 'groups' => [], 'error' => 'Search failed.'];
+        return ['variant' => 'nested', 'rows' => [], 'groups' => [], 'error' => 'Search failed.', 'validation_issues' => null];
     }
     $stmt->bind_param('ss', $agent, $user);
     $stmt->execute();

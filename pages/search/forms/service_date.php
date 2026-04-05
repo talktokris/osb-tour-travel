@@ -10,6 +10,7 @@
         $name = 'from_date';
         $value = (string) ($fv['from_date'] ?? '');
         $id = 'search-sd-from';
+        $dateRequired = true;
         require __DIR__ . '/../date_field.php';
         ?>
     </label>
@@ -19,6 +20,7 @@
         $name = 'to_date';
         $value = (string) ($fv['to_date'] ?? '');
         $id = 'search-sd-to';
+        $dateRequired = true;
         require __DIR__ . '/../date_field.php';
         ?>
     </label>
