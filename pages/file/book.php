@@ -233,7 +233,8 @@ require __DIR__ . '/../../includes/nav.php';
 }
 .book-form--compact {
     font-size: 12px;
-    max-width: 45.5rem;
+    width: 100%;
+    max-width: none;
 }
 .book-form--compact .book-card {
     border: 1px solid #2a8f4a;
