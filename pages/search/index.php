@@ -70,14 +70,194 @@ if (!is_file($formFile)) {
 require __DIR__ . '/../../includes/header.php';
 require __DIR__ . '/../../includes/nav.php';
 ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+/* Search module: compact form width, light autocomplete, date + calendar (match transfer search / file index) */
+.search-module-scope .search-form-shell {
+    max-width: 42rem;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.search-module-scope .search-form-yellow {
+    padding: 1.25rem 1.35rem;
+}
+@media (min-width: 640px) {
+    .search-module-scope .search-form-yellow {
+        padding: 1.35rem 1.5rem;
+    }
+}
+.search-module-scope .search-field {
+    font-size: 0.8125rem;
+    min-height: 2.25rem;
+    height: 2.25rem;
+}
+.search-module-scope select.search-field {
+    line-height: 1.2;
+}
+.search-module-scope .search-module-card .card-body {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+/* Autocomplete: full width, light panel (replaces dark native datalist) */
+.search-ac-wrap {
+    position: relative;
+    width: 100%;
+    display: block;
+}
+.search-ac-wrap > .js-ac,
+.search-ac-wrap > input.js-ac {
+    width: 100%;
+}
+.search-ac-dd {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 60;
+    margin-top: 3px;
+    max-height: 240px;
+    overflow-y: auto;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.375rem;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.06);
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem 0;
+}
+.search-ac-dd.is-open {
+    display: block;
+}
+.search-ac-dd li {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: #0f172a;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+}
+.search-ac-dd li:last-child {
+    border-bottom: 0;
+}
+.search-ac-dd li:hover,
+.search-ac-dd li.is-active {
+    background: #ecfdf5;
+    color: #14532d;
+}
+.search-dob-wrap {
+    position: relative;
+    width: 100%;
+}
+.search-dob-input {
+    width: 100%;
+    height: 2.25rem;
+    min-height: 2.25rem;
+    padding-left: 0.5rem;
+    padding-right: 2.15rem;
+    font-size: 0.8125rem;
+    line-height: 1.2;
+    border: 1px solid #94a3b8;
+    border-radius: 0.25rem;
+    background: #fff;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+.search-dob-input:hover { border-color: #64748b; }
+.search-dob-input:focus {
+    outline: 2px solid color-mix(in oklab, #00a651 40%, transparent);
+    outline-offset: 1px;
+    border-color: #1a6b5c;
+}
+.search-dob-cal-btn {
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.85rem;
+    height: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0.2rem;
+    background: transparent;
+    cursor: pointer;
+    color: #334155;
+}
+.search-dob-cal-btn:hover {
+    background: rgba(26, 107, 92, 0.1);
+    color: #1a6b5c;
+}
+.search-dob-cal-btn:focus-visible {
+    outline: 2px solid #00a651;
+    outline-offset: 1px;
+}
+.search-module-scope .flatpickr-calendar {
+    border-radius: 10px;
+    border: 1px solid #1a6b5c;
+    box-shadow: 0 14px 44px rgba(15, 23, 42, 0.14), 0 4px 14px rgba(26, 107, 92, 0.1);
+    font-family: inherit;
+}
+.search-module-scope .flatpickr-months .flatpickr-month {
+    background: #1a6b5c !important;
+    color: #fff !important;
+    fill: #fff !important;
+}
+.search-module-scope .flatpickr-current-month .flatpickr-monthDropdown-months {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #14532d !important;
+    font-weight: 600;
+    border-radius: 4px;
+}
+.search-module-scope .flatpickr-current-month input.cur-year {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: 4px;
+}
+.search-module-scope .flatpickr-months .flatpickr-prev-month svg,
+.search-module-scope .flatpickr-months .flatpickr-next-month svg {
+    fill: #fff;
+}
+.search-module-scope .flatpickr-weekdays {
+    background: #f0fdf4;
+    border-bottom: 1px solid #d1fae5;
+}
+.search-module-scope span.flatpickr-weekday {
+    color: #166534;
+    font-weight: 600;
+    font-size: 0.72rem;
+}
+.search-module-scope .flatpickr-day.selected,
+.search-module-scope .flatpickr-day.startRange,
+.search-module-scope .flatpickr-day.endRange {
+    background: #00a651 !important;
+    border-color: #00a651 !important;
+    color: #fff !important;
+}
+.search-module-scope .flatpickr-day.today {
+    border-color: #0d9488;
+    color: #0f766e;
+    font-weight: 700;
+}
+.search-module-scope .flatpickr-day:hover:not(.selected):not(.flatpickr-disabled) {
+    background: #ecfdf5;
+    border-color: #6ee7b7;
+    color: #14532d;
+}
+</style>
 
-<div class="flex gap-6 w-full">
+<div class="flex gap-6 w-full search-module-scope">
     <aside class="hidden lg:block w-72 shrink-0">
         <?php require __DIR__ . '/sidebar.php'; ?>
     </aside>
 
-    <main class="flex-1 min-w-0 px-4 max-w-6xl">
-        <div class="space-y-4">
+    <main class="flex-1 min-w-0 px-4">
+        <div class="space-y-4 w-full min-w-0">
             <?php $breadcrumbCurrent = 'Search';
             require __DIR__ . '/../../includes/breadcrumb.php'; ?>
 
@@ -87,16 +267,18 @@ require __DIR__ . '/../../includes/nav.php';
                 </div>
             <?php endif; ?>
 
-            <div class="card bg-base-100 shadow-xl border border-base-300">
+            <div class="card bg-base-100 shadow-xl border border-base-300 search-module-card max-w-2xl w-full mx-auto lg:mx-0">
                 <div class="card-body">
-                    <h3 class="card-title text-lg" style="color:#009900"><?= h($pageTitle) ?></h3>
-                    <div class="rounded-box p-5 border border-warning/40" style="background:#ffffe8">
-                        <form method="post" action="index.php?page=search&amp;mode=<?= rawurlencode($mode) ?>" class="space-y-4">
+                    <h3 class="card-title text-base sm:text-lg" style="color:#009900"><?= h($pageTitle) ?></h3>
+                    <div class="search-form-shell">
+                    <div class="rounded-box border border-warning/40 search-form-yellow" style="background:#ffffe8">
+                        <form method="post" action="index.php?page=search&amp;mode=<?= rawurlencode($mode) ?>" class="space-y-3 sm:space-y-3.5">
                             <?php require $formFile; ?>
-                            <div class="pt-2">
-                                <button type="submit" class="btn btn-success text-white">Search</button>
+                            <div class="pt-1">
+                                <button type="submit" class="btn btn-success btn-sm text-white min-h-9">Search</button>
                             </div>
                         </form>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -124,39 +306,106 @@ require __DIR__ . '/../../includes/nav.php';
     </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 (function () {
+    /* Light-themed autocomplete, aligned to input width */
     var timer = null;
-    function attach(input) {
+    function attachAc(input) {
         var field = input.getAttribute('data-ac-field');
-        if (!field) return;
-        var listId = 'ac-list-' + field + '-' + Math.random().toString(36).slice(2);
-        var dl = document.createElement('datalist');
-        dl.id = listId;
-        input.setAttribute('list', listId);
-        input.parentNode.appendChild(dl);
+        if (!field || input.closest('.search-ac-wrap')) return;
+        input.removeAttribute('list');
+        var wrap = document.createElement('div');
+        wrap.className = 'search-ac-wrap';
+        input.parentNode.insertBefore(wrap, input);
+        wrap.appendChild(input);
+        ['input', 'input-bordered', 'search-field', 'bg-white', 'w-full'].forEach(function (c) {
+            if (!input.classList.contains(c)) {
+                input.classList.add(c);
+            }
+        });
+        var dd = document.createElement('ul');
+        dd.className = 'search-ac-dd';
+        dd.setAttribute('role', 'listbox');
+        wrap.appendChild(dd);
+        var items = [];
+        var active = -1;
+        function hide() {
+            dd.classList.remove('is-open');
+            active = -1;
+            Array.prototype.forEach.call(dd.querySelectorAll('li'), function (el) { el.classList.remove('is-active'); });
+        }
+        function render() {
+            dd.innerHTML = '';
+            if (!items.length) {
+                hide();
+                return;
+            }
+            items.forEach(function (t, i) {
+                var li = document.createElement('li');
+                li.setAttribute('role', 'option');
+                li.textContent = t;
+                li.addEventListener('mousedown', function (e) {
+                    e.preventDefault();
+                    input.value = t;
+                    hide();
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+                dd.appendChild(li);
+            });
+            dd.classList.add('is-open');
+        }
         function run(q) {
             fetch('index.php?page=search_autocomplete&field=' + encodeURIComponent(field) + '&q=' + encodeURIComponent(q))
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
-                    if (!data || !data.items) return;
-                    dl.innerHTML = '';
-                    data.items.forEach(function (t) {
-                        var opt = document.createElement('option');
-                        opt.value = t;
-                        dl.appendChild(opt);
-                    });
+                    items = (data && data.items) ? data.items : [];
+                    render();
                 })
-                .catch(function () {});
+                .catch(function () { items = []; hide(); });
         }
         input.addEventListener('input', function () {
             clearTimeout(timer);
             var v = input.value.trim();
             timer = setTimeout(function () { run(v); }, 200);
         });
-        run('');
+        input.addEventListener('focus', function () {
+            run(input.value.trim());
+        });
+        input.addEventListener('blur', function () {
+            setTimeout(hide, 180);
+        });
+        document.addEventListener('click', function (e) {
+            if (!wrap.contains(e.target)) hide();
+        });
     }
-    document.querySelectorAll('.js-ac').forEach(attach);
+    document.querySelectorAll('.js-ac').forEach(attachAc);
+
+    /* Flatpickr dd-mm-yyyy + calendar button */
+    if (typeof flatpickr === 'function') {
+        var fpMap = {};
+        document.querySelectorAll('.js-search-date-input').forEach(function (inp) {
+            if (inp._fp) return;
+            var fp = flatpickr(inp, {
+                dateFormat: 'd-m-Y',
+                allowInput: true,
+                clickOpens: true,
+                animate: true
+            });
+            inp._fp = fp;
+            fpMap[inp.id] = fp;
+        });
+        document.querySelectorAll('.js-search-date-cal').forEach(function (btn) {
+            var tid = btn.getAttribute('data-target');
+            if (!tid) return;
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var fp = fpMap[tid];
+                if (fp) fp.open();
+            });
+        });
+    }
 })();
 </script>
 
