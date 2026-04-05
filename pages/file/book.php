@@ -259,7 +259,7 @@ require __DIR__ . '/../../includes/nav.php';
 .book-row {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-end;
+    align-items: center;
     gap: 0.25rem 0.5rem;
 }
 .book-row--center { align-items: center; }
@@ -267,24 +267,62 @@ require __DIR__ . '/../../includes/nav.php';
     align-items: center;
     gap: 0.35rem 0.5rem;
 }
+.book-field-row {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem 0.5rem;
+    width: 100%;
+    min-width: 0;
+}
+.book-field-row--top {
+    align-items: flex-start;
+}
+.book-field-row--top .book-lbl-slot {
+    padding-top: 0.28rem;
+}
+.book-field-inline {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0.3rem;
+    min-width: 0;
+}
+.book-field-inline--grow {
+    flex: 1 1 auto;
+    min-width: 12rem;
+}
 .book-inline-lbl {
     font-size: 11px;
     font-weight: 600;
     color: #334155;
     white-space: nowrap;
     flex-shrink: 0;
+    line-height: 1.2;
 }
-.book-stack {
+.book-lbl-slot {
+    flex: 0 0 7rem;
+    max-width: 7rem;
+    text-align: right;
+    padding-right: 0.2rem;
+    box-sizing: border-box;
+}
+@media (max-width: 480px) {
+    .book-field-row {
+        flex-wrap: wrap;
+    }
+    .book-lbl-slot {
+        flex: 1 1 100%;
+        max-width: none;
+        text-align: left;
+        padding-right: 0;
+    }
+}
+.book-contact-row {
     display: flex;
-    flex-direction: column;
-    gap: 1px;
-    min-width: 0;
-}
-.book-stack__lbl {
-    font-size: 10px;
-    font-weight: 600;
-    color: #64748b;
-    line-height: 1.1;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    margin-top: 0.3rem;
 }
 .book-guest-head {
     display: grid;
@@ -308,12 +346,6 @@ require __DIR__ . '/../../includes/nav.php';
     gap: 0.35rem;
     align-items: center;
 }
-.book-guest-row2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem 1rem;
-    margin-top: 0.25rem;
-}
 @media (max-width: 640px) {
     .book-guest-head,
     .book-guest-row { grid-template-columns: 1.25rem 4rem 1fr; }
@@ -323,14 +355,8 @@ require __DIR__ . '/../../includes/nav.php';
 .book-timing-row {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-end;
-    gap: 0.35rem 0.55rem;
-}
-.book-timing-row .book-inline-lbl--muted {
-    font-size: 11px;
-    color: #475569;
-    align-self: center;
-    padding-right: 0.15rem;
+    align-items: center;
+    gap: 0.4rem 0.65rem;
 }
 .book-form--compact .input.input-sm,
 .book-form--compact .select.select-sm {
@@ -493,8 +519,8 @@ span.flatpickr-weekday {
 
             <div class="book-card">
                 <div class="book-card__body">
-                    <div class="book-row book-row--center">
-                        <span class="book-inline-lbl">File number :</span>
+                    <div class="book-field-row">
+                        <span class="book-inline-lbl book-lbl-slot">File number :</span>
                         <input type="text" name="file_no" class="input input-bordered input-sm bg-white flex-1 min-w-48 max-w-xl" value="<?= h($fv['file_no']) ?>">
                     </div>
                 </div>
@@ -518,14 +544,14 @@ span.flatpickr-weekday {
                         <input type="text" name="last_name" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['last_name']) ?>" required aria-label="Last name">
                         <input type="text" name="first_name" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['first_name']) ?>" required aria-label="First name">
                     </div>
-                    <div class="book-guest-row2">
-                        <div class="book-stack">
-                            <span class="book-stack__lbl">Guest mobile</span>
-                            <input type="text" name="pax_mobile" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['pax_mobile']) ?>" inputmode="tel" autocomplete="tel">
+                    <div class="book-contact-row">
+                        <div class="book-field-inline book-field-inline--grow">
+                            <span class="book-inline-lbl">Guest mobile no :</span>
+                            <input type="text" name="pax_mobile" class="input input-bordered input-sm bg-white flex-1 min-w-32" value="<?= h($fv['pax_mobile']) ?>" inputmode="tel" autocomplete="tel">
                         </div>
-                        <div class="book-stack">
-                            <span class="book-stack__lbl">Ref no</span>
-                            <input type="text" name="ref_no" class="input input-bordered input-sm bg-white w-full" value="<?= h($fv['ref_no']) ?>">
+                        <div class="book-field-inline book-field-inline--grow">
+                            <span class="book-inline-lbl">Ref no :</span>
+                            <input type="text" name="ref_no" class="input input-bordered input-sm bg-white flex-1 min-w-32" value="<?= h($fv['ref_no']) ?>">
                         </div>
                     </div>
                 </div>
@@ -535,9 +561,9 @@ span.flatpickr-weekday {
                 <p class="book-card__head">Timing &amp; flight details</p>
                 <div class="book-card__body space-y-1">
                     <div class="book-timing-row">
-                        <span class="book-inline-lbl--muted">Flight details</span>
-                        <div class="book-stack">
-                            <span class="book-stack__lbl">Service date</span>
+                        <span class="book-inline-lbl">Flight details</span>
+                        <div class="book-field-inline">
+                            <span class="book-inline-lbl">Service date</span>
                             <div class="file-ts-dob-wrap">
                                 <input type="text" name="service_date" id="fb-service-date" class="file-ts-dob-input" placeholder="dd-mm-yyyy" value="<?= h($fv['service_date']) ?>" required autocomplete="off" inputmode="numeric">
                                 <button type="button" class="file-ts-dob-cal-btn" id="fb-service-date-cal" title="Open calendar" aria-label="Open calendar">
@@ -545,8 +571,8 @@ span.flatpickr-weekday {
                                 </button>
                             </div>
                         </div>
-                        <div class="book-stack">
-                            <span class="book-stack__lbl">Flight time</span>
+                        <div class="book-field-inline">
+                            <span class="book-inline-lbl">Flight time</span>
                             <div class="flex gap-0.5 items-center">
                                 <select name="fhr" class="select select-bordered select-sm bg-white w-time" aria-label="Flight hour"><?php for ($h = 0; $h <= 23; $h++): ?>
                                     <option value="<?= $h ?>" <?= (string) $h === $fv['fhr'] ? 'selected' : '' ?>><?= $h ?></option><?php endfor; ?></select>
@@ -554,12 +580,12 @@ span.flatpickr-weekday {
                                     <option value="<?= $m ?>" <?= (string) $m === $fv['fmin'] ? 'selected' : '' ?>><?= str_pad((string) $m, 2, '0', STR_PAD_LEFT) ?></option><?php endfor; ?></select>
                             </div>
                         </div>
-                        <div class="book-stack">
-                            <span class="book-stack__lbl">Flight no</span>
+                        <div class="book-field-inline">
+                            <span class="book-inline-lbl">Flight no</span>
                             <input type="text" name="flight_no" class="input input-bordered input-sm bg-white w-24 max-w-28" value="<?= h($fv['flight_no']) ?>">
                         </div>
-                        <div class="book-stack">
-                            <span class="book-stack__lbl">Pickup time</span>
+                        <div class="book-field-inline">
+                            <span class="book-inline-lbl">Pickup time</span>
                             <div class="flex gap-0.5 items-center">
                                 <select name="phr" class="select select-bordered select-sm bg-white w-time" aria-label="Pickup hour"><?php for ($h = 0; $h <= 23; $h++): ?>
                                     <option value="<?= $h ?>" <?= (string) $h === $fv['phr'] ? 'selected' : '' ?>><?= $h ?></option><?php endfor; ?></select>
@@ -568,12 +594,12 @@ span.flatpickr-weekday {
                             </div>
                         </div>
                     </div>
-                    <div class="book-row book-row--pick">
-                        <span class="book-inline-lbl">Pick up from :</span>
+                    <div class="book-field-row">
+                        <span class="book-inline-lbl book-lbl-slot">Pick up from :</span>
                         <input type="text" name="pickup_from" class="input input-bordered input-sm bg-white flex-1 min-w-40" value="<?= h($fv['pickup_from']) ?>">
                     </div>
-                    <div class="book-row book-row--pick">
-                        <span class="book-inline-lbl">Drop off at :</span>
+                    <div class="book-field-row">
+                        <span class="book-inline-lbl book-lbl-slot">Drop off at :</span>
                         <input type="text" name="drop_off" class="input input-bordered input-sm bg-white flex-1 min-w-40" value="<?= h($fv['drop_off']) ?>">
                     </div>
                 </div>
@@ -582,24 +608,28 @@ span.flatpickr-weekday {
             <div class="book-card">
                 <p class="book-card__head">Supplier details</p>
                 <div class="book-card__body space-y-1">
-                    <div class="book-row book-row--pick flex-wrap">
-                        <span class="book-inline-lbl">Supplier name :</span>
-                        <select name="supplier_name" class="select select-bordered select-sm bg-white flex-1 min-w-40 max-w-md" required>
-                            <option value="">Select supplier</option>
-                            <?php foreach ($suppliers as $s): ?>
-                                <option value="<?= h($s) ?>" <?= $fv['supplier_name'] === $s ? 'selected' : '' ?>><?= h($s) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                        <span class="book-inline-lbl">Driver name</span>
-                        <select name="driver_name" class="select select-bordered select-sm bg-white flex-1 min-w-40 max-w-md">
-                            <option value="">Select driver</option>
-                            <?php foreach ($drivers as $d): ?>
-                                <option value="<?= h($d['driver_name']) ?>" <?= $fv['driver_name'] === $d['driver_name'] ? 'selected' : '' ?>><?= h($d['driver_name']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                    <div class="book-contact-row">
+                        <div class="book-field-inline book-field-inline--grow">
+                            <span class="book-inline-lbl">Supplier name :</span>
+                            <select name="supplier_name" class="select select-bordered select-sm bg-white flex-1 min-w-40 max-w-md" required>
+                                <option value="">Select supplier</option>
+                                <?php foreach ($suppliers as $s): ?>
+                                    <option value="<?= h($s) ?>" <?= $fv['supplier_name'] === $s ? 'selected' : '' ?>><?= h($s) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="book-field-inline book-field-inline--grow">
+                            <span class="book-inline-lbl">Driver name :</span>
+                            <select name="driver_name" class="select select-bordered select-sm bg-white flex-1 min-w-40 max-w-md">
+                                <option value="">Select driver</option>
+                                <?php foreach ($drivers as $d): ?>
+                                    <option value="<?= h($d['driver_name']) ?>" <?= $fv['driver_name'] === $d['driver_name'] ? 'selected' : '' ?>><?= h($d['driver_name']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
-                    <div class="book-row book-row--pick items-start">
-                        <span class="book-inline-lbl pt-1">Remark :</span>
+                    <div class="book-field-row book-field-row--top">
+                        <span class="book-inline-lbl book-lbl-slot">Remark :</span>
                         <textarea name="remarks" class="textarea textarea-bordered textarea-sm bg-white flex-1 min-h-11" rows="2" placeholder="Remarks"><?= h($fv['remarks']) ?></textarea>
                     </div>
                 </div>
