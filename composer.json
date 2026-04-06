@@ -3,7 +3,8 @@
     "description": "OSB Tour new application",
     "require": {
         "php": ">=8.1",
-        "phpmailer/phpmailer": "^6.9"
+        "phpmailer/phpmailer": "^6.9",
+        "tecnickcom/tcpdf": "^6.11"
     },
     "config": {
         "platform": {
