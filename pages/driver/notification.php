@@ -5,10 +5,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../includes/file_module_service.php';
 require_once __DIR__ . '/../../includes/driver_module_service.php';
 
-if (!file_module_has_agent()) {
-    file_module_render_agent_required();
-}
-
 $currentPage = 'driver_notification';
 $dName = trim((string) ($_GET['dName'] ?? ''));
 $csrf = file_module_csrf_token();

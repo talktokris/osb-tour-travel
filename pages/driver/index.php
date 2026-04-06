@@ -5,10 +5,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../includes/file_module_service.php';
 require_once __DIR__ . '/../../includes/driver_module_service.php';
 
-if (!file_module_has_agent()) {
-    file_module_render_agent_required();
-}
-
 $currentPage = 'driver';
 $userEnterBy = trim((string) ($_SESSION['user_name'] ?? ''));
 $driverSub = driver_module_normalize_sub((string) ($_GET['sub'] ?? 'search'));
