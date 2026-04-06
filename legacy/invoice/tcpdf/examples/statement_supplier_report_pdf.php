@@ -99,7 +99,7 @@ $pdf->SetFont('helvetica', '', 7);
 $pdf->AddPage('L', 'A4');
 $osbLogo = __DIR__ . '/images/within_earth.jpg';
 if (is_file($osbLogo)) {
-	$pdf->Image($osbLogo, 10, 10, 45, 0, 'JPG');
+	$pdf->Image($osbLogo, 10, 6, 45, 0, 'JPG');
 }
 //$isComing='hi thisi s coming test';
 //$supplier_name_came='Texi hub';
