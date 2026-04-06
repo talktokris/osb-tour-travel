@@ -8,11 +8,18 @@
     <title>OSB Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/tailwind.css">
+    <style>
+        /* Login header only: brighten logo for blue bar */
+        .login-header-logo {
+            filter: brightness(0) invert(1) saturate(0) brightness(2.25) contrast(1.15);
+            opacity: 0.98;
+        }
+    </style>
 </head>
 <body class="min-h-screen bg-base-200 flex flex-col">
     <header class="navbar bg-primary text-primary-content shadow-md px-4">
         <div class="flex items-center gap-3">
-            <img src="images/within_earth.png" alt="OSB" class="h-10 w-auto rounded-md bg-white/10 p-0.5">
+            <img src="images/within_earth.png" alt="OSB" class="login-header-logo h-10 w-auto rounded-md bg-white/10 p-0.5">
             <span class="font-semibold tracking-wide text-base">OSB GLOBAL SERVICES</span>
         </div>
     </header>
