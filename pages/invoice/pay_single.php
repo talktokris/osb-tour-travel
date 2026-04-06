@@ -16,23 +16,26 @@ declare(strict_types=1);
       <div class="voucher-label">Cheque / Voucher No.:</div>
       <div></div>
       <div class="voucher-field"><input name="cheque_no" class="voucher-input" value="<?= h((string)($fv['cheque_no'] ?? '')) ?>"></div>
-      <div class="voucher-label">Amount:</div>
-      <div></div>
-      <div class="voucher-field"><input name="paying_amt" class="voucher-input" value="<?= h((string)($fv['paying_amt'] ?? $invoiceRow['balance_amount'])) ?>"></div>
-      <div class="voucher-label">Balance :</div>
-      <div></div>
-      <div class="voucher-field"><input class="voucher-input" value="<?= h((string)$invoiceRow['balance_amount']) ?>" readonly></div>
     </div>
 
     <div class="voucher-table-wrap">
       <table class="voucher-table">
         <thead>
-          <tr><th>Invoice Date</th><th>Invoice No.</th><th>Supplier / Agent Name</th><th>Amount</th></tr>
+          <tr><th style="width:95px">Invoice Date</th><th style="width:80px">Invoice No.</th><th>Supplier Name</th><th style="width:70px">Amount</th></tr>
         </thead>
         <tbody>
           <tr><td><?= h($invoiceRow['invoice_create_date']) ?></td><td><?= h($invoiceRow['invoices_id']) ?></td><td><?= h($invoiceRow['agent_supplier_name']) ?></td><td><?= h($invoiceRow['balance_amount']) ?></td></tr>
         </tbody>
       </table>
+    </div>
+
+    <div class="voucher-under-fields">
+      <div class="voucher-label">Amount:</div>
+      <div></div>
+      <div><input name="paying_amt" class="voucher-input" value="<?= h((string)($fv['paying_amt'] ?? $invoiceRow['balance_amount'])) ?>"></div>
+      <div class="voucher-label">Balance :</div>
+      <div></div>
+      <div><input class="voucher-input" value="<?= h((string)$invoiceRow['balance_amount']) ?>" readonly></div>
     </div>
 
     <div class="voucher-actions">

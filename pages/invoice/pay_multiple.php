@@ -24,7 +24,7 @@ declare(strict_types=1);
     <div class="voucher-table-wrap">
       <table class="voucher-table">
         <thead>
-          <tr><th>Invoice Date</th><th>Invoice No.</th><th>Supplier / Agent Name</th><th>Amount</th></tr>
+          <tr><th style="width:95px">Invoice Date</th><th style="width:80px">Invoice No.</th><th>Supplier Name</th><th style="width:70px">Amount</th></tr>
         </thead>
         <tbody>
         <?php $tot=0.0; foreach($selectedRows as $r): $tot += (float)$r['balance_amount']; ?>

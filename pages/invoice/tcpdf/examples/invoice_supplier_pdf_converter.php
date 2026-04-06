@@ -17,7 +17,7 @@ if (!is_dir($targetDir)) {
 $cwd = getcwd();
 chdir($targetDir);
 $_GET['file_count_no'] = (string) ($_GET['file_count_no'] ?? '');
-include 'invoice_supplier_pdf_converter.php';
+include $targetDir . '/invoice_supplier_pdf_converter.php';
 chdir((string) $cwd);
 $buf = ob_get_clean();
 if ($buf !== '' && !headers_sent()) { echo $buf; }

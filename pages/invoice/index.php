@@ -176,18 +176,115 @@ require __DIR__ . '/../../includes/nav.php';
 .invoice-module-scope .invoice-form-yellow { background:#ffffe8; box-sizing:border-box; padding:1.35rem 1.5rem 1.45rem; border-radius:var(--rounded-box,1rem); }
 .invoice-module-scope .invoice-form-fieldstack { display:flex; flex-direction:column; gap:1rem; }
 .invoice-module-scope .invoice-form-shell { max-width:48rem; width:100%; margin-left:auto; margin-right:auto; }
-.invoice-module-scope .voucher-shell { max-width:50rem; margin-left:auto; margin-right:auto; }
-.invoice-module-scope .voucher-title { text-align:center; font-weight:700; font-size:1.08rem; color:#374151; margin-bottom:0.9rem; }
-.invoice-module-scope .voucher-grid { display:grid; grid-template-columns: 1fr auto 16rem; gap:.55rem .8rem; align-items:center; max-width:34rem; margin-left:auto; }
-.invoice-module-scope .voucher-grid .voucher-label { font-size:.76rem; color:#374151; text-align:right; font-weight:600; }
+.invoice-module-scope .voucher-panel-fixed {
+    width: 560px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.invoice-module-scope .voucher-shell {
+    width: 520px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: .1rem 0 .2rem;
+}
+.invoice-module-scope .voucher-title {
+    text-align:center;
+    font-weight:700;
+    font-size:.9rem;
+    color:#2f3b4a;
+    margin-bottom:.7rem;
+}
+.invoice-module-scope .voucher-grid {
+    display:grid;
+    grid-template-columns: 1fr auto 165px;
+    gap:.26rem .45rem;
+    align-items:center;
+    width: 300px;
+    margin-left:auto;
+}
+.invoice-module-scope .voucher-grid .voucher-label {
+    font-size:.68rem;
+    color:#374151;
+    text-align:right;
+    font-weight:600;
+}
 .invoice-module-scope .voucher-grid .voucher-field { grid-column:3/4; }
-.invoice-module-scope .voucher-input { height:1.85rem; border:1px solid #bfc8d3; background:#fff; border-radius:0; width:100%; padding:.2rem .4rem; font-size:.78rem; }
-.invoice-module-scope .voucher-table-wrap { margin-top:.95rem; border:1px solid #8db2d3; }
-.invoice-module-scope .voucher-table { width:100%; border-collapse:collapse; font-size:.78rem; }
+.invoice-module-scope .voucher-input {
+    height:1.15rem;
+    line-height:1.1rem;
+    border:1px solid #a8b6c5;
+    background:#fff;
+    border-radius:0;
+    width:100%;
+    padding:0 .28rem;
+    font-size:.7rem;
+}
+.invoice-module-scope .voucher-table-wrap {
+    margin-top:.62rem;
+    border:1px solid #2f89c5;
+}
+.invoice-module-scope .voucher-table {
+    width:100%;
+    border-collapse:collapse;
+    font-size:.64rem;
+}
 .invoice-module-scope .voucher-table thead th { background:#1b77b8; color:#fff; border:1px solid #7ea4c6; padding:.28rem .35rem; text-align:left; }
-.invoice-module-scope .voucher-table tbody td { border:1px solid #bdd1e3; padding:.28rem .35rem; background:#fff; }
-.invoice-module-scope .voucher-actions { display:flex; justify-content:flex-end; margin-top:.95rem; }
-.invoice-module-scope .voucher-save { min-height:1.95rem; font-size:.76rem; border-radius:.35rem; padding:0 .95rem; }
+.invoice-module-scope .voucher-table tbody td { border:1px solid #8eb3cf; padding:.17rem .25rem; background:#fff; }
+.invoice-module-scope .voucher-actions { display:flex; justify-content:flex-end; margin-top:.45rem; }
+.invoice-module-scope .voucher-save { min-height:1.15rem; font-size:.62rem; border-radius:.2rem; padding:0 .52rem; }
+.invoice-module-scope .voucher-under-fields {
+    width: 300px;
+    margin-left: auto;
+    margin-top: .65rem;
+    display: grid;
+    grid-template-columns: 1fr auto 58px;
+    align-items: center;
+    gap: .42rem;
+}
+.invoice-module-scope .voucher-under-fields .voucher-label { font-size:.68rem; color:#4b5563; text-align:right; font-weight:600; }
+.invoice-pdf-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.2rem;
+    background: rgba(15, 23, 42, 0.68);
+}
+.invoice-pdf-modal.is-open { display: flex; }
+.invoice-pdf-modal__panel {
+    width: min(1200px, 96vw);
+    height: min(840px, 92vh);
+    background: #fff;
+    border-radius: .6rem;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 28px 60px rgba(2, 6, 23, .45);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.invoice-pdf-modal__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .55rem .7rem;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+.invoice-pdf-modal__title {
+    font-size: .78rem;
+    font-weight: 700;
+    color: #334155;
+}
+.invoice-pdf-modal__frame {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #fff;
+}
 </style>
 
 <div class="flex gap-6 w-full invoice-module-scope">
@@ -211,7 +308,7 @@ require __DIR__ . '/../../includes/nav.php';
                 <div class="card bg-base-100 shadow-xl border border-base-300">
                     <div class="card-body">
                         <h3 class="card-title text-lg" style="color:#009900"><?= h($pageTitle) ?></h3>
-                        <div class="invoice-form-yellow border border-warning/40 rounded-box">
+                        <div class="invoice-form-yellow border border-warning/40 rounded-box voucher-panel-fixed">
                             <?php require __DIR__ . '/pay_single.php'; ?>
                         </div>
                     </div>
@@ -220,7 +317,7 @@ require __DIR__ . '/../../includes/nav.php';
                 <div class="card bg-base-100 shadow-xl border border-base-300">
                     <div class="card-body">
                         <h3 class="card-title text-lg" style="color:#009900"><?= h($pageTitle) ?></h3>
-                        <div class="invoice-form-yellow border border-warning/40 rounded-box">
+                        <div class="invoice-form-yellow border border-warning/40 rounded-box voucher-panel-fixed">
                             <?php if ($selectedRows === []): ?>
                                 <p class="text-sm text-base-content/70">No invoices selected.</p>
                             <?php else: ?>
@@ -279,6 +376,16 @@ require __DIR__ . '/../../includes/nav.php';
     </main>
 </div>
 
+<div id="invoicePdfModal" class="invoice-pdf-modal" aria-hidden="true">
+    <div class="invoice-pdf-modal__panel" role="dialog" aria-modal="true" aria-label="Invoice PDF preview">
+        <div class="invoice-pdf-modal__head">
+            <div class="invoice-pdf-modal__title">Invoice PDF Preview</div>
+            <button type="button" id="invoicePdfModalClose" class="btn btn-xs btn-outline">Close</button>
+        </div>
+        <iframe id="invoicePdfModalFrame" class="invoice-pdf-modal__frame" src="about:blank"></iframe>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 (function () {
@@ -286,6 +393,36 @@ require __DIR__ . '/../../includes/nav.php';
   document.querySelectorAll('.js-invoice-date-input').forEach(function (inp) {
     if (inp._fp) return;
     inp._fp = flatpickr(inp, {dateFormat: 'Y-m-d', allowInput: true, clickOpens: true});
+  });
+
+  var modal = document.getElementById('invoicePdfModal');
+  var frame = document.getElementById('invoicePdfModalFrame');
+  var closeBtn = document.getElementById('invoicePdfModalClose');
+  if (!modal || !frame || !closeBtn) return;
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    frame.setAttribute('src', 'about:blank');
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  document.querySelectorAll('.js-invoice-pdf').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var url = a.getAttribute('href');
+      if (!url) return;
+      frame.setAttribute('src', url);
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+    });
   });
 })();
 </script>

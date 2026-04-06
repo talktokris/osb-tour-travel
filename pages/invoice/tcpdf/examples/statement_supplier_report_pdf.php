@@ -17,7 +17,7 @@ if (!is_dir($targetDir)) {
 $cwd = getcwd();
 chdir($targetDir);
 $_GET['statement_suppplier'] = (string) ($_GET['statement_supplier'] ?? $_GET['statement_suppplier'] ?? '');
-include 'statement_supplier_report_pdf.php';
+include $targetDir . '/statement_supplier_report_pdf.php';
 chdir((string) $cwd);
 $buf = ob_get_clean();
 if ($buf !== '' && !headers_sent()) { echo $buf; }

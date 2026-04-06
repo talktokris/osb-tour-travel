@@ -26,9 +26,9 @@ declare(strict_types=1);
           <td><?= h($r['invoice_create_date']) ?></td>
           <td>
             <?php if (($r['invoice_type'] ?? '') === 'Supplier Invoice'): ?>
-              <a class="link" target="_blank" href="index.php?page=invoice_pdf_supplier_converter&file_count_no=<?= h(rawurlencode((string) ($r['file_count_no'] . '|' . $r['agent_supplier_name']))) ?>"><?= h($r['agent_supplier_name']) ?></a>
+              <a class="link js-invoice-pdf" href="index.php?page=invoice_pdf_supplier_converter&file_count_no=<?= h(rawurlencode((string) ($r['file_count_no'] . '|' . $r['agent_supplier_name']))) ?>"><?= h($r['agent_supplier_name']) ?></a>
             <?php else: ?>
-              <a class="link" target="_blank" href="index.php?page=invoice_pdf_converter&file_count_no=<?= h(rawurlencode($r['file_count_no'])) ?>"><?= h($r['agent_supplier_name']) ?></a>
+              <a class="link js-invoice-pdf" href="index.php?page=invoice_pdf_converter&file_count_no=<?= h(rawurlencode($r['file_count_no'])) ?>"><?= h($r['agent_supplier_name']) ?></a>
             <?php endif; ?>
           </td>
           <td><?= h($r['invoice_type']) ?></td>

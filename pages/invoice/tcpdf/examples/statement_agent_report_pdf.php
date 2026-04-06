@@ -17,7 +17,7 @@ if (!is_dir($targetDir)) {
 $cwd = getcwd();
 chdir($targetDir);
 $_GET['statement_agent'] = (string) ($_GET['statement_agent'] ?? '');
-include 'statement_agent_report_pdf.php';
+include $targetDir . '/statement_agent_report_pdf.php';
 chdir((string) $cwd);
 $buf = ob_get_clean();
 if ($buf !== '' && !headers_sent()) { echo $buf; }
