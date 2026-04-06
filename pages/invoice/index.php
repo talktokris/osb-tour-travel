@@ -176,6 +176,18 @@ require __DIR__ . '/../../includes/nav.php';
 .invoice-module-scope .invoice-form-yellow { background:#ffffe8; box-sizing:border-box; padding:1.35rem 1.5rem 1.45rem; border-radius:var(--rounded-box,1rem); }
 .invoice-module-scope .invoice-form-fieldstack { display:flex; flex-direction:column; gap:1rem; }
 .invoice-module-scope .invoice-form-shell { max-width:48rem; width:100%; margin-left:auto; margin-right:auto; }
+.invoice-module-scope .voucher-shell { max-width:50rem; margin-left:auto; margin-right:auto; }
+.invoice-module-scope .voucher-title { text-align:center; font-weight:700; font-size:1.08rem; color:#374151; margin-bottom:0.9rem; }
+.invoice-module-scope .voucher-grid { display:grid; grid-template-columns: 1fr auto 16rem; gap:.55rem .8rem; align-items:center; max-width:34rem; margin-left:auto; }
+.invoice-module-scope .voucher-grid .voucher-label { font-size:.76rem; color:#374151; text-align:right; font-weight:600; }
+.invoice-module-scope .voucher-grid .voucher-field { grid-column:3/4; }
+.invoice-module-scope .voucher-input { height:1.85rem; border:1px solid #bfc8d3; background:#fff; border-radius:0; width:100%; padding:.2rem .4rem; font-size:.78rem; }
+.invoice-module-scope .voucher-table-wrap { margin-top:.95rem; border:1px solid #8db2d3; }
+.invoice-module-scope .voucher-table { width:100%; border-collapse:collapse; font-size:.78rem; }
+.invoice-module-scope .voucher-table thead th { background:#1b77b8; color:#fff; border:1px solid #7ea4c6; padding:.28rem .35rem; text-align:left; }
+.invoice-module-scope .voucher-table tbody td { border:1px solid #bdd1e3; padding:.28rem .35rem; background:#fff; }
+.invoice-module-scope .voucher-actions { display:flex; justify-content:flex-end; margin-top:.95rem; }
+.invoice-module-scope .voucher-save { min-height:1.95rem; font-size:.76rem; border-radius:.35rem; padding:0 .95rem; }
 </style>
 
 <div class="flex gap-6 w-full invoice-module-scope">
