@@ -59,7 +59,7 @@ $pdf->SetTitle('within Earth');
 $pdf->SetSubject('');
 $pdf->SetKeywords('');
 define ('K_PATH_IMAGES', '/images/');
-$pdf->SetHeaderData(__DIR__ . "/images/within_earth.png", 60, "", "  ");
+$pdf->SetHeaderData(__DIR__ . "/images/within_earth.jpg", 60, "", "  ");
 
 // set default header data
 //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 021', PDF_HEADER_STRING);
@@ -97,9 +97,9 @@ $pdf->SetFont('helvetica', '', 7);
 //$pdf->AddPage();
 
 $pdf->AddPage('L', 'A4');
-$osbLogo = __DIR__ . '/images/within_earth.png';
+$osbLogo = __DIR__ . '/images/within_earth.jpg';
 if (is_file($osbLogo)) {
-	$pdf->Image($osbLogo, 10, 10, 45, 0, 'PNG');
+	$pdf->Image($osbLogo, 10, 10, 45, 0, 'JPG');
 }
 //$isComing='hi thisi s coming test';
 //$supplier_name_came='Texi hub';
