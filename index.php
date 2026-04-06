@@ -104,6 +104,14 @@ if ($page === 'login') {
     require __DIR__ . '/pages/driver/autocomplete.php';
 } elseif ($page === 'invoice') {
     require __DIR__ . '/pages/invoice/index.php';
+} elseif ($page === 'invoice_pdf_statement_agent') {
+    require __DIR__ . '/pages/invoice/tcpdf/examples/statement_agent_report_pdf.php';
+} elseif ($page === 'invoice_pdf_statement_supplier') {
+    require __DIR__ . '/pages/invoice/tcpdf/examples/statement_supplier_report_pdf.php';
+} elseif ($page === 'invoice_pdf_converter') {
+    require __DIR__ . '/pages/invoice/tcpdf/examples/invoice_pdf_converter.php';
+} elseif ($page === 'invoice_pdf_supplier_converter') {
+    require __DIR__ . '/pages/invoice/tcpdf/examples/invoice_supplier_pdf_converter.php';
 } elseif ($page === 'sms') {
     require __DIR__ . '/pages/sms/index.php';
 } elseif ($page === 'sms_test') {
