@@ -17,10 +17,9 @@
     </style>
 </head>
 <body class="min-h-screen bg-base-200 flex flex-col">
-    <header class="navbar bg-primary text-primary-content shadow-md px-4">
-        <div class="flex items-center gap-3">
-            <img src="images/within_earth.png" alt="OSB" class="login-header-logo h-10 w-auto rounded-md bg-white/10 p-0.5">
-            <span class="font-semibold tracking-wide text-base">OSB GLOBAL SERVICES</span>
+    <header class="w-full bg-primary text-primary-content shadow-md">
+        <div class="mx-auto flex w-full max-w-[1400px] items-center justify-start px-5 py-2.5 sm:px-6 lg:px-8">
+            <img src="images/within_earth.png" alt="OSB" class="login-header-logo block h-9 w-auto sm:h-10">
         </div>
     </header>
 
