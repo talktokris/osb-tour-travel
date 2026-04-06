@@ -8,7 +8,7 @@ if (!ini_get('date.timezone')) {
     date_default_timezone_set('UTC');
 }
 ob_start();
-$targetDir = '/Applications/XAMPP/xamppfiles/htdocs/projects/withinearth/withinearth_new_travel/old_app_travel/login/super/invoice/tcpdf/examples';
+$targetDir = dirname(__DIR__, 4) . '/legacy/invoice/tcpdf/examples';
 if (!is_dir($targetDir)) {
     http_response_code(500);
     echo 'Legacy PDF source folder not found.';

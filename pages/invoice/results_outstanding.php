@@ -2,7 +2,6 @@
 declare(strict_types=1);
 /** @var list<array<string,string>> $rows */
 /** @var array<string,string> $context */
-$legacyPdfBase = 'http://localhost:8080/login/super/file/tcpdf/examples';
 ?>
 <form method="post" action="index.php?page=invoice&mode=pay_multiple" class="space-y-3">
   <input type="hidden" name="csrf" value="<?= h($csrf) ?>">
@@ -27,9 +26,9 @@ $legacyPdfBase = 'http://localhost:8080/login/super/file/tcpdf/examples';
           <td><?= h($r['invoice_create_date']) ?></td>
           <td>
             <?php if (($r['invoice_type'] ?? '') === 'Supplier Invoice'): ?>
-              <a class="link js-invoice-pdf" href="<?= h($legacyPdfBase . '/invoice_pdf_supplier.php?file_count_no=' . rawurlencode((string) ($r['file_count_no'] . '|' . $r['agent_supplier_name']))) ?>"><?= h($r['agent_supplier_name']) ?></a>
+              <a class="link js-invoice-pdf" href="<?= h('index.php?page=invoice_pdf_supplier_converter&file_count_no=' . rawurlencode((string) ($r['file_count_no'] . '|' . $r['agent_supplier_name']))) ?>"><?= h($r['agent_supplier_name']) ?></a>
             <?php else: ?>
-              <a class="link js-invoice-pdf" href="<?= h($legacyPdfBase . '/invoice_pdf_converter.php?file_count_no=' . rawurlencode((string) $r['file_count_no'])) ?>"><?= h($r['agent_supplier_name']) ?></a>
+              <a class="link js-invoice-pdf" href="<?= h('index.php?page=invoice_pdf_converter&file_count_no=' . rawurlencode((string) $r['file_count_no'])) ?>"><?= h($r['agent_supplier_name']) ?></a>
             <?php endif; ?>
           </td>
           <td><?= h($r['invoice_type']) ?></td>
