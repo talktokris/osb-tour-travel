@@ -79,7 +79,7 @@ $pdf->SetFont('helvetica', '', 9);
 $pdf->AddPage();
 $osbLogo = __DIR__ . '/images/within_earth.jpg';
 if (is_file($osbLogo)) {
-	$pdf->Image($osbLogo, 14, 8, 70, 0, 'JPG');
+	$pdf->Image($osbLogo, 14, 8, 58, 0, 'JPG');
 }
 //$isComing='hi thisi s coming test';
 //$supplier_name_came='Texi hub';
@@ -89,11 +89,11 @@ if (is_file($osbLogo)) {
 //$html2 =  'Murari Kumar Jha Kumar Jha'.$isComing ;
 
 $textHeader=  '<table>
-<tr><td><h3>Within Earth Holidays Sdn. Bhd.</h3></td></tr>
+<tr><td><h3>OSB Blobal Services Sdn Bhd</h3></td></tr>
 <tr><td>Suite B-09-04 ,Block B, Megan Avenue 2 - Jalan Yap Kwan Seng,50450</td></tr>
 <tr><td>Kuala Lumpur 50450 Malaysia</td></tr>
 <tr><td>Tel : +603 2166 3969, Fax : +603 2166 0418</td></tr>
-<tr><td>E-Mail : sales@withinearth.com Website : malaysia.onlinewe.net</td></tr>
+<tr><td>E-Mail : sales@ossbtrf.com Website : malaysia.onlinewe.net</td></tr>
 </table>
 ';
 
