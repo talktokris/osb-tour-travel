@@ -94,6 +94,8 @@ if ($page === 'login') {
     require __DIR__ . '/pages/search/autocomplete.php';
 } elseif ($page === 'report') {
     require __DIR__ . '/pages/report/index.php';
+} elseif ($page === 'report_export_excel') {
+    require __DIR__ . '/pages/report/export_excel.php';
 } elseif ($page === 'driver') {
     require __DIR__ . '/pages/driver/index.php';
 } elseif ($page === 'driver_assign') {

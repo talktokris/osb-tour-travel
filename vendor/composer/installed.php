@@ -3,13 +3,22 @@
         'name' => 'withinearth/new-app-travel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'b159bd229e88c524b3265726d24d8fa034031ec1',
+        'reference' => 'ec029431faefd28722d29d3c9134a8ac5d57d565',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
+        'openspout/openspout' => array(
+            'pretty_version' => 'v4.25.0',
+            'version' => '4.25.0.0',
+            'reference' => '519affe730d92e1598720a6467227fc28550f0e6',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../openspout/openspout',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'phpmailer/phpmailer' => array(
             'pretty_version' => 'v6.12.0',
             'version' => '6.12.0.0',
@@ -31,7 +40,7 @@
         'withinearth/new-app-travel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'b159bd229e88c524b3265726d24d8fa034031ec1',
+            'reference' => 'ec029431faefd28722d29d3c9134a8ac5d57d565',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

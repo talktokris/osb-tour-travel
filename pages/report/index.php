@@ -167,7 +167,16 @@ require __DIR__ . '/../../includes/nav.php';
             </div>
 
             <?php if ($reportOutcome !== null && $reportOutcome['ok']): ?>
-                <div class="flex justify-end report-no-print mb-2">
+                <div class="flex justify-end gap-2 report-no-print mb-2">
+                    <form method="post" action="index.php?page=report_export_excel">
+                        <input type="hidden" name="csrf" value="<?= h($csrf) ?>">
+                        <input type="hidden" name="mode" value="<?= h($mode) ?>">
+                        <input type="hidden" name="search_word" value="<?= h((string) ($fv['search_word'] ?? '')) ?>">
+                        <input type="hidden" name="search_supplier" value="<?= h((string) ($fv['search_supplier'] ?? '')) ?>">
+                        <input type="hidden" name="from_date" value="<?= h((string) ($fv['from_date'] ?? '')) ?>">
+                        <input type="hidden" name="to_date" value="<?= h((string) ($fv['to_date'] ?? '')) ?>">
+                        <button type="submit" class="btn btn-primary btn-sm">Export Excel</button>
+                    </form>
                     <button type="button" class="btn btn-success btn-sm" onclick="window.print()">Print</button>
                 </div>
                 <!-- Phase 2: optional TCPDF routes mirroring legacy tcpdf/examples/*_report_pdf.php -->

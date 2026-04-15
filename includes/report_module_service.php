@@ -858,3 +858,153 @@ function report_module_run(mysqli $mysqli, string $mode, array $post): array
         ? ['ok' => true, 'kind' => 'transfer', 'transfer' => $r]
         : ['ok' => false, 'kind' => 'transfer', 'error' => $r['error'] ?? 'Error'];
 }
+
+function report_module_export_filename(string $mode): string
+{
+    $mode = report_module_normalize_mode($mode);
+    $stamp = date('Ymd_His');
+
+    return 'report_' . $mode . '_' . $stamp . '.xlsx';
+}
+
+/**
+ * @param array<string, mixed> $reportOutcome
+ * @return list<list<string>>
+ */
+function report_module_export_rows(array $reportOutcome): array
+{
+    $kind = (string) ($reportOutcome['kind'] ?? '');
+    if ($kind === 'transfer') {
+        /** @var array{sections?: list<array{title: string, rows: list<array<string, string>>}>} $transfer */
+        $transfer = (array) ($reportOutcome['transfer'] ?? []);
+        $sections = (array) ($transfer['sections'] ?? []);
+        $rows = [];
+        $first = true;
+        foreach ($sections as $sec) {
+            $title = (string) ($sec['title'] ?? '');
+            $items = (array) ($sec['rows'] ?? []);
+            if ($first) {
+                $rows[] = ['Report :'];
+                $first = false;
+            }
+            $rows[] = [$title . ' Transfer:'];
+            $rows[] = [
+                'Supplier Name', 'Agent Name', 'File No.', 'Client Name', 'Service Date', 'Service Name',
+                'Flight No.', 'Flight Time', 'Pick Up Time', 'Pick Up', 'Drop Off', 'Vehicle Type',
+                'Driver Name', 'PAX SIM NO', 'Tour type',
+            ];
+            foreach ($items as $r) {
+                $rows[] = [
+                    (string) ($r['supplier_name'] ?? ''),
+                    (string) ($r['agent_name'] ?? ''),
+                    (string) ($r['file_no'] ?? ''),
+                    (string) ($r['client_name'] ?? ''),
+                    (string) ($r['service_date'] ?? ''),
+                    (string) ($r['service'] ?? ''),
+                    (string) ($r['flight_no'] ?? ''),
+                    (string) ($r['flight_time'] ?? ''),
+                    (string) ($r['pickup_time'] ?? ''),
+                    (string) ($r['pick_up'] ?? ''),
+                    (string) ($r['drop_off'] ?? ''),
+                    (string) ($r['vehicle_type'] ?? ''),
+                    (string) ($r['driver_name'] ?? ''),
+                    (string) ($r['pax_mobile'] ?? ''),
+                    (string) ($r['service_cat'] ?? ''),
+                ];
+            }
+            $rows[] = [];
+        }
+
+        return $rows;
+    }
+
+    if ($kind === 'statement_agent') {
+        /** @var array{agent_name?: string, agent_address?: string, rows?: list<array<string, string>>, totals?: array<string, string>} $stmt */
+        $stmt = (array) ($reportOutcome['statement_agent'] ?? []);
+        $items = (array) ($stmt['rows'] ?? []);
+        $totals = (array) ($stmt['totals'] ?? []);
+        $rows = [
+            ['STATEMENT REPORT'],
+            ['Agent :', (string) ($stmt['agent_name'] ?? '')],
+            ['Address :', (string) ($stmt['agent_address'] ?? '')],
+            ['Currency :', 'Ringgit Malaysia', 'Type', 'INVOICE'],
+            [],
+            [
+                'No.', 'Invoice No.', 'Issue Date', 'Due Date', 'Service Date', 'Guest Name', 'Description', 'Qty',
+                'Type', 'Price', 'Item Amount', 'Total Invoice', 'Paid', 'Balance', 'Acc. Status', 'Status', 'UserCreate',
+            ],
+        ];
+        $num = 1;
+        foreach ($items as $r) {
+            $rows[] = [
+                (string) $num++,
+                (string) ($r['invoices_id'] ?? ''),
+                (string) ($r['invoice_create_date'] ?? ''),
+                '',
+                (string) ($r['service_date'] ?? ''),
+                (string) ($r['guest'] ?? ''),
+                (string) ($r['description'] ?? ''),
+                (string) ($r['qty'] ?? ''),
+                (string) ($r['type'] ?? ''),
+                (string) ($r['unit_price'] ?? ''),
+                (string) ($r['selling_price'] ?? ''),
+                (string) ($r['item_amount'] ?? ''),
+                (string) ($r['paid'] ?? ''),
+                (string) ($r['balance'] ?? ''),
+                (string) ($r['acc_status'] ?? ''),
+                (string) ($r['status'] ?? ''),
+                (string) ($r['user_create'] ?? ''),
+            ];
+        }
+        $rows[] = [
+            'Total', '', '', '', '', '', '', '', '', '', '',
+            (string) ($totals['total'] ?? ''),
+            (string) ($totals['paid'] ?? ''),
+            (string) ($totals['balance'] ?? ''),
+            '', '', '',
+        ];
+
+        return $rows;
+    }
+
+    if ($kind === 'statement_supplier') {
+        /** @var array{supplier_name?: string, rows?: list<array<string, string>>, totals?: array<string, string>} $stmt */
+        $stmt = (array) ($reportOutcome['statement_supplier'] ?? []);
+        $items = (array) ($stmt['rows'] ?? []);
+        $totals = (array) ($stmt['totals'] ?? []);
+        $rows = [
+            ['CREDITOR INVOICE COSTING REPORT'],
+            [],
+            ['Transfer', (string) ($stmt['supplier_name'] ?? ''), 'Invoice Status', 'ACTIVE'],
+            ['Account Status'],
+            ['Source Type'],
+            ['Currency', 'Ringgit Malaysia'],
+            [],
+            ['No.', 'Doc ID.', 'Issued Date', 'O/S Ref.', 'Agent', 'Service Date', 'Inv # No.', 'Net Total', 'Paid Amt.', 'Balance'],
+        ];
+        foreach ($items as $r) {
+            $rows[] = [
+                (string) ($r['no'] ?? ''),
+                (string) ($r['doc_id'] ?? ''),
+                (string) ($r['issued_date'] ?? ''),
+                (string) ($r['ref_no'] ?? ''),
+                (string) ($r['agent'] ?? ''),
+                (string) ($r['service_date'] ?? ''),
+                (string) ($r['inv_no'] ?? ''),
+                (string) ($r['net_total'] ?? ''),
+                (string) ($r['paid_amt'] ?? ''),
+                (string) ($r['balance'] ?? ''),
+            ];
+        }
+        $rows[] = [
+            'Total', '', '', '', '', '', '',
+            (string) ($totals['total'] ?? ''),
+            (string) ($totals['paid'] ?? ''),
+            (string) ($totals['balance'] ?? ''),
+        ];
+
+        return $rows;
+    }
+
+    return [];
+}
