@@ -1,16 +1,48 @@
 <?php
 // Basic configuration shared by all pages
 
-// Database config – adjust if your Docker MySQL changes
-$DB_HOST = '127.0.0.1';
-$DB_PORT = 3308;
-$DB_NAME = 'ossb_tour';
-$DB_USER = 'root';
-$DB_PASS = 'root';
+/**
+ * Minimal .env loader for local development.
+ */
+$envPath = __DIR__ . '/.env';
+if (is_file($envPath) && is_readable($envPath)) {
+    $envLines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (is_array($envLines)) {
+        foreach ($envLines as $envLine) {
+            $envLine = trim((string) $envLine);
+            if ($envLine === '' || str_starts_with($envLine, '#') || !str_contains($envLine, '=')) {
+                continue;
+            }
+            [$envKey, $envValue] = explode('=', $envLine, 2);
+            $envKey = trim($envKey);
+            $envValue = trim($envValue, " \t\n\r\0\x0B\"'");
+            if ($envKey !== '' && getenv($envKey) === false) {
+                putenv($envKey . '=' . $envValue);
+                $_ENV[$envKey] = $envValue;
+            }
+        }
+    }
+}
+
+$env = static function (string $key, string $default = ''): string {
+    $value = getenv($key);
+    if ($value === false || $value === null || $value === '') {
+        return $default;
+    }
+    return (string) $value;
+};
+
+// Database config (prefers environment / .env values)
+$DB_HOST = $env('DB_HOST', '127.0.0.1');
+$DB_PORT = (int) $env('DB_PORT', '3308');
+$DB_NAME = $env('DB_DATABASE', 'ossb_tour');
+$DB_USER = $env('DB_USERNAME', 'root');
+$DB_PASS = $env('DB_PASSWORD', 'root');
 
 // Connect to database
-$mysqli = @new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, (int) $DB_PORT);
-if ($mysqli->connect_error) {
+mysqli_report(MYSQLI_REPORT_OFF);
+$mysqli = @new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME, $DB_PORT);
+if ($mysqli->connect_errno) {
     die('Database connection failed: ' . htmlspecialchars($mysqli->connect_error));
 }
 $mysqli->set_charset('utf8mb4');
