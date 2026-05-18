@@ -8,7 +8,9 @@ if (!ini_get('date.timezone')) {
     date_default_timezone_set('UTC');
 }
 ob_start();
-$targetDir = dirname(__DIR__, 4) . '/legacy/invoice/tcpdf/examples';
+$appRoot = dirname(__DIR__, 4);
+require_once $appRoot . '/includes/pdf_company_config.php';
+$targetDir = $appRoot . '/legacy/invoice/tcpdf/examples';
 if (!is_dir($targetDir)) {
     http_response_code(500);
     echo 'Legacy PDF source folder not found.';

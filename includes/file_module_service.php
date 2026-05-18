@@ -444,6 +444,57 @@ function file_module_entries_for_count(mysqli $mysqli, string $fileCountNo): arr
     return $rows;
 }
 
+/** First service row by service_date (legacy file_booking_preview header). */
+function file_module_entry_header_for_count(mysqli $mysqli, string $fileCountNo): ?array
+{
+    $stmt = $mysqli->prepare(
+        'SELECT * FROM file_entry WHERE file_count_no = ? ORDER BY service_date ASC, file_id ASC LIMIT 1'
+    );
+    if (!$stmt) {
+        return null;
+    }
+    $stmt->bind_param('s', $fileCountNo);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    return is_array($row) ? $row : null;
+}
+
+/** @return list<array<string, mixed>> */
+function file_module_invoices_for_count(mysqli $mysqli, string $fileCountNo): array
+{
+    $stmt = $mysqli->prepare('SELECT * FROM invoices WHERE file_count_no = ? ORDER BY Invoices_id ASC');
+    if (!$stmt) {
+        return [];
+    }
+    $stmt->bind_param('s', $fileCountNo);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $rows = [];
+    while ($row = $res->fetch_assoc()) {
+        $rows[] = $row;
+    }
+    $stmt->close();
+    return $rows;
+}
+
+/** Legacy: show agent Confirm when not every row is already On Request. */
+function file_module_show_agent_confirm_button(array $entries): bool
+{
+    if ($entries === []) {
+        return false;
+    }
+    $onRequest = 0;
+    foreach ($entries as $row) {
+        if ((string) ($row['book_status'] ?? '') === 'On Request') {
+            $onRequest++;
+        }
+    }
+
+    return $onRequest < count($entries);
+}
+
 function file_module_set_all_on_request(mysqli $mysqli, string $fileCountNo): bool
 {
     $stmt = $mysqli->prepare("UPDATE file_entry SET book_status = 'On Request' WHERE file_count_no = ?");

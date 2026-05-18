@@ -88,14 +88,8 @@ if (is_file($osbLogo)) {
 //$html3 =  'Krishna Kumar Jha'.$isComing ;
 //$html2 =  'Murari Kumar Jha Kumar Jha'.$isComing ;
 
-$textHeader=  '<table>
-<tr><td><h3>OSB Blobal Services Sdn Bhd</h3></td></tr>
-<tr><td>Suite B-09-04 ,Block B, Megan Avenue 2 - Jalan Yap Kwan Seng,50450</td></tr>
-<tr><td>Kuala Lumpur 50450 Malaysia</td></tr>
-<tr><td>Tel : +603 2166 3969, Fax : +603 2166 0418</td></tr>
-<tr><td>E-Mail : sales@ossbtrf.com Website : malaysia.onlinewe.net</td></tr>
-</table>
-';
+require_once dirname(__DIR__, 4) . '/includes/pdf_company_config.php';
+$textHeader = pdf_company_header_html_invoice();
 
 $pdf->writeHTML($textHeader, true, 0, true, 0);
 

@@ -130,17 +130,8 @@ if (is_file($osbLogo)) {
 		$balance_amounts= $rowysInvoice['balance_amount'];
 			if($paid_amount>1){$balance_amount=$balance_amounts;} else {$balance_amount=$total_price;} 
 		
-		$textHeader=  '<table><tr><td>
-		<table>
-<tr><td><h3>OSB Blobal Services Sdn Bhd</h3></td></tr>
-<tr><td>Suite B-09-04 ,Block B, Megan Avenue 2 - Jalan Yap Kwan Seng,50450</td></tr>
-<tr><td>Kuala Lumpur 50450 Malaysia</td></tr>
-<tr><td>Tel : +603 2166 3969, Fax : +603 2166 0418</td></tr>
-<tr><td>E-Mail : sales@ossbtrf.com Website : malaysia.onlinewe.net</td></tr>
-</table>
-
-</td><td width="300" align="right"><h1>'.$paid_status.'</h1></td></tr></table>
-';
+		require_once dirname(__DIR__, 4) . '/includes/pdf_company_config.php';
+		$textHeader = '<table><tr><td>' . pdf_company_header_html_invoice() . '</td><td width="300" align="right"><h1>' . $paid_status . '</h1></td></tr></table>';
 		
 $pdf->writeHTML($textHeader, true, 0, true, 0);	
 

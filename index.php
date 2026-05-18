@@ -84,6 +84,8 @@ if ($page === 'login') {
     require __DIR__ . '/pages/file/preview.php';
 } elseif ($page === 'file_send_email') {
     require __DIR__ . '/pages/file/send_email.php';
+} elseif ($page === 'file_itinerary_pdf') {
+    require __DIR__ . '/pages/file/tcpdf/examples/itinerary_converter.php';
 } elseif ($page === 'file_api') {
     require __DIR__ . '/pages/file/api.php';
 } elseif ($page === 'search') {

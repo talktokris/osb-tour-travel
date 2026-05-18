@@ -15,6 +15,26 @@ if (isset($_GET['new'])) {
     file_module_set_file_count_no(null);
 }
 
+$continueGroup = trim((string) ($_GET['file_group_no'] ?? $_GET['file_count_no'] ?? ''));
+if ($continueGroup !== '') {
+    file_module_state();
+    $uname = (string) ($_SESSION['user_name'] ?? '');
+    if (file_module_user_can_access_file_count($mysqli, $continueGroup, $uname)) {
+        file_module_set_file_count_no($continueGroup);
+        $hdr = file_module_entry_header_for_count($mysqli, $continueGroup);
+        if ($hdr !== null) {
+            file_module_set_file_no((string) ($hdr['file_no'] ?? ''));
+            file_module_save_guest([
+                'title' => (string) ($hdr['title'] ?? 'Mr'),
+                'last_name' => (string) ($hdr['last_name'] ?? ''),
+                'first_name' => (string) ($hdr['first_name'] ?? ''),
+                'pax_mobile' => (string) ($hdr['pax_mobile'] ?? ''),
+                'ref_no' => (string) ($hdr['ref_no'] ?? ''),
+            ]);
+        }
+    }
+}
+
 require __DIR__ . '/../../includes/header.php';
 require __DIR__ . '/../../includes/nav.php';
 
