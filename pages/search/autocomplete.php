@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 header('Content-Type: application/json; charset=utf-8');
+/** @var mysqli $mysqli */
 
 if (empty($_SESSION['user_id'])) {
     http_response_code(403);
@@ -14,7 +15,6 @@ $field = trim((string) ($_GET['field'] ?? ''));
 $q = trim((string) ($_GET['q'] ?? ''));
 $like = $q === '' ? '%' : ('%' . $q . '%');
 $limit = 60;
-$user = trim((string) ($_SESSION['user_name'] ?? ''));
 $items = [];
 
 $pushDistinct = static function (mysqli_result $res, string $col) use (&$items): void {
@@ -24,6 +24,22 @@ $pushDistinct = static function (mysqli_result $res, string $col) use (&$items):
             $items[] = $v;
         }
     }
+};
+
+$fetchFileEntryDistinct = static function (string $column) use ($mysqli, $like, $limit, $pushDistinct): void {
+    $sql = 'SELECT DISTINCT ' . $column . ' FROM file_entry WHERE ' . $column . ' LIKE ? ORDER BY ' . $column . ' LIMIT ' . (int) $limit;
+    $stmt = $mysqli->prepare($sql);
+    if (!$stmt) {
+        return;
+    }
+    $stmt->bind_param('s', $like);
+    if ($stmt->execute()) {
+        $r = $stmt->get_result();
+        if ($r) {
+            $pushDistinct($r, $column);
+        }
+    }
+    $stmt->close();
 };
 
 switch ($field) {
@@ -39,18 +55,8 @@ switch ($field) {
             }
             $stmt->close();
         }
-        if ($items === [] && $user !== '') {
-            $stmt = $mysqli->prepare('SELECT DISTINCT agent_name FROM file_entry WHERE user_enter_by = ? AND agent_name LIKE ? ORDER BY agent_name LIMIT ' . (int) $limit);
-            if ($stmt) {
-                $stmt->bind_param('ss', $user, $like);
-                if ($stmt->execute()) {
-                    $r = $stmt->get_result();
-                    if ($r) {
-                        $pushDistinct($r, 'agent_name');
-                    }
-                }
-                $stmt->close();
-            }
+        if ($items === []) {
+            $fetchFileEntryDistinct('agent_name');
         }
         break;
 
@@ -69,20 +75,7 @@ switch ($field) {
         break;
 
     case 'driver':
-        if ($user === '') {
-            break;
-        }
-        $stmt = $mysqli->prepare('SELECT DISTINCT driver_name FROM file_entry WHERE user_enter_by = ? AND driver_name LIKE ? ORDER BY driver_name LIMIT ' . (int) $limit);
-        if ($stmt) {
-            $stmt->bind_param('ss', $user, $like);
-            if ($stmt->execute()) {
-                $r = $stmt->get_result();
-                if ($r) {
-                    $pushDistinct($r, 'driver_name');
-                }
-            }
-            $stmt->close();
-        }
+        $fetchFileEntryDistinct('driver_name');
         break;
 
     case 'vehicle_no':
@@ -100,37 +93,11 @@ switch ($field) {
         break;
 
     case 'file_no':
-        if ($user === '') {
-            break;
-        }
-        $stmt = $mysqli->prepare('SELECT DISTINCT file_no FROM file_entry WHERE user_enter_by = ? AND file_no LIKE ? ORDER BY file_no LIMIT ' . (int) $limit);
-        if ($stmt) {
-            $stmt->bind_param('ss', $user, $like);
-            if ($stmt->execute()) {
-                $r = $stmt->get_result();
-                if ($r) {
-                    $pushDistinct($r, 'file_no');
-                }
-            }
-            $stmt->close();
-        }
+        $fetchFileEntryDistinct('file_no');
         break;
 
     case 'ref_no':
-        if ($user === '') {
-            break;
-        }
-        $stmt = $mysqli->prepare('SELECT DISTINCT ref_no FROM file_entry WHERE user_enter_by = ? AND ref_no LIKE ? ORDER BY ref_no LIMIT ' . (int) $limit);
-        if ($stmt) {
-            $stmt->bind_param('ss', $user, $like);
-            if ($stmt->execute()) {
-                $r = $stmt->get_result();
-                if ($r) {
-                    $pushDistinct($r, 'ref_no');
-                }
-            }
-            $stmt->close();
-        }
+        $fetchFileEntryDistinct('ref_no');
         break;
 
     case 'city':
@@ -148,20 +115,7 @@ switch ($field) {
         break;
 
     case 'pax':
-        if ($user === '') {
-            break;
-        }
-        $stmt = $mysqli->prepare('SELECT DISTINCT last_name FROM file_entry WHERE user_enter_by = ? AND last_name LIKE ? ORDER BY last_name LIMIT ' . (int) $limit);
-        if ($stmt) {
-            $stmt->bind_param('ss', $user, $like);
-            if ($stmt->execute()) {
-                $r = $stmt->get_result();
-                if ($r) {
-                    $pushDistinct($r, 'last_name');
-                }
-            }
-            $stmt->close();
-        }
+        $fetchFileEntryDistinct('last_name');
         break;
 
     default:

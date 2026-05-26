@@ -65,27 +65,22 @@ function normalize_arabic_text(string $value): string {
     if ($value === '') {
         return $value;
     }
-    if (preg_match('/[\x{0600}-\x{06FF}]/u', $value)) {
+    if (preg_match('/[\x{0600}-\x{06FF}]/u', $value) && !preg_match('/[ØÙÃÂ]/u', $value)) {
         return $value;
     }
     if (preg_match('/[ØÙÃÂ]/u', $value) && function_exists('mb_convert_encoding')) {
         $fromLatin = @mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
-        if (is_string($fromLatin) && $fromLatin !== '' && preg_match('/[\x{0600}-\x{06FF}]/u', $fromLatin)) {
-            return $fromLatin;
-        }
-        if (is_string($fromLatin) && $fromLatin !== '' && mb_check_encoding($fromLatin, 'UTF-8')) {
-            return $fromLatin;
-        }
-    }
-    if (!preg_match('/[ØÙ]/u', $value)) {
-        return $value;
-    }
-    if (function_exists('mb_convert_encoding')) {
-        $converted = @mb_convert_encoding($value, 'UTF-8', 'Windows-1252');
-        if (is_string($converted) && preg_match('/[\x{0600}-\x{06FF}]/u', $converted)) {
-            return $converted;
+        if (is_string($fromLatin) && $fromLatin !== '') {
+            $clean = @iconv('UTF-8', 'UTF-8//IGNORE', $fromLatin);
+            if (is_string($clean) && $clean !== '' && preg_match('/[\x{0600}-\x{06FF}]/u', $clean) && !str_contains($clean, '?')) {
+                return $clean;
+            }
+            if (preg_match('/[\x{0600}-\x{06FF}]/u', $fromLatin) && !str_contains($fromLatin, '?')) {
+                return $fromLatin;
+            }
         }
     }
+
     return $value;
 }
 

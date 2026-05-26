@@ -412,14 +412,16 @@ function file_module_service_by_id(mysqli $mysqli, int $serviceId): ?array
 
 function file_module_user_can_access_file_count(mysqli $mysqli, string $fileCountNo, string $username): bool
 {
-    if ($fileCountNo === '' || $username === '') {
+    if ($fileCountNo === '') {
         return false;
     }
-    $stmt = $mysqli->prepare('SELECT 1 FROM file_entry WHERE file_count_no = ? AND user_enter_by = ? LIMIT 1');
+    // Legacy behavior: any logged-in user can open existing files across creators.
+    // Keep $username in signature for compatibility with existing callers.
+    $stmt = $mysqli->prepare('SELECT 1 FROM file_entry WHERE file_count_no = ? LIMIT 1');
     if (!$stmt) {
         return false;
     }
-    $stmt->bind_param('ss', $fileCountNo, $username);
+    $stmt->bind_param('s', $fileCountNo);
     $stmt->execute();
     $ok = $stmt->get_result()->fetch_row() !== null;
     $stmt->close();

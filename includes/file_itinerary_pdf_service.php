@@ -52,41 +52,99 @@ function file_itinerary_ar(string $value): string
     if (function_exists('normalize_arabic_text')) {
         $value = normalize_arabic_text($value);
     }
+    if (preg_match('/[ØÙÃÂ]/u', $value)) {
+        return '';
+    }
     if (preg_match('/[\x{0600}-\x{06FF}]/u', $value)) {
         return $value;
     }
-    if (preg_match('/[ØÙÃÂ]/u', $value)) {
-        $bytes = @mb_convert_encoding($value, 'ISO-8859-1', 'UTF-8');
-        if (is_string($bytes) && $bytes !== '') {
-            if (mb_check_encoding($bytes, 'UTF-8') && preg_match('/[\x{0600}-\x{06FF}]/u', $bytes)) {
-                return $bytes;
-            }
-            $clean = @iconv('UTF-8', 'UTF-8//IGNORE', $bytes);
-            if (is_string($clean) && $clean !== '' && preg_match('/[\x{0600}-\x{06FF}]/u', $clean)) {
-                return $clean;
-            }
-        }
-    }
 
-    return $value;
+    return '';
 }
 
-/** Wrap Arabic for TCPDF HTML (legacy-style aealarabiya). */
+/** Standard itinerary labels (legacy / image reference). */
+function file_itinerary_label_defaults(): array
+{
+    return [
+        'ITINERARY_fills' => 'جدول الرحلة',
+        'Client_Name_fills' => 'اسم العميل',
+        'Ref_No_fills' => 'الملف رقم',
+        'Transfers_fills' => 'المواصلات',
+        'city_one_fills' => 'الوقت',
+        'city_two_fills' => 'المدينه',
+        'city_three_fills' => 'الخدمات',
+        'city_four_fills' => 'تاريخ',
+        'Drop_Off_Point_fills' => 'الوجهة',
+        'Pick_Up_Point_fills' => 'من',
+    ];
+}
+
+function file_itinerary_label_is_valid(string $value): bool
+{
+    $value = trim($value);
+    if ($value === '' || !preg_match('/[\x{0600}-\x{06FF}]/u', $value)) {
+        return false;
+    }
+    if (preg_match('/[ØÙÃÂ?�]/u', $value)) {
+        return false;
+    }
+    return (bool) preg_match(
+        '/(?:ال|اسم|رقم|ملف|وقت|تاريخ|خدم|مواص|عميل|وجه|مدين|من|جدول|رح|صباح|عصر|مساء|فجر|ظهر)/u',
+        $value
+    );
+}
+
+function file_itinerary_resolve_label(array $labels, string $key): string
+{
+    $defaults = file_itinerary_label_defaults();
+    $default = $defaults[$key] ?? '';
+    $raw = trim((string) ($labels[$key] ?? ''));
+    if ($raw !== '' && file_itinerary_label_is_valid($raw)) {
+        return $raw;
+    }
+
+    return $default;
+}
+
+function file_itinerary_is_arabic(string $value): bool
+{
+    return (bool) preg_match('/[\x{0600}-\x{06FF}]/u', $value);
+}
+
+function file_itinerary_ar_broken(string $value): bool
+{
+    return $value === '' || str_contains($value, '?') || str_contains($value, '�');
+}
+
+/** Wrap text for TCPDF HTML (legacy uses dejavusans for Arabic). */
 function file_itinerary_ar_html(string $value): string
 {
-    $ar = file_itinerary_ar($value);
-    if ($ar === '') {
+    $text = file_itinerary_ar($value);
+    if ($text === '') {
         return '';
     }
 
-    return '<span dir="rtl" style="font-family:aealarabiya;font-size:11pt;">'
-        . file_itinerary_h($ar)
-        . '</span>';
+    $escaped = file_itinerary_h($text);
+    if (file_itinerary_is_arabic($text)) {
+        return $escaped;
+    }
+
+    return '<span dir="ltr">' . $escaped . '</span>';
+}
+
+function file_itinerary_latin_html(string $value): string
+{
+    $value = trim($value);
+    if ($value === '') {
+        return '';
+    }
+
+    return '<span dir="ltr">' . file_itinerary_h($value) . '</span>';
 }
 
 function file_itinerary_write_html(TCPDF $pdf, string $html, int $fontPt = 10): void
 {
-    $pdf->SetFont('aealarabiya', '', $fontPt);
+    $pdf->SetFont('dejavusans', '', $fontPt);
     $pdf->writeHTML($html, true, false, true, false, '');
 }
 
@@ -122,6 +180,18 @@ function file_itinerary_resolve_logo(?int $agentId, string $agentLogoName): ?str
     return null;
 }
 
+/** @return array<string, string> */
+function file_itinerary_time_label_defaults(): array
+{
+    return [
+        'aa_fills' => 'فجرا',
+        'bb_fills' => 'صباحا',
+        'cc_fills' => 'ظهرا',
+        'dd_fills' => 'عصرا',
+        'ee_fills' => 'مساءا',
+    ];
+}
+
 /** @param array<string, mixed> $timeRow */
 function file_itinerary_arabic_time_label(string $pickupTimeSql, array $timeRow): string
 {
@@ -136,11 +206,17 @@ function file_itinerary_arabic_time_label(string $pickupTimeSql, array $timeRow)
         ['15:00:00', '17:59:00', 'dd_fills'],
         ['18:00:00', '23:59:00', 'ee_fills'],
     ];
+    $defaults = file_itinerary_time_label_defaults();
     $timeOnly = date('H:i:s', $ts);
     $t = strtotime($timeOnly);
     foreach ($ranges as [$from, $to, $key]) {
         if ($t >= strtotime($from) && $t <= strtotime($to)) {
-            return file_itinerary_ar((string) ($timeRow[$key] ?? ''));
+            $label = file_itinerary_ar((string) ($timeRow[$key] ?? ''));
+            if (file_itinerary_ar_broken($label)) {
+                return $defaults[$key] ?? $label;
+            }
+
+            return $label;
         }
     }
 
@@ -262,6 +338,8 @@ function file_itinerary_pdf_render(mysqli $mysqli, string $fileCountNo): void
     $pdf->setPrintFooter(false);
     $pdf->SetMargins(12, 12, 12);
     $pdf->SetAutoPageBreak(true, 18);
+    $pdf->setRTL(false);
+    $pdf->SetFont('dejavusans', '', 9);
     $pdf->AddPage();
 
     $logoPath = file_itinerary_resolve_logo($agentId, $agentLogo);
@@ -282,37 +360,34 @@ function file_itinerary_pdf_render(mysqli $mysqli, string $fileCountNo): void
     $pdf->Line(12, $pdf->GetY(), 198, $pdf->GetY());
     $pdf->Ln(6);
 
-    $itineraryArLabel = file_itinerary_ar((string) ($labels['ITINERARY_fills'] ?? ''));
-    if ($itineraryArLabel === '' || !preg_match('/[\x{0600}-\x{06FF}]/u', $itineraryArLabel)) {
-        $itineraryArLabel = 'جدول الرحلة';
-    }
+    $itineraryArLabel = file_itinerary_resolve_label($labels, 'ITINERARY_fills');
     $pdf->SetFont('dejavusans', 'B', 14);
     $pdf->Cell(0, 8, 'ITINERARY', 0, 1, 'C');
-    $pdf->SetFont('aealarabiya', 'B', 14);
+    $pdf->SetFont('dejavusans', 'B', 14);
     $pdf->Cell(0, 8, '( ' . $itineraryArLabel . ' )', 0, 1, 'C');
 
-    $clientLabel = (string) ($labels['Client_Name_fills'] ?? 'اسم العميل');
-    $refLabel = (string) ($labels['Ref_No_fills'] ?? 'رقم الملف');
+    $clientLabel = file_itinerary_resolve_label($labels, 'Client_Name_fills');
+    $refLabel = file_itinerary_resolve_label($labels, 'Ref_No_fills');
 
     $clientHtml = '<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;width:100%;">'
         . '<tr>'
         . '<td colspan="2" rowspan="2" align="center" style="font-size:11pt;">'
-        . '<b><font face="dejavusans">' . file_itinerary_h($clientName) . '</font> : '
+        . '<b>' . file_itinerary_latin_html($clientName) . ' : '
         . file_itinerary_ar_html($clientLabel) . '</b></td>'
         . '<td align="center">' . file_itinerary_ar_html($refLabel) . '</td>'
         . '</tr>'
-        . '<tr><td align="center"><b><font face="dejavusans">' . file_itinerary_h($fileNo) . '</font></b></td></tr>'
+        . '<tr><td align="center"><b>' . file_itinerary_latin_html($fileNo) . '</b></td></tr>'
         . '</table>';
 
     file_itinerary_write_html($pdf, $clientHtml, 10);
 
-    $transfersLabel = file_itinerary_ar((string) ($labels['Transfers_fills'] ?? 'المواصلات'));
-    $colTime = file_itinerary_ar((string) ($labels['city_one_fills'] ?? 'الوقت'));
-    $colCity = file_itinerary_ar((string) ($labels['city_two_fills'] ?? 'المدينة'));
-    $colService = file_itinerary_ar((string) ($labels['city_three_fills'] ?? 'الخدمات'));
-    $colDate = file_itinerary_ar((string) ($labels['city_four_fills'] ?? 'تاريخ'));
-    $dropLabel = file_itinerary_ar((string) ($labels['Drop_Off_Point_fills'] ?? 'الوجهة'));
-    $pickLabel = file_itinerary_ar((string) ($labels['Pick_Up_Point_fills'] ?? 'من'));
+    $transfersLabel = file_itinerary_resolve_label($labels, 'Transfers_fills');
+    $colTime = file_itinerary_resolve_label($labels, 'city_one_fills');
+    $colCity = file_itinerary_resolve_label($labels, 'city_two_fills');
+    $colService = file_itinerary_resolve_label($labels, 'city_three_fills');
+    $colDate = file_itinerary_resolve_label($labels, 'city_four_fills');
+    $dropLabel = file_itinerary_resolve_label($labels, 'Drop_Off_Point_fills');
+    $pickLabel = file_itinerary_resolve_label($labels, 'Pick_Up_Point_fills');
 
     $table = '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse;width:100%;">'
         . '<tr><td colspan="4" align="center" style="font-size:14pt;font-weight:bold;">'
@@ -410,19 +485,24 @@ function file_itinerary_pdf_render(mysqli $mysqli, string $fileCountNo): void
             }
         }
 
-        $serviceArHtml = $serviceAr !== '' ? file_itinerary_ar_html($serviceAr) : '<font face="dejavusans">' . file_itinerary_h((string) ($row['service'] ?? '')) . '</font>';
-        $timeCell = file_itinerary_ar_html($arabicTime) . ' <font face="dejavusans">' . file_itinerary_h($timeDisplay) . '</font>';
+        $serviceArHtml = $serviceAr !== ''
+            ? file_itinerary_ar_html($serviceAr)
+            : file_itinerary_latin_html((string) ($row['service'] ?? ''));
+        $timeCell = '<table><tr><td align="right">' . file_itinerary_ar_html($arabicTime)
+            . '</td><td align="center">' . file_itinerary_latin_html($timeDisplay) . '</td></tr></table>';
 
         $table .= '<tr>'
             . '<td align="center" style="font-size:10pt;">' . $timeCell . '</td>'
             . '<td align="center" style="font-size:10pt;">' . file_itinerary_ar_html($fromCityAr) . '</td>'
             . '<td align="center" style="font-size:10pt;">'
-            . '<div style="text-align:center;">' . $serviceArHtml . '</div>'
-            . '<table width="100%" cellpadding="2" style="font-size:10pt;"><tr>'
-            . '<td width="50%" align="right">' . file_itinerary_ar_html($toLoop) . ' : ' . file_itinerary_ar_html($dropLabel) . '</td>'
-            . '<td width="50%" align="right">' . file_itinerary_ar_html($fromLoop) . ' : ' . file_itinerary_ar_html($pickLabel) . '</td>'
-            . '</tr></table></td>'
-            . '<td align="center" style="font-size:10pt;"><font face="dejavusans">' . file_itinerary_h($serviceDateDisp) . '</font></td>'
+            . '<table><tr><td colspan="2" align="center">' . $serviceArHtml . '</td></tr><tr><td>'
+            . '<table><tr><td width="100" align="right">' . file_itinerary_ar_html($toLoop)
+            . '</td><td width="5">:</td><td width="30">' . file_itinerary_ar_html($dropLabel) . '</td></tr></table>'
+            . '</td><td>'
+            . '<table><tr><td width="100" align="right">' . file_itinerary_ar_html($fromLoop)
+            . '</td><td width="5">:</td><td width="30">' . file_itinerary_ar_html($pickLabel) . '</td></tr></table>'
+            . '</td></tr></table></td>'
+            . '<td align="center" style="font-size:10pt;">' . file_itinerary_latin_html($serviceDateDisp) . '</td>'
             . '</tr>';
     }
 
